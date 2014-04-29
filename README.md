@@ -3,8 +3,6 @@ KzRemoteApi
 - Sony camera remote API wrapper for .NET
 - Currently supports [Camera Remote API beta v1.5.0](https://developer.sony.com/develop/cameras/).
 
-This software is published under the [MIT License](http://opensource.org/licenses/mit-license.php).
-
 ##Build
 1. Clone repository.
  ``` bash
@@ -14,3 +12,24 @@ This software is published under the [MIT License](http://opensource.org/license
 2. Open /Project/KzRemoteApi.sln by Visual Studio 2012 for WP.
 
 3. Add reference of [Json.NET](https://github.com/JamesNK/Newtonsoft.Json).
+
+##Call camera remote APIs
+1. Get end point URL of the services. See [KzSoDiscovery](https://github.com/kazyx/KzSoDiscovery).
+ ``` cs
+ discovery.ScalarDeviceDiscovered += (sender, e) => {
+     var endpoints = e.ScalarDevice.Endpoints;
+ }
+ ```
+
+2. Create ApiClient instance.
+ ``` cs
+ var camera = new CameraApiClient(endpoints["camera"]);
+ ```
+
+3. Call async API.
+ ``` cs
+ var picUrls = await camera.ActTakePictureAsync();
+ ```
+
+##License
+This software is published under the [MIT License](http://opensource.org/licenses/mit-license).
