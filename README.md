@@ -9,7 +9,9 @@ KzRemoteApi
  git clone git@github.com:kazyx/KzRemoteApi.git
  ```
 
-2. Open /Project/KzRemoteApi.sln by Visual Studio 2012 for WP.
+2. Open csproj file by Visual Studio.
+ - /Project/KzRemoteApi.csproj for Windows Phone 8.
+ - /Project/KzRemoteApiUniversal.csproj for Universal Windows application.
 
 3. Add reference of [Json.NET](https://github.com/JamesNK/Newtonsoft.Json).
 
