@@ -649,5 +649,43 @@ namespace Kazyx.RemoteApi
                 res => result = res);
             return result;
         }
+
+        public async Task SetBeepModeAsync(string mode)
+        {
+            BasicResultHandler.HandleNoValue(
+                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("setBeepMode", mode)),
+                code => { throw new RemoteApiException(code); },
+                () => { });
+        }
+
+        public async Task<string> GetBeepModeAsync()
+        {
+            string result = null;
+            BasicResultHandler.HandleSingleValue<string>(
+                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getBeepMode")),
+                code => { throw new RemoteApiException(code); },
+                mode => result = mode);
+            return result;
+        }
+
+        public async Task<string[]> GetSupportedBeepModeAsync()
+        {
+            string[] result = null;
+            BasicResultHandler.HandleArray<string>(
+                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getSupportedBeepMode")),
+                code => { throw new RemoteApiException(code); },
+                mode => result = mode);
+            return result;
+        }
+
+        public async Task<Capability<string>> GetAvailableBeepModeAsync()
+        {
+            Capability<string> result = null;
+            BasicResultHandler.HandleCapability<string>(
+                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getAvailableBeepMode")),
+                code => { throw new RemoteApiException(code); },
+                info => result = info);
+            return result;
+        }
     }
 }
