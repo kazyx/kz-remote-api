@@ -6,7 +6,8 @@ namespace Kazyx.RemoteApi
     /// </summary>
     public enum StatusCode
     {
-        NetworkError = -1,
+        NetworkError = -2,
+        Undefined = -1,
         OK = 0,
         Any = 1,
         Timeout = 2,

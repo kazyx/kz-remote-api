@@ -4,13 +4,8 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-#if NETFX_CORE
-using Windows.UI.Core;
-#elif WINDOWS_PHONE
-using System.Windows;
-#endif
 
-namespace Kazyx.RemoteApi
+namespace Kazyx.RemoteApi.Internal
 {
     internal class AsyncPostClient
     {

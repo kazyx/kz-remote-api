@@ -84,14 +84,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Internal\ApiClient.cs" />
+    <Compile Include="Internal\BasicParser.cs" />
+    <Compile Include="Internal\CustomParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Internal\BasicResultHandler.cs" />
     <Compile Include="Api\CameraApiClient.cs" />
+    <Compile Include="Util\ApiVersion.cs" />
     <Compile Include="Util\RemoteApiException.cs" />
     <Compile Include="Api\SystemApiClient.cs" />
     <Compile Include="Util\ApiParams.cs" />
     <Compile Include="Internal\RequestGenerator.cs" />
-    <Compile Include="Internal\ResultHandler.cs" />
     <Compile Include="Util\Structures.cs" />
     <Compile Include="Util\StatusCode.cs" />
     <Compile Include="Internal\AsyncPostClient.cs" />

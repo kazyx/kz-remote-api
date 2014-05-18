@@ -6,6 +6,7 @@ namespace Kazyx.RemoteApi
         public const string Still = "still";
         public const string Movie = "movie";
         public const string Audio = "audio";
+        public const string Interval = "intervalstill";
     }
 
     public class ZoomParam
@@ -123,5 +124,11 @@ namespace Kazyx.RemoteApi
         public const string InProgress = "Focusing";
         public const string Focused = "Focused";
         public const string Failed = "Failed";
+    }
+
+    public class SteadyMode
+    {
+        public const string On = "on";
+        public const string Off = "off";
     }
 }

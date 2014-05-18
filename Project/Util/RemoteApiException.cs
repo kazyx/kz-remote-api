@@ -14,7 +14,14 @@ namespace Kazyx.RemoteApi
 
         internal RemoteApiException(int code)
         {
-            this.code = (StatusCode)code;
+            if (Enum.IsDefined(typeof(StatusCode), code))
+            {
+                this.code = (StatusCode)code;
+            }
+            else
+            {
+                this.code = StatusCode.Undefined;
+            }
         }
 
         internal RemoteApiException(StatusCode code)

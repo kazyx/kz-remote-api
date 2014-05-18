@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using System;
 
 namespace Kazyx.RemoteApi
 {
@@ -35,9 +34,6 @@ namespace Kazyx.RemoteApi
         public string version { set; get; }
     }
 
-    /// <summary>
-    /// Though response of getEvent is not an object, use this as an callback arugument for future extension.
-    /// </summary>
     public class Event
     {
         public string[] AvailableApis { internal set; get; }
@@ -60,6 +56,9 @@ namespace Kazyx.RemoteApi
         public WhiteBalanceEvent WhiteBalance { internal set; get; }
         public StillImageSizeEvent StillImageSize { internal set; get; }
         public string FocusStatus { internal set; get; }
+        public Capability<string> SteadyMode { internal set; get; }
+        public Capability<int> ViewAngle { internal set; get; }
+        public Capability<string> MovieQuality { internal set; get; }
     }
 
     public class EvCapability

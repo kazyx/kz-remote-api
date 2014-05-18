@@ -1,58 +1,56 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
-namespace Kazyx.RemoteApi
+namespace Kazyx.RemoteApi.Internal
 {
-    /// <summary>
-    /// This class provides function to parse response JSON string and invoke proper callback.
-    /// </summary>
-    /// <remarks>
-    /// Error callback include error code as an argument.
-    /// <see cref="WPPMM.RemoteApi.StatusCode"/>
-    /// </remarks>
-    ///
-    internal class ResultHandler
+    internal class CustomParser
     {
-        internal static void HandleWBCapability(string jString, Action<StatusCode> error, Action<WhiteBalanceCapability> result)
+        internal static WhiteBalanceCapability AsWhiteBalanceCapability(string jString)
         {
-            var json = JObject.Parse(jString);
-            if (BasicResultHandler.HandleError(json, error))
-            {
-                return;
-            }
+            var json = BasicParser.Initialize(jString);
 
-            result.Invoke(new WhiteBalanceCapability
+            return new WhiteBalanceCapability
             {
                 current = JsonConvert.DeserializeObject<WhiteBalance>(json["result"][0].ToString()),
                 candidates = JsonConvert.DeserializeObject<WhiteBalanceCandidate[]>(json["result"][1].ToString())
-            }
-            );
+            };
         }
 
-        internal static void HandleGetCurrentTime(string jString, Action<StatusCode> error, Action<DateTimeOffset> result)
+        internal static EvCapability AsEvCapability(string jString)
         {
-            var json = JObject.Parse(jString);
-            if (BasicResultHandler.HandleError(json, error))
-            {
-                return;
-            }
+            var info = BasicParser.AsParallelPrimitives<int>(jString, 4);
 
-            DateTime dt = DateTime.Parse(json["result"][0].Value<string>("dateTime"));
-            int timezone = json["result"][1].Value<int>("timeZoneOffsetMinute");
-            int dst = json["result"][2].Value<int>("dstOffsetMinute");
-            DateTimeOffset dto = new DateTimeOffset(dt, TimeSpan.FromMinutes(timezone + dst));
-            result.Invoke(dto);
+            return new EvCapability
+               {
+                   Candidate = new EvCandidate
+                   {
+                       IndexStep = EvConverter.GetDefinition(info[3]),
+                       MaxIndex = info[1],
+                       MinIndex = info[2]
+                   },
+                   CurrentIndex = info[0]
+               };
         }
 
-        internal static void HandleGetSupportedEv(string jString, Action<StatusCode> error, Action<EvCandidate[]> result)
+        internal static ServerAppInfo AsServerAppInfo(string jString)
         {
-            var json = JObject.Parse(jString);
-            if (BasicResultHandler.HandleError(json, error))
-            {
-                return;
-            }
+            var res = BasicParser.AsParallelPrimitives<string>(jString, 2);
+
+            return new ServerAppInfo { name = res[0], version = res[1] };
+        }
+
+        internal static SetFocusResult AsSetFocusResult(string jString)
+        {
+            var json = BasicParser.Initialize(jString);
+
+            return JsonConvert.DeserializeObject<SetFocusResult>(json["result"][1].ToString()); // ignore 0th parameter
+        }
+
+        internal static EvCandidate[] AsEvCandidates(string jString)
+        {
+            var json = BasicParser.Initialize(jString);
 
             var maxlist = new List<int>();
             foreach (int max in json["result"][0].Values<int>())
@@ -74,7 +72,7 @@ namespace Kazyx.RemoteApi
 
             if (maxlist.Count != minlist.Count || minlist.Count != deflist.Count)
             {
-                error.Invoke(StatusCode.IllegalResponse);
+                throw new RemoteApiException(StatusCode.IllegalResponse);
             }
             var tmp = new List<EvCandidate>();
             for (int i = 0; i < maxlist.Count; i++)
@@ -86,22 +84,13 @@ namespace Kazyx.RemoteApi
                     MinIndex = minlist[i]
                 });
             }
-            result.Invoke(tmp.ToArray());
+
+            return tmp.ToArray();
         }
 
-        internal static void HandleGetApplicationInfo(string jString, Action<StatusCode> error, Action<ServerAppInfo> result)
+        internal static MethodType[] AsMethodTypes(string jString)
         {
-            BasicResultHandler.HandleParallelValues<string>(jString, 2, error,
-                (array) => { result.Invoke(new ServerAppInfo { name = array[0], version = array[1] }); });
-        }
-
-        internal static void HandleGetMethodTypes(string jString, Action<StatusCode> error, Action<MethodType[]> result)
-        {
-            var json = JObject.Parse(jString);
-            if (BasicResultHandler.HandleError(json, error))
-            {
-                return;
-            }
+            var json = BasicParser.Initialize(jString);
 
             var method_types = new List<MethodType>();
             foreach (var token in json["results"])
@@ -124,16 +113,13 @@ namespace Kazyx.RemoteApi
                     version = token.Value<string>(3)
                 });
             }
-            result.Invoke(method_types.ToArray());
+
+            return method_types.ToArray();
         }
 
-        internal static void HandleGetEvent(string jString, Action<StatusCode> error, Action<Event> result)
+        internal static Event AsCameraEvent(string jString)
         {
-            var json = JObject.Parse(jString);
-            if (BasicResultHandler.HandleError(json, error))
-            {
-                return;
-            }
+            var json = BasicParser.Initialize(jString);
 
             var jResult = json["result"] as JArray;
 
@@ -214,6 +200,23 @@ namespace Kazyx.RemoteApi
                 };
             }
 
+            var jMQuality = jResult[13];
+            Capability<string> mquality = null;
+            if (jMQuality.HasValues)
+            {
+                Debug.WriteLine(jMQuality.ToString());
+                var modecandidates = new List<string>();
+                foreach (var str in jMQuality["movieQualityCandidates"].Values<string>())
+                {
+                    modecandidates.Add(str);
+                }
+                mquality = new Capability<string>
+                {
+                    current = jMQuality.Value<string>("currentMovieQuality"),
+                    candidates = modecandidates.ToArray()
+                };
+            }
+
             var jssize = jResult[14];
             StillImageSizeEvent sis = null;
             if (jssize.HasValues)
@@ -227,6 +230,38 @@ namespace Kazyx.RemoteApi
                         SizeDefinition = jssize.Value<string>("currentSize")
                     },
                     CapabilityChanged = jssize.Value<bool>("checkAvailability")
+                };
+            }
+
+            var jSteady = jResult[16];
+            Capability<string> steady = null;
+            if (jSteady.HasValues)
+            {
+                var modecandidates = new List<string>();
+                foreach (var str in jSteady["steadyModeCandidates"].Values<string>())
+                {
+                    modecandidates.Add(str);
+                }
+                steady = new Capability<string>
+                {
+                    current = jSteady.Value<string>("currentSteadyMode"),
+                    candidates = modecandidates.ToArray()
+                };
+            }
+
+            var jAngle = jResult[17];
+            Capability<int> angle = null;
+            if (jAngle.HasValues)
+            {
+                var modecandidates = new List<int>();
+                foreach (var str in jAngle["viewAngleCandidates"].Values<int>())
+                {
+                    modecandidates.Add(str);
+                }
+                angle = new Capability<int>
+                {
+                    current = jAngle.Value<int>("currentViewAngle"),
+                    candidates = modecandidates.ToArray()
                 };
             }
 
@@ -417,8 +452,7 @@ namespace Kazyx.RemoteApi
                 }
             }
 
-
-            result.Invoke(new Event()
+            return new Event()
             {
                 AvailableApis = apis,
                 CameraStatus = status,
@@ -439,8 +473,11 @@ namespace Kazyx.RemoteApi
                 PictureUrls = pic_urls,
                 StillImageSize = sis,
                 WhiteBalance = wb,
-                FocusStatus = fs
-            });
+                FocusStatus = fs,
+                SteadyMode = steady,
+                ViewAngle = angle,
+                MovieQuality = mquality,
+            };
         }
     }
 }

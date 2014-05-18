@@ -1,23 +1,17 @@
-﻿using System;
+﻿using Kazyx.RemoteApi.Internal;
 using System.Threading.Tasks;
 
 namespace Kazyx.RemoteApi
 {
-    public class CameraApiClient
+    public class CameraApiClient : ApiClient
     {
-        private readonly string endpoint;
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="endpoint">Endpoint URL of camera service.</param>
         public CameraApiClient(string endpoint)
+            : base(endpoint)
         {
-            if (endpoint == null)
-            {
-                throw new ArgumentNullException();
-            }
-            this.endpoint = endpoint;
         }
 
         /// <summary>
@@ -27,278 +21,146 @@ namespace Kazyx.RemoteApi
         /// <returns></returns>
         public async Task<Event> GetEventAsync(bool longpolling, ApiVersion version = ApiVersion.V1_0)
         {
-            Event result = null;
-            ResultHandler.HandleGetEvent(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getEvent", version, longpolling)),
-                code => { throw new RemoteApiException(code); },
-                @event => result = @event);
-            return result;
-        }
-
-        public async Task<MethodType[]> GetMethodTypesAsync(string version = "")
-        {
-            MethodType[] result = null;
-            ResultHandler.HandleGetMethodTypes(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getMethodTypes", version)),
-                code => { throw new RemoteApiException(code); },
-                types => result = types);
-            return result;
-        }
-
-        public async Task<string[]> GetVersionsAsync()
-        {
-            string[] result = null;
-            BasicResultHandler.HandleArray<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getVersions")),
-                code => { throw new RemoteApiException(code); },
-                versions => result = versions);
-            return result;
+            return await Single<Event>(
+                RequestGenerator.Jsonize("getEvent", version, longpolling),
+                CustomParser.AsCameraEvent);
         }
 
         public async Task<ServerAppInfo> GetApplicationInfoAsync()
         {
-            ServerAppInfo result = null;
-            ResultHandler.HandleGetApplicationInfo(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getApplicationInfo")),
-                code => { throw new RemoteApiException(code); },
-                info => result = info);
-            return result;
+            return await Single<ServerAppInfo>(
+                RequestGenerator.Jsonize("getApplicationInfo"),
+                CustomParser.AsServerAppInfo);
         }
 
         public async Task<string[]> GetAvailableApiListAsync()
         {
-            string[] result = null;
-            BasicResultHandler.HandleArray<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getAvailableApiList")),
-                code => { throw new RemoteApiException(code); },
-                list => result = list);
-            return result;
+            return await PrimitiveArrayByMethod<string>("getAvailableApiList");
         }
 
         public async Task StartRecModeAsync()
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("startRecMode")),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValueByMethod("startRecMode");
         }
 
         public async Task StopRecModeAsync()
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("stopRecMode")),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValueByMethod("stopRecMode");
         }
 
         public async Task ActZoomAsync(string direction, string movement)
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("actZoom", direction, movement)),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValue(RequestGenerator.Jsonize("actZoom", direction, movement));
         }
 
         public async Task<string> StartLiveviewAsync()
         {
-            string result = null;
-            BasicResultHandler.HandleSingleValue<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("startLiveview")),
-                code => { throw new RemoteApiException(code); },
-                url => result = url);
-            return result;
+            return await PrimitiveByMethod<string>("startLiveview");
         }
 
         public async Task StopLiveviewAsync()
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("stopLiveview")),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValueByMethod("stopLiveview");
         }
 
         public async Task StartAudioRecAsync()
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("startAudioRec")),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValueByMethod("startAudioRec");
         }
 
         public async Task StopAudioRecAsync()
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("stopAudioRec")),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValueByMethod("stopAudioRec");
         }
 
         public async Task StartMovieRecAsync()
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("startMovieRec")),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValueByMethod("startMovieRec");
         }
 
         public async Task<string> StopMovieRecAsync()
         {
-            string result = null;
-            BasicResultHandler.HandleSingleValue<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("stopMovieRec")),
-                code => { throw new RemoteApiException(code); },
-                url => result = url);
-            return result;
+            return await PrimitiveByMethod<string>("stopMovieRec");
         }
 
         public async Task<string[]> ActTakePictureAsync()
         {
-            string[] result = null;
-            BasicResultHandler.HandleArray<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("actTakePicture")),
-                code => { throw new RemoteApiException(code); },
-                url => result = url);
-            return result;
+            return await PrimitiveArrayByMethod<string>("actTakePicture");
         }
 
         public async Task<string[]> AwaitTakePictureAsync()
         {
-            string[] result = null;
-            BasicResultHandler.HandleArray<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("awaitTakePicture")),
-                code => { throw new RemoteApiException(code); },
-                url => result = url);
-            return result;
+            return await PrimitiveArrayByMethod<string>("awaitTakePicture");
         }
 
         public async Task SetSelfTimerAsync(int timer)
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("setSelfTimer", timer)),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValue(RequestGenerator.Jsonize("setSelfTimer", timer));
         }
 
         public async Task<int> GetSelfTimerAsync()
         {
-            int result = 0;
-            BasicResultHandler.HandleSingleValue<int>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getSelfTimer")),
-                code => { throw new RemoteApiException(code); },
-                timer => result = timer);
-            return result;
+            return await PrimitiveByMethod<int>("getSelfTimer");
         }
 
         public async Task<int[]> GetSupportedSelfTimerAsync()
         {
-            int[] result = null;
-            BasicResultHandler.HandleArray<int>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getSupportedSelfTimer")),
-                code => { throw new RemoteApiException(code); },
-                timer => result = timer);
-            return result;
+            return await PrimitiveArrayByMethod<int>("getSupportedSelfTimer");
         }
 
         public async Task<Capability<int>> GetAvailableSelfTimerAsync()
         {
-            Capability<int> result = null;
-            BasicResultHandler.HandleCapability<int>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getAvailableSelfTimer")),
-                code => { throw new RemoteApiException(code); },
-                info => result = info);
-            return result;
+            return await CapabilityByMethod<int>("getAvailableSelfTimer");
         }
 
         public async Task SetPostviewImageSizeAsync(string size)
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("setPostviewImageSize", size)),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValue(RequestGenerator.Jsonize("setPostviewImageSize", size));
         }
 
         public async Task<string> GetPostviewImageSizeAsync()
         {
-            string result = null;
-            BasicResultHandler.HandleSingleValue<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getPostviewImageSize")),
-                code => { throw new RemoteApiException(code); },
-                size => result = size);
-            return result;
+            return await PrimitiveByMethod<string>("getPostviewImageSize");
         }
 
         public async Task<string[]> GetSupportedPostviewImageSizeAsync()
         {
-            string[] result = null;
-            BasicResultHandler.HandleArray<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getSupportedPostviewImageSize")),
-                code => { throw new RemoteApiException(code); },
-                size => result = size);
-            return result;
+            return await PrimitiveArrayByMethod<string>("getSupportedPostviewImageSize");
         }
 
         public async Task<Capability<string>> GetAvailablePostviewImageSizeAsync()
         {
-            Capability<string> result = null;
-            BasicResultHandler.HandleCapability<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getAvailablePostviewImageSize")),
-                code => { throw new RemoteApiException(code); },
-                info => result = info);
-            return result;
+            return await CapabilityByMethod<string>("getAvailablePostviewImageSize");
         }
 
         public async Task SetShootModeAsync(string mode)
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("setShootMode", mode)),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValue(RequestGenerator.Jsonize("setShootMode", mode));
         }
 
         public async Task<string> GetShootModeAsync()
         {
-            string result = null;
-            BasicResultHandler.HandleSingleValue<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getShootMode")),
-                code => { throw new RemoteApiException(code); },
-                mode => result = mode);
-            return result;
+            return await PrimitiveByMethod<string>("getShootMode");
         }
 
         public async Task<string[]> GetSupportedShootModeAsync()
         {
-            string[] result = null;
-            BasicResultHandler.HandleArray<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getSupportedShootMode")),
-                code => { throw new RemoteApiException(code); },
-                mode => result = mode);
-            return result;
+            return await PrimitiveArrayByMethod<string>("getSupportedShootMode");
         }
 
         public async Task<Capability<string>> GetAvailableShootModeAsync()
         {
-            Capability<string> result = null;
-            BasicResultHandler.HandleCapability<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getAvailableShootMode")),
-                code => { throw new RemoteApiException(code); },
-                info => result = info);
-            return result;
+            return await CapabilityByMethod<string>("getAvailableShootMode");
         }
 
         public async Task ActHalfPressShutterAsync()
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("actHalfPressShutter")),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValueByMethod("actHalfPressShutter");
         }
 
         public async Task CancelHalfPressShutterAsync()
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("cancelHalfPressShutter")),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValueByMethod("cancelHalfPressShutter");
         }
 
         /// <summary>
@@ -309,383 +171,277 @@ namespace Kazyx.RemoteApi
         /// <returns></returns>
         public async Task<SetFocusResult> SetAFPositionAsync(double x, double y)
         {
-            SetFocusResult result = null;
-            BasicResultHandler.HandleObject<SetFocusResult>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("setTouchAFPosition", x, y)),
-                code => { throw new RemoteApiException(code); },
-                res => result = res,
-                1); // ignore 0th parameter
-            return result;
+            return await Single<SetFocusResult>(
+                RequestGenerator.Jsonize("setTouchAFPosition", x, y),
+                CustomParser.AsSetFocusResult);
         }
 
         public async Task<TouchFocusStatus> GetTouchAFStatusAsync()
         {
-            TouchFocusStatus result = null;
-            BasicResultHandler.HandleObject<TouchFocusStatus>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getTouchAFPosition")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await ObjectByMethod<TouchFocusStatus>("getTouchAFPosition");
         }
 
         public async Task CancelTouchAFAsync()
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("cancelTouchAFPosition")),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValueByMethod("cancelTouchAFPosition");
         }
 
         public async Task SetExposureModeAsync(string mode)
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("setExposureMode", mode)),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValue(RequestGenerator.Jsonize("setExposureMode", mode));
         }
 
         public async Task<string> GetExposureModeAsync()
         {
-            string result = null;
-            BasicResultHandler.HandleSingleValue<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getExposureMode")),
-                code => { throw new RemoteApiException(code); },
-                mode => result = mode);
-            return result;
+            return await PrimitiveByMethod<string>("getExposureMode");
         }
 
         public async Task<string[]> GetSupportedExposureModeAsync()
         {
-            string[] result = null;
-            BasicResultHandler.HandleArray<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getSupportedExposureMode")),
-                code => { throw new RemoteApiException(code); },
-                mode => result = mode);
-            return result;
+            return await PrimitiveArrayByMethod<string>("getSupportedExposureMode");
         }
 
         public async Task<Capability<string>> GetAvailableExposureModeAsync()
         {
-            Capability<string> result = null;
-            BasicResultHandler.HandleCapability<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getAvailableExposureMode")),
-                code => { throw new RemoteApiException(code); },
-                info => result = info);
-            return result;
+            return await CapabilityByMethod<string>("getAvailableExposureMode");
         }
 
         public async Task SetFocusModeAsync(string mode)
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("setFocusMode", mode)),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValue(RequestGenerator.Jsonize("setFocusMode", mode));
         }
 
         public async Task<string> GetFocusModeAsync()
         {
-            string result = null;
-            BasicResultHandler.HandleSingleValue<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getFocusMode")),
-                code => { throw new RemoteApiException(code); },
-                mode => result = mode);
-            return result;
+            return await PrimitiveByMethod<string>("getFocusMode");
         }
 
         public async Task<string[]> GetSupportedFocusModeAsync()
         {
-            string[] result = null;
-            BasicResultHandler.HandleArray<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getSupportedFocusMode")),
-                code => { throw new RemoteApiException(code); },
-                mode => result = mode);
-            return result;
+            return await PrimitiveArrayByMethod<string>("getSupportedFocusMode");
         }
 
         public async Task<Capability<string>> GetAvailableFocusModeAsync()
         {
-            Capability<string> result = null;
-            BasicResultHandler.HandleCapability<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getAvailableFocusMode")),
-                code => { throw new RemoteApiException(code); },
-                info => result = info);
-            return result;
+            return await CapabilityByMethod<string>("getAvailableFocusMode");
         }
 
         public async Task SetEvIndexAsync(int index)
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("setExposureCompensation", index)),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValue(RequestGenerator.Jsonize("setExposureCompensation", index));
         }
 
         public async Task<int> GetEvIndexAsync()
         {
-            int result = -1;
-            BasicResultHandler.HandleSingleValue<int>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getExposureCompensation")),
-                code => { throw new RemoteApiException(code); },
-                mode => result = mode);
-            return result;
+            return await PrimitiveByMethod<int>("getExposureCompensation");
         }
 
         public async Task<EvCandidate[]> GetSupportedEvAsync()
         {
-            EvCandidate[] result = null;
-            ResultHandler.HandleGetSupportedEv(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getSupportedExposureCompensation")),
-                code => { throw new RemoteApiException(code); },
-                info => result = info);
-            return result;
+            return await Single<EvCandidate[]>(
+                 RequestGenerator.Jsonize("getSupportedExposureCompensation"),
+                 CustomParser.AsEvCandidates);
         }
 
         public async Task<EvCapability> GetAvailableEvAsync()
         {
-            EvCapability result = null;
-            BasicResultHandler.HandleParallelValues<int>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getAvailableExposureCompensation")),
-                4,
-                code => { throw new RemoteApiException(code); },
-                info => result = new EvCapability
-                {
-                    Candidate = new EvCandidate
-                    {
-                        IndexStep = EvConverter.GetDefinition(info[3]),
-                        MaxIndex = info[1],
-                        MinIndex = info[2]
-                    },
-                    CurrentIndex = info[0]
-                });
-            return result;
+            return await Single<EvCapability>(
+                RequestGenerator.Jsonize("getAvailableExposureCompensation"),
+                CustomParser.AsEvCapability);
         }
 
         public async Task SetFNumberAsync(string f)
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("setFNumber", f)),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValue(RequestGenerator.Jsonize("setFNumber", f));
         }
 
         public async Task<string> GetFNumberAsync()
         {
-            string result = null;
-            BasicResultHandler.HandleSingleValue<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getFNumber")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await PrimitiveByMethod<string>("getFNumber");
         }
 
         public async Task<string[]> GetSupportedFNumberAsync()
         {
-            string[] result = null;
-            BasicResultHandler.HandleArray<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getSupportedFNumber")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await PrimitiveArrayByMethod<string>("getSupportedFNumber");
         }
 
         public async Task<Capability<string>> GetAvailableFNumberAsync()
         {
-            Capability<string> result = null;
-            BasicResultHandler.HandleCapability<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getAvailableFNumber")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await CapabilityByMethod<string>("getAvailableFNumber");
         }
 
         public async Task SetShutterSpeedAsync(string ss)
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("setShutterSpeed", ss)),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValue(RequestGenerator.Jsonize("setShutterSpeed", ss));
         }
 
         public async Task<string> GetShutterSpeedAsync()
         {
-            string result = null;
-            BasicResultHandler.HandleSingleValue<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getShutterSpeed")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await PrimitiveByMethod<string>("getShutterSpeed");
         }
 
         public async Task<string[]> GetSupportedShutterSpeedAsync()
         {
-            string[] result = null;
-            BasicResultHandler.HandleArray<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getSupportedShutterSpeed")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await PrimitiveArrayByMethod<string>("getSupportedShutterSpeed");
         }
 
         public async Task<Capability<string>> GetAvailableShutterSpeedAsync()
         {
-            Capability<string> result = null;
-            BasicResultHandler.HandleCapability<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getAvailableShutterSpeed")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await CapabilityByMethod<string>("getAvailableShutterSpeed");
         }
 
         public async Task SetISOSpeedAsync(string iso)
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("setIsoSpeedRate", iso)),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValue(RequestGenerator.Jsonize("setIsoSpeedRate", iso));
         }
 
         public async Task<string> GetIsoSpeedAsync()
         {
-            string result = null;
-            BasicResultHandler.HandleSingleValue<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getIsoSpeedRate")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await PrimitiveByMethod<string>("getIsoSpeedRate");
         }
 
         public async Task<string[]> GetSupportedIsoSpeedAsync()
         {
-            string[] result = null;
-            BasicResultHandler.HandleArray<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getSupportedIsoSpeedRate")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await PrimitiveArrayByMethod<string>("getSupportedIsoSpeedRate");
         }
 
         public async Task<Capability<string>> GetAvailableIsoSpeedAsync()
         {
-            Capability<string> result = null;
-            BasicResultHandler.HandleCapability<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getAvailableIsoSpeedRate")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await CapabilityByMethod<string>("getAvailableIsoSpeedRate");
         }
 
         public async Task SetStillImageSizeAsync(StillImageSize size)
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("setStillSize", size.AspectRatio, size.SizeDefinition)),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValue(RequestGenerator.Jsonize("setStillSize", size.AspectRatio, size.SizeDefinition));
         }
 
         public async Task<StillImageSize> GetStillSizeAsync()
         {
-            StillImageSize result = null;
-            BasicResultHandler.HandleObject<StillImageSize>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getStillSize")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await ObjectByMethod<StillImageSize>(RequestGenerator.Jsonize("getStillSize"));
         }
 
         public async Task<StillImageSize[]> GetSupportedStillSizeAsync()
         {
-            StillImageSize[] result = null;
-            BasicResultHandler.HandleObject<StillImageSize[]>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getSupportedStillSize")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await ObjectByMethod<StillImageSize[]>("getSupportedStillSize");
         }
 
         public async Task<Capability<StillImageSize>> GetAvailableStillSizeAsync()
         {
-            Capability<StillImageSize> result = null;
-            BasicResultHandler.HandleCapabilityObject<StillImageSize>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getAvailableStillSize")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await Capability<StillImageSize>(
+                RequestGenerator.Jsonize("getAvailableStillSize"),
+                BasicParser.AsCapabilityObject<StillImageSize>);
         }
 
         public async Task SetWhiteBalanceAsync(WhiteBalance wb, bool enableColorTemperature)
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("setWhiteBalance", wb.Mode, enableColorTemperature, wb.ColorTemperature)),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValue(RequestGenerator.Jsonize("setWhiteBalance", wb.Mode, enableColorTemperature, wb.ColorTemperature));
         }
 
         public async Task<WhiteBalance> GetWhiteBalanceAsync()
         {
-            WhiteBalance result = null;
-            BasicResultHandler.HandleObject<WhiteBalance>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getWhiteBalance")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await ObjectByMethod<WhiteBalance>("getWhiteBalance");
         }
 
         public async Task<WhiteBalanceCandidate[]> GetSupportedWhiteBalanceAsync()
         {
-            WhiteBalanceCandidate[] result = null;
-            BasicResultHandler.HandleObject<WhiteBalanceCandidate[]>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getSupportedWhiteBalance")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await ObjectByMethod<WhiteBalanceCandidate[]>("getSupportedWhiteBalance");
         }
 
         public async Task<WhiteBalanceCapability> GetAvailableWhiteBalanceAsync()
         {
-            WhiteBalanceCapability result = null;
-            ResultHandler.HandleWBCapability(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getAvailableWhiteBalance")),
-                code => { throw new RemoteApiException(code); },
-                res => result = res);
-            return result;
+            return await Single<WhiteBalanceCapability>(
+                RequestGenerator.Jsonize("getAvailableWhiteBalance"),
+                CustomParser.AsWhiteBalanceCapability);
         }
 
         public async Task SetBeepModeAsync(string mode)
         {
-            BasicResultHandler.HandleNoValue(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("setBeepMode", mode)),
-                code => { throw new RemoteApiException(code); },
-                () => { });
+            await NoValue(RequestGenerator.Jsonize("setBeepMode", mode));
         }
 
         public async Task<string> GetBeepModeAsync()
         {
-            string result = null;
-            BasicResultHandler.HandleSingleValue<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getBeepMode")),
-                code => { throw new RemoteApiException(code); },
-                mode => result = mode);
-            return result;
+            return await PrimitiveByMethod<string>("getBeepMode");
         }
 
         public async Task<string[]> GetSupportedBeepModeAsync()
         {
-            string[] result = null;
-            BasicResultHandler.HandleArray<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getSupportedBeepMode")),
-                code => { throw new RemoteApiException(code); },
-                mode => result = mode);
-            return result;
+            return await PrimitiveArrayByMethod<string>("getSupportedBeepMode");
         }
 
         public async Task<Capability<string>> GetAvailableBeepModeAsync()
         {
-            Capability<string> result = null;
-            BasicResultHandler.HandleCapability<string>(
-                await AsyncPostClient.Post(endpoint, RequestGenerator.Jsonize("getAvailableBeepMode")),
-                code => { throw new RemoteApiException(code); },
-                info => result = info);
-            return result;
+            return await CapabilityByMethod<string>("getAvailableBeepMode");
+        }
+
+        public async Task StartIntervalStillRecAsync()
+        {
+            await NoValueByMethod("startIntervalStillRec");
+        }
+
+        public async Task StopIntervalStillRecAsync()
+        {
+            await NoValueByMethod("stopIntervalStillRec");
+        }
+
+        public async Task SetViewAngleAsync(int angle)
+        {
+            await NoValue(RequestGenerator.Jsonize("setViewAngle", angle));
+        }
+
+        public async Task<int> GetViewAngleAsync()
+        {
+            return await PrimitiveByMethod<int>("getViewAngle");
+        }
+
+        public async Task<int[]> GetSupportedViewAngleAsync()
+        {
+            return await PrimitiveArrayByMethod<int>("getSupportedViewAngle");
+        }
+
+        public async Task<Capability<int>> GetAvailableViewAngleAsync()
+        {
+            return await CapabilityByMethod<int>("getAvailableViewAngle");
+        }
+
+        public async Task SetSteadyModeAsync(string mode)
+        {
+            await NoValue(RequestGenerator.Jsonize("setSteadyMode", mode));
+        }
+
+        public async Task<string> GetSteadyModeAsync()
+        {
+            return await PrimitiveByMethod<string>("getSteadyMode");
+        }
+
+        public async Task<string[]> GetSupportedSteadyModeAsync()
+        {
+            return await PrimitiveArrayByMethod<string>("getSupportedSteadyMode");
+        }
+
+        public async Task<Capability<string>> GetAvailableSteadyModeAsync()
+        {
+            return await CapabilityByMethod<string>("getAvailableSteadyMode");
+        }
+
+        public async Task SetMovieQualityAsync(string mode)
+        {
+            await NoValue(RequestGenerator.Jsonize("setMovieQuality", mode));
+        }
+
+        public async Task<string> GetMovieQualityAsync()
+        {
+            return await PrimitiveByMethod<string>("getMovieQuality");
+        }
+
+        public async Task<string[]> GetSupportedMovieQualityAsync()
+        {
+            return await PrimitiveArrayByMethod<string>("getSupportedMovieQuality");
+        }
+
+        public async Task<Capability<string>> GetAvailableMovieQualityAsync()
+        {
+            return await CapabilityByMethod<string>("getAvailableMovieQuality");
         }
     }
 }
