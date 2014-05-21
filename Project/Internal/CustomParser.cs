@@ -13,8 +13,8 @@ namespace Kazyx.RemoteApi.Internal
 
             return new WhiteBalanceCapability
             {
-                current = JsonConvert.DeserializeObject<WhiteBalance>(json["result"][0].ToString()),
-                candidates = JsonConvert.DeserializeObject<WhiteBalanceCandidate[]>(json["result"][1].ToString())
+                current = JsonConvert.DeserializeObject<WhiteBalance>(json["result"][0].ToString(Formatting.None)),
+                candidates = JsonConvert.DeserializeObject<WhiteBalanceCandidate[]>(json["result"][1].ToString(Formatting.None))
             };
         }
 
@@ -45,7 +45,7 @@ namespace Kazyx.RemoteApi.Internal
         {
             var json = BasicParser.Initialize(jString);
 
-            return JsonConvert.DeserializeObject<SetFocusResult>(json["result"][1].ToString()); // ignore 0th parameter
+            return JsonConvert.DeserializeObject<SetFocusResult>(json["result"][1].ToString(Formatting.None)); // ignore 0th parameter
         }
 
         internal static EvCandidate[] AsEvCandidates(string jString)
@@ -120,7 +120,7 @@ namespace Kazyx.RemoteApi.Internal
         internal static Event AsCameraEvent(string jString)
         {
             var json = BasicParser.Initialize(jString);
-
+            Debug.WriteLine(json.ToString());
             var jResult = json["result"] as JArray;
 
             var jApi = jResult[0];
@@ -182,6 +182,13 @@ namespace Kazyx.RemoteApi.Internal
                     }
                 }
                 pic_urls = tmp.ToArray();
+            }
+
+            var jStorageInfo = jResult[10];
+            StorageInfo[] storage = null;
+            if (jStorageInfo.HasValues)
+            {
+                storage = JsonConvert.DeserializeObject<StorageInfo[]>(jStorageInfo.ToString(Formatting.None));
             }
 
             var jbeep = jResult[11];
@@ -477,6 +484,7 @@ namespace Kazyx.RemoteApi.Internal
                 SteadyMode = steady,
                 ViewAngle = angle,
                 MovieQuality = mquality,
+                StorageInfo = storage,
             };
         }
     }

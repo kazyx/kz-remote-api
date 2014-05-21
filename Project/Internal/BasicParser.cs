@@ -105,7 +105,7 @@ namespace Kazyx.RemoteApi.Internal
         {
             var json = Initialize(jString);
 
-            return JsonConvert.DeserializeObject<T>(json["result"][0].ToString());
+            return JsonConvert.DeserializeObject<T>(json["result"][0].ToString(Formatting.None));
         }
 
         internal static Capability<T> AsCapabilityObject<T>(string jString)
@@ -115,12 +115,12 @@ namespace Kazyx.RemoteApi.Internal
             var _candidates = new List<T>();
             foreach (var token in json["result"][1].Values())
             {
-                _candidates.Add(JsonConvert.DeserializeObject<T>(token.ToString()));
+                _candidates.Add(JsonConvert.DeserializeObject<T>(token.ToString(Formatting.None)));
             }
 
             return new Capability<T>
             {
-                current = JsonConvert.DeserializeObject<T>(json["result"][0].ToString()),
+                current = JsonConvert.DeserializeObject<T>(json["result"][0].ToString(Formatting.None)),
                 candidates = _candidates.ToArray()
             };
         }

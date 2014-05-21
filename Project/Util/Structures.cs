@@ -59,6 +59,7 @@ namespace Kazyx.RemoteApi
         public Capability<string> SteadyMode { internal set; get; }
         public Capability<int> ViewAngle { internal set; get; }
         public Capability<string> MovieQuality { internal set; get; }
+        public StorageInfo[] StorageInfo { internal set; get; }
     }
 
     public class EvCapability
@@ -150,5 +151,23 @@ namespace Kazyx.RemoteApi
 
         [JsonProperty("dstOffsetMinute")]
         public int DstOffsetMinute { set; get; }
+    }
+
+    public class StorageInfo
+    {
+        [JsonProperty("numberOfRecordableImages")]
+        public int RecordableImages { set; get; }
+
+        [JsonProperty("recordTarget")]
+        public bool RecordTarget { set; get; }
+
+        [JsonProperty("recordableTime")]
+        public int RecordableMovieLength { set; get; }
+
+        [JsonProperty("storageDescription")]
+        public string Description { set; get; }
+
+        [JsonProperty("storageID")]
+        public string StorageID { set; get; }
     }
 }
