@@ -113,7 +113,8 @@ namespace Kazyx.RemoteApi.Internal
             var json = Initialize(jString);
 
             var _candidates = new List<T>();
-            foreach (var token in json["result"][1].Values())
+            var array = json["result"][1] as JArray;
+            foreach (var token in array.Values<JObject>())
             {
                 _candidates.Add(JsonConvert.DeserializeObject<T>(token.ToString(Formatting.None)));
             }
