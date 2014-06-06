@@ -77,7 +77,7 @@ namespace Kazyx.RemoteApi
         public const string W1_H1 = "1:1";
     }
 
-    public class WhiteBallanceMode
+    public class WhiteBalanceMode
     {
         public const string Auto = "Auto WB";
         public const string DayLight = "Daylight";
