@@ -46,6 +46,9 @@ namespace Kazyx.RemoteApi
         public const string AuRecording = "AudioRecording";
         public const string AuWaitRecStop = "AudioWaitRecStop";
         public const string AuSaving = "AudioSaving";
+        public const string ItvWaitRecStart = "IntervalWaitRecStart";
+        public const string ItvRecording = "IntervalRecording";
+        public const string ItvWaitRecStop = "IntervalWaitRecStop";
     }
 
     public class FocusArea
