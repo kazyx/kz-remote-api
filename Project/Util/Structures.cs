@@ -113,10 +113,13 @@ namespace Kazyx.RemoteApi
 
     public class WhiteBalance
     {
+        [JsonIgnore]
+        public const int InvalidColorTemperture = -1;
+
         [JsonProperty("whiteBalanceMode")]
         public string Mode { set; get; }
 
-        private int _ColorTemperature = -1;
+        private int _ColorTemperature = InvalidColorTemperture;
 
         [JsonProperty("colorTemperature")]
         public int ColorTemperature

@@ -332,9 +332,9 @@ namespace Kazyx.RemoteApi
                 BasicParser.AsCapabilityObject<StillImageSize>);
         }
 
-        public async Task SetWhiteBalanceAsync(WhiteBalance wb, bool enableColorTemperature)
+        public async Task SetWhiteBalanceAsync(WhiteBalance wb)
         {
-            await NoValue(RequestGenerator.Jsonize("setWhiteBalance", wb.Mode, enableColorTemperature, wb.ColorTemperature));
+            await NoValue(RequestGenerator.Jsonize("setWhiteBalance", wb.Mode, wb.ColorTemperature != WhiteBalance.InvalidColorTemperture, wb.ColorTemperature));
         }
 
         public async Task<WhiteBalance> GetWhiteBalanceAsync()
