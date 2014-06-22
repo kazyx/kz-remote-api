@@ -1,7 +1,7 @@
 KzRemoteApi
 =============
 - Sony camera remote API wrapper for .NET
-- Currently supports [Camera Remote API beta v1.5.0](https://developer.sony.com/develop/cameras/).
+- Currently supports [Camera Remote API beta v1.6.0](https://developer.sony.com/develop/cameras/).
 
 ##Build
 1. Clone repository.
@@ -13,7 +13,7 @@ KzRemoteApi
  - /Project/KzRemoteApi.csproj for Windows Phone 8.
  - /Project/KzRemoteApiUniversal.csproj for Universal Windows application.
 
-3. Add reference of [Json.NET](https://github.com/JamesNK/Newtonsoft.Json).
+3. Add reference to [Json.NET](https://github.com/JamesNK/Newtonsoft.Json).
 
 ##Call camera remote APIs
 1. Get end point URL of the services. See [KzSoDiscovery](https://github.com/kazyx/KzSoDiscovery).
