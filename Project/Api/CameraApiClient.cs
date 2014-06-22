@@ -58,6 +58,13 @@ namespace Kazyx.RemoteApi
             return await PrimitiveByMethod<string>("startLiveview");
         }
 
+        public async Task<string> StartLiveviewWithSizeAsync(string size)
+        {
+            return await Single<string>(
+                RequestGenerator.Jsonize("startLiveviewWithSize", size),
+                BasicParser.AsPrimitive<string>);
+        }
+
         public async Task StopLiveviewAsync()
         {
             await NoValueByMethod("stopLiveview");
@@ -442,6 +449,38 @@ namespace Kazyx.RemoteApi
         public async Task<Capability<string>> GetAvailableMovieQualityAsync()
         {
             return await CapabilityByMethod<string>("getAvailableMovieQuality");
+        }
+
+        public async Task SetFlashModeAsync(string mode)
+        {
+            await NoValue(RequestGenerator.Jsonize("setFlashMode", mode));
+        }
+
+        public async Task<string> GetFlashModeAsync()
+        {
+            return await PrimitiveByMethod<string>("getFlashMode");
+        }
+
+        public async Task<string[]> GetSupportedFlashModeAsync()
+        {
+            return await PrimitiveArrayByMethod<string>("getSupportedFlashMode");
+        }
+
+        public async Task<Capability<string>> GetAvailableFlashModeAsync()
+        {
+            return await CapabilityByMethod<string>("getAvailableFlashMode");
+        }
+
+        public async Task SetProgramShiftAsync(int amount)
+        {
+            await NoValue(RequestGenerator.Jsonize("setProgramShift", amount));
+        }
+
+        public async Task<ProgramShiftRange> GetSupportedProgramShift()
+        {
+            return await Single<ProgramShiftRange>(
+                RequestGenerator.Jsonize("getSupportedProgramShift"),
+                CustomParser.AsProgramShiftRange);
         }
     }
 }

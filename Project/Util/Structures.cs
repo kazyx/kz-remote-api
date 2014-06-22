@@ -60,6 +60,7 @@ namespace Kazyx.RemoteApi
         public Capability<int> ViewAngle { internal set; get; }
         public Capability<string> MovieQuality { internal set; get; }
         public StorageInfo[] StorageInfo { internal set; get; }
+        public Capability<string> FlashMode { internal set; get; }
     }
 
     public class EvCapability
@@ -172,5 +173,11 @@ namespace Kazyx.RemoteApi
 
         [JsonProperty("storageID")]
         public string StorageID { set; get; }
+    }
+
+    public class ProgramShiftRange
+    {
+        public int Max { set; get; }
+        public int Min { set; get; }
     }
 }

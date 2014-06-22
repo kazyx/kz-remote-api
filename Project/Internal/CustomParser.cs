@@ -7,6 +7,21 @@ namespace Kazyx.RemoteApi.Internal
 {
     internal class CustomParser
     {
+        internal static ProgramShiftRange AsProgramShiftRange(string jString)
+        {
+            var range = BasicParser.AsPrimitiveArray<int>(jString);
+            if (range.Length != 2)
+            {
+                throw new RemoteApiException(StatusCode.IllegalResponse);
+            }
+
+            return new ProgramShiftRange
+            {
+                Max = range[0],
+                Min = range[1]
+            };
+        }
+
         internal static WhiteBalanceCapability AsWhiteBalanceCapability(string jString)
         {
             var json = BasicParser.Initialize(jString);
@@ -352,6 +367,22 @@ namespace Kazyx.RemoteApi.Internal
                 };
             }
 
+            var jFlash = jResult[26];
+            Capability<string> flash = null;
+            if (jFlash.HasValues)
+            {
+                var flcandidates = new List<string>();
+                foreach (var str in jFlash["flashModeCandidates"].Values<string>())
+                {
+                    flcandidates.Add(str);
+                }
+                flash = new Capability<string>
+                {
+                    current = jFlash.Value<string>("currentFlashMode"),
+                    candidates = flcandidates.ToArray()
+                };
+            }
+
             var jFN = jResult[27];
             Capability<string> fn = null;
             if (jFN.HasValues)
@@ -485,6 +516,7 @@ namespace Kazyx.RemoteApi.Internal
                 ViewAngle = angle,
                 MovieQuality = mquality,
                 StorageInfo = storage,
+                FlashMode = flash,
             };
         }
     }

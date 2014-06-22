@@ -54,6 +54,7 @@ namespace Kazyx.RemoteApi
     public class FocusArea
     {
         public const string Touch = "Touch";
+        public const string Wide = "Wide";
     }
 
     public class ExposureMode
@@ -92,6 +93,10 @@ namespace Kazyx.RemoteApi
         public const string Fluorescent_DayWhite = "Fluorescent: Day White (+1)";
         public const string Fluorescent_DayLight = "Fluorescent: Daylight (+2)";
         public const string Manual = "Color Temperature";
+        public const string Flash = "Flash";
+        public const string Custom_1 = "Custom 1";
+        public const string Custom_2 = "Custom 2";
+        public const string Custom_3 = "Custom 3";
     }
 
     public class ImageSize
@@ -133,5 +138,47 @@ namespace Kazyx.RemoteApi
     {
         public const string On = "on";
         public const string Off = "off";
+    }
+
+    public class ViewAngle
+    {
+        public const int Deg120 = 120;
+        public const int Deg170 = 170;
+        public const int Invalid = -1;
+    }
+
+    public class MovieQuality
+    {
+        public const string MP4_FHD_60P = "PS";
+        public const string MP4_FHD_30P = "HQ";
+        public const string MP4_HD_30P = "STD";
+        public const string MP4_VGA_30P = "VGA";
+        public const string MP4_HD_30P_DOUBLE = "SLOW";
+        public const string MP4_HD_30P_QUADRABLE = "SSLOW";
+        public const string MP4_HD_120P = "HS120";
+        public const string MP4_HD_100P = "HS100";
+        public const string MP4_VGA_240P = "HS240";
+        public const string MP4_VGA_200P = "HS200";
+        public const string XAVC_S_FHD_60P = "50M 60p";
+        public const string XAVC_S_FHD_50P = "50M 50p";
+        public const string XAVC_S_FHD_30P = "50M 30p";
+        public const string XAVC_S_FHD_25P = "50M 25p";
+        public const string XAVC_S_FHD_24P = "50M 24p";
+    }
+
+    public class FlashMode
+    {
+        public const string Off = "off";
+        public const string Auto = "auto";
+        public const string On = "on";
+        public const string SlowSync = "slowSync";
+        public const string RearSync = "rearSync";
+        public const string Wireless = "wireless";
+    }
+
+    public class LiveviewSize
+    {
+        public const string XGA = "L";
+        public const string VGA = "M";
     }
 }
