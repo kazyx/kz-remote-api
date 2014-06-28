@@ -523,6 +523,7 @@ namespace Kazyx.RemoteApi.Internal
                 MovieQuality = mquality,
                 StorageInfo = storage,
                 FlashMode = flash,
+                FocusMode = fm,
             };
         }
     }

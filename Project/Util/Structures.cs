@@ -61,6 +61,7 @@ namespace Kazyx.RemoteApi
         public Capability<string> MovieQuality { internal set; get; }
         public StorageInfo[] StorageInfo { internal set; get; }
         public Capability<string> FlashMode { internal set; get; }
+        public Capability<string> FocusMode { internal set; get; }
     }
 
     public class EvCapability
