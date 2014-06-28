@@ -4,10 +4,10 @@ namespace Kazyx.RemoteApi
 {
     public class ZoomInfo
     {
-        public int position { set; get; }
-        public int number_of_boxes { set; get; }
-        public int current_box_index { set; get; }
-        public int position_in_current_box { set; get; }
+        public int Position { set; get; }
+        public int NumberOfBoxes { set; get; }
+        public int CurrentBoxIndex { set; get; }
+        public int PositionInCurrentBox { set; get; }
     }
 
     /// <summary>
@@ -16,22 +16,22 @@ namespace Kazyx.RemoteApi
     /// <typeparam name="T"></typeparam>
     public class Capability<T>
     {
-        public T current { set; get; }
-        public T[] candidates { set; get; }
+        public T Current { set; get; }
+        public T[] Candidates { set; get; }
     }
 
     public class MethodType
     {
-        public string name { set; get; }
-        public string[] reqtypes { set; get; }
-        public string[] restypes { set; get; }
-        public string version { set; get; }
+        public string Name { set; get; }
+        public string[] ReqTypes { set; get; }
+        public string[] ResTypes { set; get; }
+        public string Version { set; get; }
     }
 
     public class ServerAppInfo
     {
-        public string name { set; get; }
-        public string version { set; get; }
+        public string Name { set; get; }
+        public string Version { set; get; }
     }
 
     public class Event
@@ -111,8 +111,8 @@ namespace Kazyx.RemoteApi
 
     public class WhiteBalanceCapability
     {
-        public WhiteBalance current { internal set; get; }
-        public WhiteBalanceCandidate[] candidates { internal set; get; }
+        public WhiteBalance Current { internal set; get; }
+        public WhiteBalanceCandidate[] Candidates { internal set; get; }
     }
 
     public class WhiteBalance

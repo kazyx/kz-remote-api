@@ -96,8 +96,8 @@ namespace Kazyx.RemoteApi.Internal
 
             return new Capability<T>
             {
-                current = json["result"].Value<T>(0),
-                candidates = _candidates.ToArray()
+                Current = json["result"].Value<T>(0),
+                Candidates = _candidates.ToArray()
             };
         }
 
@@ -121,8 +121,8 @@ namespace Kazyx.RemoteApi.Internal
 
             return new Capability<T>
             {
-                current = JsonConvert.DeserializeObject<T>(json["result"][0].ToString(Formatting.None)),
-                candidates = _candidates.ToArray()
+                Current = JsonConvert.DeserializeObject<T>(json["result"][0].ToString(Formatting.None)),
+                Candidates = _candidates.ToArray()
             };
         }
     }

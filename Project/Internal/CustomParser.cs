@@ -28,8 +28,8 @@ namespace Kazyx.RemoteApi.Internal
 
             return new WhiteBalanceCapability
             {
-                current = JsonConvert.DeserializeObject<WhiteBalance>(json["result"][0].ToString(Formatting.None)),
-                candidates = JsonConvert.DeserializeObject<WhiteBalanceCandidate[]>(json["result"][1].ToString(Formatting.None))
+                Current = JsonConvert.DeserializeObject<WhiteBalance>(json["result"][0].ToString(Formatting.None)),
+                Candidates = JsonConvert.DeserializeObject<WhiteBalanceCandidate[]>(json["result"][1].ToString(Formatting.None))
             };
         }
 
@@ -53,7 +53,7 @@ namespace Kazyx.RemoteApi.Internal
         {
             var res = BasicParser.AsParallelPrimitives<string>(jString, 2);
 
-            return new ServerAppInfo { name = res[0], version = res[1] };
+            return new ServerAppInfo { Name = res[0], Version = res[1] };
         }
 
         internal static SetFocusResult AsSetFocusResult(string jString)
@@ -122,10 +122,10 @@ namespace Kazyx.RemoteApi.Internal
                 }
                 method_types.Add(new MethodType()
                 {
-                    name = token.Value<string>(0),
-                    reqtypes = req.ToArray(),
-                    restypes = res.ToArray(),
-                    version = token.Value<string>(3)
+                    Name = token.Value<string>(0),
+                    ReqTypes = req.ToArray(),
+                    ResTypes = res.ToArray(),
+                    Version = token.Value<string>(3)
                 });
             }
 
@@ -163,10 +163,10 @@ namespace Kazyx.RemoteApi.Internal
             {
                 zoom = new ZoomInfo
                 {
-                    position = jZoom.Value<int>("zoomPosition"),
-                    number_of_boxes = jZoom.Value<int>("zoomNumberBox"),
-                    current_box_index = jZoom.Value<int>("zoomIndexCurrentBox"),
-                    position_in_current_box = jZoom.Value<int>("zoomPositionCurrentBox")
+                    Position = jZoom.Value<int>("zoomPosition"),
+                    NumberOfBoxes = jZoom.Value<int>("zoomNumberBox"),
+                    CurrentBoxIndex = jZoom.Value<int>("zoomIndexCurrentBox"),
+                    PositionInCurrentBox = jZoom.Value<int>("zoomPositionCurrentBox")
                 };
             }
 
@@ -217,8 +217,8 @@ namespace Kazyx.RemoteApi.Internal
                 }
                 beep = new Capability<string>
                 {
-                    current = jbeep.Value<string>("currentBeepMode"),
-                    candidates = bcand.ToArray()
+                    Current = jbeep.Value<string>("currentBeepMode"),
+                    Candidates = bcand.ToArray()
                 };
             }
 
@@ -234,8 +234,8 @@ namespace Kazyx.RemoteApi.Internal
                 }
                 mquality = new Capability<string>
                 {
-                    current = jMQuality.Value<string>("currentMovieQuality"),
-                    candidates = modecandidates.ToArray()
+                    Current = jMQuality.Value<string>("currentMovieQuality"),
+                    Candidates = modecandidates.ToArray()
                 };
             }
 
@@ -266,8 +266,8 @@ namespace Kazyx.RemoteApi.Internal
                 }
                 steady = new Capability<string>
                 {
-                    current = jSteady.Value<string>("currentSteadyMode"),
-                    candidates = modecandidates.ToArray()
+                    Current = jSteady.Value<string>("currentSteadyMode"),
+                    Candidates = modecandidates.ToArray()
                 };
             }
 
@@ -282,8 +282,8 @@ namespace Kazyx.RemoteApi.Internal
                 }
                 angle = new Capability<int>
                 {
-                    current = jAngle.Value<int>("currentViewAngle"),
-                    candidates = modecandidates.ToArray()
+                    Current = jAngle.Value<int>("currentViewAngle"),
+                    Candidates = modecandidates.ToArray()
                 };
             }
 
@@ -298,8 +298,8 @@ namespace Kazyx.RemoteApi.Internal
                 }
                 exposure = new Capability<string>
                 {
-                    current = jExposureMode.Value<string>("currentExposureMode"),
-                    candidates = modecandidates.ToArray()
+                    Current = jExposureMode.Value<string>("currentExposureMode"),
+                    Candidates = modecandidates.ToArray()
                 };
             }
 
@@ -314,8 +314,8 @@ namespace Kazyx.RemoteApi.Internal
                 }
                 postview = new Capability<string>
                 {
-                    current = jPostView.Value<string>("currentPostviewImageSize"),
-                    candidates = pvcandidates.ToArray()
+                    Current = jPostView.Value<string>("currentPostviewImageSize"),
+                    Candidates = pvcandidates.ToArray()
                 };
             }
 
@@ -330,8 +330,8 @@ namespace Kazyx.RemoteApi.Internal
                 }
                 selftimer = new Capability<int>
                 {
-                    current = jSelfTimer.Value<int>("currentSelfTimer"),
-                    candidates = stcandidates.ToArray()
+                    Current = jSelfTimer.Value<int>("currentSelfTimer"),
+                    Candidates = stcandidates.ToArray()
                 };
             }
 
@@ -346,8 +346,8 @@ namespace Kazyx.RemoteApi.Internal
                 }
                 shootmode = new Capability<string>
                 {
-                    current = jShootMode.Value<string>("currentShootMode"),
-                    candidates = smcandidates.ToArray()
+                    Current = jShootMode.Value<string>("currentShootMode"),
+                    Candidates = smcandidates.ToArray()
                 };
             }
 
@@ -378,8 +378,8 @@ namespace Kazyx.RemoteApi.Internal
                 }
                 flash = new Capability<string>
                 {
-                    current = jFlash.Value<string>("currentFlashMode"),
-                    candidates = flcandidates.ToArray()
+                    Current = jFlash.Value<string>("currentFlashMode"),
+                    Candidates = flcandidates.ToArray()
                 };
             }
 
@@ -394,8 +394,8 @@ namespace Kazyx.RemoteApi.Internal
                 }
                 fn = new Capability<string>
                 {
-                    current = jFN.Value<string>("currentFNumber"),
-                    candidates = fncandidates.ToArray()
+                    Current = jFN.Value<string>("currentFNumber"),
+                    Candidates = fncandidates.ToArray()
                 };
             }
 
@@ -410,8 +410,8 @@ namespace Kazyx.RemoteApi.Internal
                 }
                 fm = new Capability<string>
                 {
-                    current = jFM.Value<string>("currentFocusMode"),
-                    candidates = candidates.ToArray()
+                    Current = jFM.Value<string>("currentFocusMode"),
+                    Candidates = candidates.ToArray()
                 };
             }
 
@@ -426,8 +426,8 @@ namespace Kazyx.RemoteApi.Internal
                 }
                 iso = new Capability<string>
                 {
-                    current = jIso.Value<string>("currentIsoSpeedRate"),
-                    candidates = isocandidates.ToArray()
+                    Current = jIso.Value<string>("currentIsoSpeedRate"),
+                    Candidates = isocandidates.ToArray()
                 };
             }
 
@@ -449,8 +449,8 @@ namespace Kazyx.RemoteApi.Internal
                 }
                 ss = new Capability<string>
                 {
-                    current = jSS.Value<string>("currentShutterSpeed"),
-                    candidates = sscandidates.ToArray()
+                    Current = jSS.Value<string>("currentShutterSpeed"),
+                    Candidates = sscandidates.ToArray()
                 };
             }
 
