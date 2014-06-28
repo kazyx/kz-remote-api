@@ -161,13 +161,7 @@ namespace Kazyx.RemoteApi.Internal
             ZoomInfo zoom = null;
             if (jZoom.HasValues)
             {
-                zoom = new ZoomInfo
-                {
-                    Position = jZoom.Value<int>("zoomPosition"),
-                    NumberOfBoxes = jZoom.Value<int>("zoomNumberBox"),
-                    CurrentBoxIndex = jZoom.Value<int>("zoomIndexCurrentBox"),
-                    PositionInCurrentBox = jZoom.Value<int>("zoomPositionCurrentBox")
-                };
+                zoom = JsonConvert.DeserializeObject<ZoomInfo>(jZoom.ToString(Formatting.None));
             }
 
             var jLiveview = jResult[3];

@@ -4,9 +4,16 @@ namespace Kazyx.RemoteApi
 {
     public class ZoomInfo
     {
+        [JsonProperty("zoomPosition")]
         public int Position { set; get; }
+
+        [JsonProperty("zoomNumberBox")]
         public int NumberOfBoxes { set; get; }
+
+        [JsonProperty("zoomIndexCurrentBox")]
         public int CurrentBoxIndex { set; get; }
+
+        [JsonProperty("zoomPositionCurrentBox")]
         public int PositionInCurrentBox { set; get; }
     }
 
