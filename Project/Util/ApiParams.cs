@@ -62,6 +62,7 @@ namespace Kazyx.RemoteApi
         public const string Program = "Program Auto";
         public const string Aperture = "Aperture";
         public const string SS = "Shutter";
+        public const string Manual = "Manual";
         public const string Intelligent = "Intelligent Auto";
         public const string Superior = "Superior Auto";
     }

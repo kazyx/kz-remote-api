@@ -82,6 +82,9 @@ namespace Kazyx.RemoteApi
     {
         [JsonProperty("set")]
         public bool Focused { internal set; get; }
+
+        [JsonProperty("touchCoordinates")]
+        public double[] Position { internal set; get; }
     }
 
     public class EvCandidate

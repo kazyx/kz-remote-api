@@ -474,9 +474,15 @@ namespace Kazyx.RemoteApi.Internal
             TouchFocusStatus tafs = null;
             if (jtaf.HasValues)
             {
+                var coordinates = new List<double>();
+                foreach (var val in jtaf["currentTouchCoordinates"].Values<double>())
+                {
+                    coordinates.Add(val);
+                }
                 tafs = new TouchFocusStatus
                 {
-                    Focused = jtaf.Value<bool>("currentSet")
+                    Focused = jtaf.Value<bool>("currentSet"),
+                    Position = coordinates.ToArray()
                 };
             }
 
