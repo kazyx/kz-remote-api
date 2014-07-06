@@ -43,38 +43,38 @@ namespace Kazyx.RemoteApi
 
     public class Event
     {
-        public string[] AvailableApis { internal set; get; }
-        public string CameraStatus { internal set; get; }
-        public ZoomInfo ZoomInfo { internal set; get; }
-        public bool LiveviewAvailable { internal set; get; }
-        public Capability<string> PostviewSizeInfo { internal set; get; }
-        public Capability<int> SelfTimerInfo { internal set; get; }
-        public Capability<string> ShootModeInfo { internal set; get; }
-        public Capability<string> ExposureMode { internal set; get; }
-        public Capability<string> ShutterSpeed { internal set; get; }
-        public Capability<string> ISOSpeedRate { internal set; get; }
-        public Capability<string> FNumber { internal set; get; }
-        public EvCapability EvInfo { internal set; get; }
-        public bool? ProgramShiftActivated { internal set; get; }
-        public TouchFocusStatus TouchAFStatus { internal set; get; }
-        public string[] PictureUrls { internal set; get; }
-        public Capability<string> BeepMode { internal set; get; }
-        public string LiveviewOrientation { internal set; get; }
-        public WhiteBalanceEvent WhiteBalance { internal set; get; }
-        public StillImageSizeEvent StillImageSize { internal set; get; }
-        public string FocusStatus { internal set; get; }
-        public Capability<string> SteadyMode { internal set; get; }
-        public Capability<int> ViewAngle { internal set; get; }
-        public Capability<string> MovieQuality { internal set; get; }
-        public StorageInfo[] StorageInfo { internal set; get; }
-        public Capability<string> FlashMode { internal set; get; }
-        public Capability<string> FocusMode { internal set; get; }
+        public string[] AvailableApis { set; get; }
+        public string CameraStatus { set; get; }
+        public ZoomInfo ZoomInfo { set; get; }
+        public bool LiveviewAvailable { set; get; }
+        public Capability<string> PostviewSizeInfo { set; get; }
+        public Capability<int> SelfTimerInfo { set; get; }
+        public Capability<string> ShootModeInfo { set; get; }
+        public Capability<string> ExposureMode { set; get; }
+        public Capability<string> ShutterSpeed { set; get; }
+        public Capability<string> ISOSpeedRate { set; get; }
+        public Capability<string> FNumber { set; get; }
+        public EvCapability EvInfo { set; get; }
+        public bool? ProgramShiftActivated { set; get; }
+        public TouchFocusStatus TouchAFStatus { set; get; }
+        public string[] PictureUrls { set; get; }
+        public Capability<string> BeepMode { set; get; }
+        public string LiveviewOrientation { set; get; }
+        public WhiteBalanceEvent WhiteBalance { set; get; }
+        public StillImageSizeEvent StillImageSize { set; get; }
+        public string FocusStatus { set; get; }
+        public Capability<string> SteadyMode { set; get; }
+        public Capability<int> ViewAngle { set; get; }
+        public Capability<string> MovieQuality { set; get; }
+        public StorageInfo[] StorageInfo { set; get; }
+        public Capability<string> FlashMode { set; get; }
+        public Capability<string> FocusMode { set; get; }
     }
 
     public class EvCapability
     {
         public int CurrentIndex { set; get; }
-        public EvCandidate Candidate { internal set; get; }
+        public EvCandidate Candidate { set; get; }
     }
 
     public class SetFocusResult
@@ -89,17 +89,17 @@ namespace Kazyx.RemoteApi
     public class TouchFocusStatus
     {
         [JsonProperty("set")]
-        public bool Focused { internal set; get; }
+        public bool Focused { set; get; }
 
         [JsonProperty("touchCoordinates")]
-        public double[] Position { internal set; get; }
+        public double[] Position { set; get; }
     }
 
     public class EvCandidate
     {
-        public EvStepDefinition IndexStep { internal set; get; }
-        public int MaxIndex { internal set; get; }
-        public int MinIndex { internal set; get; }
+        public EvStepDefinition IndexStep { set; get; }
+        public int MaxIndex { set; get; }
+        public int MinIndex { set; get; }
     }
 
     public class StillImageSize
@@ -113,14 +113,14 @@ namespace Kazyx.RemoteApi
 
     public class StillImageSizeEvent
     {
-        public bool CapabilityChanged { internal set; get; }
-        public StillImageSize Current { internal set; get; }
+        public bool CapabilityChanged { set; get; }
+        public StillImageSize Current { set; get; }
     }
 
     public class WhiteBalanceCapability
     {
-        public WhiteBalance Current { internal set; get; }
-        public WhiteBalanceCandidate[] Candidates { internal set; get; }
+        public WhiteBalance Current { set; get; }
+        public WhiteBalanceCandidate[] Candidates { set; get; }
     }
 
     public class WhiteBalance
@@ -143,8 +143,8 @@ namespace Kazyx.RemoteApi
 
     public class WhiteBalanceEvent
     {
-        public bool CapabilityChanged { internal set; get; }
-        public WhiteBalance Current { internal set; get; }
+        public bool CapabilityChanged { set; get; }
+        public WhiteBalance Current { set; get; }
     }
 
     public class WhiteBalanceCandidate
