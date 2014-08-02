@@ -95,6 +95,7 @@ namespace Kazyx.RemoteApi
         public const string Fluorescent_DayLight = "Fluorescent: Daylight (+2)";
         public const string Manual = "Color Temperature";
         public const string Flash = "Flash";
+        public const string Custom = "Custom";
         public const string Custom_1 = "Custom 1";
         public const string Custom_2 = "Custom 2";
         public const string Custom_3 = "Custom 3";
