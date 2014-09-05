@@ -302,11 +302,11 @@ namespace Kazyx.RemoteApi
                 res.TouchAFStatus = new TouchFocusStatus
                 {
                     Focused = elem.Value<bool>("currentSet"),
-                    Position = new FocusPosition
+                    Position = coordinates.Length == 2 ? new FocusPosition
                     {
                         X_Axis = coordinates[0],
                         Y_Axis = coordinates[1]
-                    }
+                    } : null
                 };
             }
 
