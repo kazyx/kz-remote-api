@@ -35,6 +35,10 @@ namespace Kazyx.RemoteApi
         ShootingFailure = 40400,
         CameraNotReady = 40401,
         DuplicatePolling = 40402,
-        StillCapturingNotFinished = 40403
+        StillCapturingNotFinished = 40403,
+        ContentProtected = 41000,
+        ContentDoesNotExist = 41001,
+        StorageRemoved = 41002,
+        FailedToDelege = 41003,
     }
 }

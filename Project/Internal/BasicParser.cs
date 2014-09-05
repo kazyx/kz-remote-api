@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace Kazyx.RemoteApi.Internal
+namespace Kazyx.RemoteApi
 {
     internal class BasicParser
     {
@@ -46,17 +47,11 @@ namespace Kazyx.RemoteApi.Internal
         /// </summary>
         /// <typeparam name="T">Type of the value</typeparam>
         /// <param name="jString"></param>
-        internal static T[] AsPrimitiveArray<T>(string jString)
+        internal static List<T> AsPrimitiveList<T>(string jString)
         {
             var json = Initialize(jString);
 
-            var array = new List<T>();
-            foreach (var token in json["result"][0].Values<T>())
-            {
-                array.Add(token);
-            }
-
-            return array.ToArray();
+            return json["result"][0].Values<T>().ToList();
         }
 
         /// <summary>
@@ -88,16 +83,10 @@ namespace Kazyx.RemoteApi.Internal
         {
             var json = Initialize(jString);
 
-            var _candidates = new List<T>();
-            foreach (var token in json["result"][1].Values<T>())
-            {
-                _candidates.Add(token);
-            }
-
             return new Capability<T>
             {
                 Current = json["result"].Value<T>(0),
-                Candidates = _candidates.ToArray()
+                Candidates = json["result"][1].Values<T>().ToList()
             };
         }
 
@@ -112,17 +101,17 @@ namespace Kazyx.RemoteApi.Internal
         {
             var json = Initialize(jString);
 
-            var _candidates = new List<T>();
+            var list = new List<T>();
             var array = json["result"][1] as JArray;
             foreach (var token in array.Values<JObject>())
             {
-                _candidates.Add(JsonConvert.DeserializeObject<T>(token.ToString(Formatting.None)));
+                list.Add(JsonConvert.DeserializeObject<T>(token.ToString(Formatting.None)));
             }
 
             return new Capability<T>
             {
                 Current = JsonConvert.DeserializeObject<T>(json["result"][0].ToString(Formatting.None)),
-                Candidates = _candidates.ToArray()
+                Candidates = list,
             };
         }
     }

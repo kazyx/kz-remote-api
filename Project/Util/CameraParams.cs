@@ -1,5 +1,5 @@
 
-namespace Kazyx.RemoteApi
+namespace Kazyx.RemoteApi.Camera
 {
     public class ShootModeParam
     {
@@ -49,6 +49,9 @@ namespace Kazyx.RemoteApi
         public const string ItvWaitRecStart = "IntervalWaitRecStart";
         public const string ItvRecording = "IntervalRecording";
         public const string ItvWaitRecStop = "IntervalWaitRecStop";
+        public const string ContentsTransfer = "ContentsTransfer";
+        public const string StreamingMovie = "Streaming";
+        public const string DeletingContents = "Deleting";
     }
 
     public class FocusArea
@@ -182,5 +185,112 @@ namespace Kazyx.RemoteApi
     {
         public const string XGA = "L";
         public const string VGA = "M";
+    }
+
+    public class ColorMode
+    {
+        public const string Neutral = "Neutral";
+        public const string Vivid = "Vivid";
+    }
+
+    public class ContinuousShootMode
+    {
+        public const string Single = "Single";
+        public const string Cont = "Continuous";
+        public const string SpeedPriority = "Spd Priority Cont.";
+        public const string Burst = "Burst";
+        public const string MotionShot = "MotionShot";
+    }
+
+    public class ContinuousShootSpeed
+    {
+        public const string High = "Hi";
+        public const string Low = "Low";
+        public const string FixedFrames_10_In_1_25Sec = "8fps 1sec";
+        public const string FixedFrames_10_In_2Sec = "5fps 2sec";
+        public const string FixedFrames_10_In_5Sec = "2fps 5sec";
+    }
+
+    public class FlipMode
+    {
+        public const string On = "On";
+        public const string Off = "Off";
+    }
+
+    public class IrRemoteSetting
+    {
+        public const string On = "On";
+        public const string Off = "Off";
+    }
+
+    public class TvColorSystemMode
+    {
+        public const string NTSC = "NTSC";
+        public const string PAL = "PAL";
+    }
+
+    public class CameraFunction
+    {
+        public const string RemoteShooting = "Remote Shooting";
+        public const string ContentTransfer = "Content Transfer";
+    }
+
+    public class Scene
+    {
+        public const string Normal = "Normal";
+        public const string UnderWater = "Under Water";
+    }
+
+    public class ImageQuality
+    {
+        public const string RawAndJpeg = "RAW+JPEG";
+        public const string Fine = "Fine";
+        public const string Standard = "Standard";
+    }
+
+    public class ZoomMode
+    {
+        public const string Optical = "Optical Zoom Only";
+        public const string ClearImageDigital = "On:Clear Image Zoom";
+    }
+
+    public class TrackingFocusMode
+    {
+        public const string Off = "Off";
+        public const string On = "On";
+    }
+
+    public class TrackingFocusStatus
+    {
+        public const string Tracking = "Tracking";
+        public const string NotTracking = "Not Tracking";
+    }
+
+    public class MovieFormatMode
+    {
+        public const string MP4 = "MP4";
+        public const string XAVCS = "XAVC S";
+    }
+
+    public class StorageId
+    {
+        public const string Card_No1 = "Memory Card 1";
+        public const string NoMedia = "No Media";
+    }
+
+    public class BatteryId
+    {
+        public const string External_No1 = "externalBattery1";
+        public const string NoBattery = "noBattery";
+    }
+
+    public class BatteryStatus
+    {
+        public const string Active = "active";
+        public const string Inactive = "inactive";
+        public const string Unknown = "unknown";
+        public const string NearEnd = "batteryNearEnd";
+        public const string Charging = "charging";
+        public const string NoInfo = "";
     }
 }

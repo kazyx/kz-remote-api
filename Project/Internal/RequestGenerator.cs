@@ -1,8 +1,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Threading;
 
-namespace Kazyx.RemoteApi.Internal
+namespace Kazyx.RemoteApi
 {
     /// <summary>
     /// This class provide function to generate JSON string to set as a body of API request.
@@ -68,8 +69,12 @@ namespace Kazyx.RemoteApi.Internal
                     return "1.0";
                 case ApiVersion.V1_1:
                     return "1.1";
+                case ApiVersion.V1_2:
+                    return "1.2";
+                case ApiVersion.V1_3:
+                    return "1.3";
                 default:
-                    throw new System.InvalidOperationException("Version " + version + " is not supported.");
+                    throw new InvalidOperationException("Version " + version + " is not supported.");
             }
         }
     }

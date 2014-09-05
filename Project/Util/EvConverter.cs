@@ -1,8 +1,13 @@
 
-namespace Kazyx.RemoteApi
+namespace Kazyx.RemoteApi.Camera
 {
+    /// <summary>
+    /// EV parameter conversion utility.
+    /// </summary>
     public class EvConverter
     {
+        private EvConverter() { }
+
         /// <summary>
         /// Convert step definition from integer value to the Enum value.
         /// </summary>
@@ -75,13 +80,22 @@ namespace Kazyx.RemoteApi
         }
     }
 
+    /// <summary>
+    /// Ev incrementation step definitions.
+    /// </summary>
     public enum EvStepDefinition
     {
+        /// <summary>
+        /// Undefined step definition.
+        /// </summary>
         Undefined,
         /// <summary>
         /// Increament of the index represents that EV is increased by 0.33.
         /// </summary>
         EV_1_3,
+        /// <summary>
+        /// Increament of the index represents that EV is increased by 0.5.
+        /// </summary>
         EV_1_2
     }
 }

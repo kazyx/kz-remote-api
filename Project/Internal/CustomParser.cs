@@ -1,16 +1,31 @@
-﻿using Newtonsoft.Json;
+﻿using Kazyx.RemoteApi.Camera;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
-namespace Kazyx.RemoteApi.Internal
+namespace Kazyx.RemoteApi
 {
     internal class CustomParser
     {
+        internal static TouchFocusStatus AsTouchFocusStatus(string jString)
+        {
+            var json = BasicParser.Initialize(jString);
+
+            var position = json["result"][0].Values<double>("touchCoordinates").ToArray();
+
+            return new TouchFocusStatus
+            {
+                Focused = json["result"][0].Value<bool>("set"),
+                Position = new FocusPosition { X_Axis = position[0], Y_Axis = position[1] }
+            };
+        }
+
         internal static ProgramShiftRange AsProgramShiftRange(string jString)
         {
-            var range = BasicParser.AsPrimitiveArray<int>(jString);
-            if (range.Length != 2)
+            var range = BasicParser.AsPrimitiveList<int>(jString);
+            if (range.Count != 2)
             {
                 throw new RemoteApiException(StatusCode.IllegalResponse);
             }
@@ -29,7 +44,7 @@ namespace Kazyx.RemoteApi.Internal
             return new WhiteBalanceCapability
             {
                 Current = JsonConvert.DeserializeObject<WhiteBalance>(json["result"][0].ToString(Formatting.None)),
-                Candidates = JsonConvert.DeserializeObject<WhiteBalanceCandidate[]>(json["result"][1].ToString(Formatting.None))
+                Candidates = JsonConvert.DeserializeObject<List<WhiteBalanceCandidate>>(json["result"][1].ToString(Formatting.None))
             };
         }
 
@@ -63,27 +78,13 @@ namespace Kazyx.RemoteApi.Internal
             return JsonConvert.DeserializeObject<SetFocusResult>(json["result"][1].ToString(Formatting.None)); // ignore 0th parameter
         }
 
-        internal static EvCandidate[] AsEvCandidates(string jString)
+        internal static List<EvCandidate> AsEvCandidates(string jString)
         {
             var json = BasicParser.Initialize(jString);
 
-            var maxlist = new List<int>();
-            foreach (int max in json["result"][0].Values<int>())
-            {
-                maxlist.Add(max);
-            }
-
-            var minlist = new List<int>();
-            foreach (int min in json["result"][1].Values<int>())
-            {
-                minlist.Add(min);
-            }
-
-            var deflist = new List<int>();
-            foreach (int def in json["result"][2].Values<int>())
-            {
-                deflist.Add(def);
-            }
+            var maxlist = json["result"][0].Values<int>().ToList();
+            var minlist = json["result"][1].Values<int>().ToList();
+            var deflist = json["result"][2].Values<int>().ToList();
 
             if (maxlist.Count != minlist.Count || minlist.Count != deflist.Count)
             {
@@ -100,425 +101,349 @@ namespace Kazyx.RemoteApi.Internal
                 });
             }
 
-            return tmp.ToArray();
+            return tmp;
         }
 
-        internal static MethodType[] AsMethodTypes(string jString)
+        internal static List<MethodType> AsMethodTypes(string jString)
         {
             var json = BasicParser.Initialize(jString);
 
             var method_types = new List<MethodType>();
             foreach (var token in json["results"])
             {
-                var req = new List<string>();
-                foreach (var type in token[1].Values<string>())
-                {
-                    req.Add(type);
-                }
-                var res = new List<string>();
-                foreach (var type in token[2].Values<string>())
-                {
-                    res.Add(type);
-                }
                 method_types.Add(new MethodType()
                 {
                     Name = token.Value<string>(0),
-                    ReqTypes = req.ToArray(),
-                    ResTypes = res.ToArray(),
+                    ReqTypes = token[1].Values<string>().ToList(),
+                    ResTypes = token[2].Values<string>().ToList(),
                     Version = token.Value<string>(3)
                 });
             }
 
-            return method_types.ToArray();
+            return method_types;
         }
 
         internal static Event AsCameraEvent(string jString)
         {
             var json = BasicParser.Initialize(jString);
             Debug.WriteLine(json.ToString());
+
             var jResult = json["result"] as JArray;
 
-            var jApi = jResult[0];
-            string[] apis = null;
-            if (jApi.HasValues)
-            {
-                var apilist = new List<string>();
-                foreach (var str in jApi["names"].Values<string>())
-                {
-                    apilist.Add(str);
-                }
-                apis = apilist.ToArray();
-            }
+            var res = new Event();
 
-            var jStatus = jResult[1];
-            string status = null;
-            if (jStatus.HasValues)
-            {
-                status = jStatus.Value<string>("cameraStatus");
-            }
+            var elem = jResult[0];
+            res.AvailableApis = elem.HasValues ? elem["names"].Values<string>().ToList() : null;
 
-            var jZoom = jResult[2];
-            ZoomInfo zoom = null;
-            if (jZoom.HasValues)
-            {
-                zoom = JsonConvert.DeserializeObject<ZoomInfo>(jZoom.ToString(Formatting.None));
-            }
+            elem = jResult[1];
+            res.CameraStatus = elem.HasValues ? elem.Value<string>("cameraStatus") : null;
 
-            var jLiveview = jResult[3];
-            bool liveview_status = false;
-            if (jLiveview.HasValues)
-            {
-                jLiveview.Value<bool>("liveviewStatus");
-            }
+            elem = jResult[2];
+            res.ZoomInfo = elem.HasValues ? JsonConvert.DeserializeObject<ZoomInfo>(elem.ToString(Formatting.None)) : null;
 
-            var jlvo = jResult[4];
-            string lv_orientation = null;
-            if (jlvo.HasValues)
-            {
-                jlvo.Value<string>("liveviewOrientation");
-            }
+            elem = jResult[3];
+            res.LiveviewAvailable = elem.HasValues ? elem.Value<bool>("liveviewStatus") : false;
 
-            var jpicurls = jResult[5];
-            string[] pic_urls = null;
-            if (jpicurls.HasValues)
+            elem = jResult[4];
+            res.LiveviewOrientation = elem.HasValues ? elem.Value<string>("liveviewOrientation") : null;
+
+            elem = jResult[5];
+            if (elem.HasValues)
             {
                 var tmp = new List<string>();
-                foreach (var obj in jpicurls.Children())
+                foreach (var obj in elem.Children())
                 {
                     foreach (var url in obj["takePictureUrl"].Values<string>())
                     {
                         tmp.Add(url);
                     }
                 }
-                pic_urls = tmp.ToArray();
+                res.PictureUrls = tmp;
             }
 
-            var jStorageInfo = jResult[10];
-            StorageInfo[] storage = null;
-            if (jStorageInfo.HasValues)
-            {
-                storage = JsonConvert.DeserializeObject<StorageInfo[]>(jStorageInfo.ToString(Formatting.None));
-            }
+            elem = jResult[10];
+            res.StorageInfo = elem.HasValues ? JsonConvert.DeserializeObject<List<StorageInfo>>(elem.ToString(Formatting.None)) : null;
 
-            var jbeep = jResult[11];
-            Capability<string> beep = null;
-            if (jbeep.HasValues)
-            {
-                var bcand = new List<string>();
-                foreach (var str in jbeep["beepModeCandidates"].Values<string>())
+            elem = jResult[11];
+            res.BeepMode = elem.HasValues ? new Capability<string>
                 {
-                    bcand.Add(str);
-                }
-                beep = new Capability<string>
-                {
-                    Current = jbeep.Value<string>("currentBeepMode"),
-                    Candidates = bcand.ToArray()
-                };
-            }
+                    Current = elem.Value<string>("currentBeepMode"),
+                    Candidates = elem["beepModeCandidates"].Values<string>().ToList()
+                } : null;
 
-            var jMQuality = jResult[13];
-            Capability<string> mquality = null;
-            if (jMQuality.HasValues)
-            {
-                Debug.WriteLine(jMQuality.ToString());
-                var modecandidates = new List<string>();
-                foreach (var str in jMQuality["movieQualityCandidates"].Values<string>())
+            elem = jResult[13];
+            res.MovieQuality = elem.HasValues ? new Capability<string>
                 {
-                    modecandidates.Add(str);
-                }
-                mquality = new Capability<string>
-                {
-                    Current = jMQuality.Value<string>("currentMovieQuality"),
-                    Candidates = modecandidates.ToArray()
-                };
-            }
+                    Current = elem.Value<string>("currentMovieQuality"),
+                    Candidates = elem["movieQualityCandidates"].Values<string>().ToList()
+                } : null;
 
-            var jssize = jResult[14];
-            StillImageSizeEvent sis = null;
-            if (jssize.HasValues)
-            {
-
-                sis = new StillImageSizeEvent
+            elem = jResult[14];
+            res.StillImageSize = elem.HasValues ? new StillImageSizeEvent
                 {
                     Current = new StillImageSize
                     {
-                        AspectRatio = jssize.Value<string>("currentAspect"),
-                        SizeDefinition = jssize.Value<string>("currentSize")
+                        AspectRatio = elem.Value<string>("currentAspect"),
+                        SizeDefinition = elem.Value<string>("currentSize")
                     },
-                    CapabilityChanged = jssize.Value<bool>("checkAvailability")
-                };
-            }
+                    CapabilityChanged = elem.Value<bool>("checkAvailability")
+                } : null;
 
-            var jSteady = jResult[16];
-            Capability<string> steady = null;
-            if (jSteady.HasValues)
-            {
-                var modecandidates = new List<string>();
-                foreach (var str in jSteady["steadyModeCandidates"].Values<string>())
+            elem = jResult[16];
+            res.SteadyMode = elem.HasValues ? new Capability<string>
                 {
-                    modecandidates.Add(str);
-                }
-                steady = new Capability<string>
-                {
-                    Current = jSteady.Value<string>("currentSteadyMode"),
-                    Candidates = modecandidates.ToArray()
-                };
-            }
+                    Current = elem.Value<string>("currentSteadyMode"),
+                    Candidates = elem["steadyModeCandidates"].Values<string>().ToList()
+                } : null;
 
-            var jAngle = jResult[17];
-            Capability<int> angle = null;
-            if (jAngle.HasValues)
-            {
-                var modecandidates = new List<int>();
-                foreach (var str in jAngle["viewAngleCandidates"].Values<int>())
+            elem = jResult[17];
+            res.ViewAngle = elem.HasValues ? new Capability<int>
                 {
-                    modecandidates.Add(str);
-                }
-                angle = new Capability<int>
-                {
-                    Current = jAngle.Value<int>("currentViewAngle"),
-                    Candidates = modecandidates.ToArray()
-                };
-            }
+                    Current = elem.Value<int>("currentViewAngle"),
+                    Candidates = elem["viewAngleCandidates"].Values<int>().ToList()
+                } : null;
 
-            var jExposureMode = jResult[18];
-            Capability<string> exposure = null;
-            if (jExposureMode.HasValues)
-            {
-                var modecandidates = new List<string>();
-                foreach (var str in jExposureMode["exposureModeCandidates"].Values<string>())
+            elem = jResult[18];
+            res.ExposureMode = elem.HasValues ? new Capability<string>
                 {
-                    modecandidates.Add(str);
-                }
-                exposure = new Capability<string>
-                {
-                    Current = jExposureMode.Value<string>("currentExposureMode"),
-                    Candidates = modecandidates.ToArray()
-                };
-            }
+                    Current = elem.Value<string>("currentExposureMode"),
+                    Candidates = elem["exposureModeCandidates"].Values<string>().ToList()
+                } : null;
 
-            var jPostView = jResult[19];
-            Capability<string> postview = null;
-            if (jPostView.HasValues)
-            {
-                var pvcandidates = new List<string>();
-                foreach (var str in jPostView["postviewImageSizeCandidates"].Values<string>())
+            elem = jResult[19];
+            res.PostviewSizeInfo = elem.HasValues ? new Capability<string>
                 {
-                    pvcandidates.Add(str);
-                }
-                postview = new Capability<string>
-                {
-                    Current = jPostView.Value<string>("currentPostviewImageSize"),
-                    Candidates = pvcandidates.ToArray()
-                };
-            }
+                    Current = elem.Value<string>("currentPostviewImageSize"),
+                    Candidates = elem["postviewImageSizeCandidates"].Values<string>().ToList()
+                } : null;
 
-            var jSelfTimer = jResult[20];
-            Capability<int> selftimer = null;
-            if (jSelfTimer.HasValues)
-            {
-                var stcandidates = new List<int>();
-                foreach (var str in jSelfTimer["selfTimerCandidates"].Values<int>())
+            elem = jResult[20];
+            res.SelfTimerInfo = elem.HasValues ? new Capability<int>
                 {
-                    stcandidates.Add(str);
-                }
-                selftimer = new Capability<int>
-                {
-                    Current = jSelfTimer.Value<int>("currentSelfTimer"),
-                    Candidates = stcandidates.ToArray()
-                };
-            }
+                    Current = elem.Value<int>("currentSelfTimer"),
+                    Candidates = elem["selfTimerCandidates"].Values<int>().ToList()
+                } : null;
 
-            var jShootMode = jResult[21];
-            Capability<string> shootmode = null;
-            if (jShootMode.HasValues)
-            {
-                var smcandidates = new List<string>();
-                foreach (var str in jShootMode["shootModeCandidates"].Values<string>())
+            elem = jResult[21];
+            res.ShootModeInfo = elem.HasValues ? new Capability<string>
                 {
-                    smcandidates.Add(str);
-                }
-                shootmode = new Capability<string>
-                {
-                    Current = jShootMode.Value<string>("currentShootMode"),
-                    Candidates = smcandidates.ToArray()
-                };
-            }
+                    Current = elem.Value<string>("currentShootMode"),
+                    Candidates = elem["shootModeCandidates"].Values<string>().ToList()
+                } : null;
 
-            var jEV = jResult[25];
-            EvCapability ev = null;
-            if (jEV.HasValues)
-            {
-                ev = new EvCapability
+            elem = jResult[25];
+            res.EvInfo = elem.HasValues ? new EvCapability
                 {
-                    CurrentIndex = jEV.Value<int>("currentExposureCompensation"),
+                    CurrentIndex = elem.Value<int>("currentExposureCompensation"),
                     Candidate = new EvCandidate
                     {
-                        MaxIndex = jEV.Value<int>("maxExposureCompensation"),
-                        MinIndex = jEV.Value<int>("minExposureCompensation"),
-                        IndexStep = EvConverter.GetDefinition(jEV.Value<int>("stepIndexOfExposureCompensation"))
+                        MaxIndex = elem.Value<int>("maxExposureCompensation"),
+                        MinIndex = elem.Value<int>("minExposureCompensation"),
+                        IndexStep = EvConverter.GetDefinition(elem.Value<int>("stepIndexOfExposureCompensation"))
+                    }
+                } : null;
+
+            elem = jResult[26];
+            res.FlashMode = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("currentFlashMode"),
+                    Candidates = elem["flashModeCandidates"].Values<string>().ToList()
+                } : null;
+
+            elem = jResult[27];
+            res.FNumber = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("currentFNumber"),
+                    Candidates = elem["fNumberCandidates"].Values<string>().ToList()
+                } : null;
+
+            elem = jResult[28];
+            res.FocusMode = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("currentFocusMode"),
+                    Candidates = elem["focusModeCandidates"].Values<string>().ToList()
+                } : null;
+
+            elem = jResult[29];
+            res.ISOSpeedRate = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("currentIsoSpeedRate"),
+                    Candidates = elem["isoSpeedRateCandidates"].Values<string>().ToList()
+                } : null;
+
+            elem = jResult[31];
+            if (elem.HasValues)
+            {
+                res.ProgramShiftActivated = elem.Value<bool>("isShifted");
+            }
+
+            elem = jResult[32];
+            res.ShutterSpeed = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("currentShutterSpeed"),
+                    Candidates = elem["shutterSpeedCandidates"].Values<string>().ToList()
+                } : null;
+
+            elem = jResult[33];
+            res.WhiteBalance = elem.HasValues ? new WhiteBalanceEvent
+                {
+                    Current = new WhiteBalance
+                    {
+                        Mode = elem.Value<string>("currentWhiteBalanceMode"),
+                        ColorTemperature = elem.Value<int>("currentColorTemperature")
+                    },
+                    CapabilityChanged = elem.Value<bool>("checkAvailability")
+                } : null;
+
+            elem = jResult[34];
+            if (elem.HasValues)
+            {
+                var coordinates = elem["currentTouchCoordinates"].Values<double>().ToArray();
+                res.TouchAFStatus = new TouchFocusStatus
+                {
+                    Focused = elem.Value<bool>("currentSet"),
+                    Position = new FocusPosition
+                    {
+                        X_Axis = coordinates[0],
+                        Y_Axis = coordinates[1]
                     }
                 };
             }
 
-            var jFlash = jResult[26];
-            Capability<string> flash = null;
-            if (jFlash.HasValues)
-            {
-                var flcandidates = new List<string>();
-                foreach (var str in jFlash["flashModeCandidates"].Values<string>())
-                {
-                    flcandidates.Add(str);
-                }
-                flash = new Capability<string>
-                {
-                    Current = jFlash.Value<string>("currentFlashMode"),
-                    Candidates = flcandidates.ToArray()
-                };
-            }
-
-            var jFN = jResult[27];
-            Capability<string> fn = null;
-            if (jFN.HasValues)
-            {
-                var fncandidates = new List<string>();
-                foreach (var str in jFN["fNumberCandidates"].Values<string>())
-                {
-                    fncandidates.Add(str);
-                }
-                fn = new Capability<string>
-                {
-                    Current = jFN.Value<string>("currentFNumber"),
-                    Candidates = fncandidates.ToArray()
-                };
-            }
-
-            var jFM = jResult[28];
-            Capability<string> fm = null;
-            if (jFM.HasValues)
-            {
-                var candidates = new List<string>();
-                foreach (var str in jFM["focusModeCandidates"].Values<string>())
-                {
-                    candidates.Add(str);
-                }
-                fm = new Capability<string>
-                {
-                    Current = jFM.Value<string>("currentFocusMode"),
-                    Candidates = candidates.ToArray()
-                };
-            }
-
-            var jIso = jResult[29];
-            Capability<string> iso = null;
-            if (jIso.HasValues)
-            {
-                var isocandidates = new List<string>();
-                foreach (var str in jIso["isoSpeedRateCandidates"].Values<string>())
-                {
-                    isocandidates.Add(str);
-                }
-                iso = new Capability<string>
-                {
-                    Current = jIso.Value<string>("currentIsoSpeedRate"),
-                    Candidates = isocandidates.ToArray()
-                };
-            }
-
-            var jPS = jResult[31];
-            bool? ps = null;
-            if (jPS.HasValues)
-            {
-                ps = jPS.Value<bool>("isShifted");
-            }
-
-            var jSS = jResult[32];
-            Capability<string> ss = null;
-            if (jSS.HasValues)
-            {
-                var sscandidates = new List<string>();
-                foreach (var str in jSS["shutterSpeedCandidates"].Values<string>())
-                {
-                    sscandidates.Add(str);
-                }
-                ss = new Capability<string>
-                {
-                    Current = jSS.Value<string>("currentShutterSpeed"),
-                    Candidates = sscandidates.ToArray()
-                };
-            }
-
-
-            var jwb = jResult[33];
-            WhiteBalanceEvent wb = null;
-            if (jwb.HasValues)
-            {
-                wb = new WhiteBalanceEvent
-                {
-                    Current = new WhiteBalance
-                    {
-                        Mode = jwb.Value<string>("currentWhiteBalanceMode"),
-                        ColorTemperature = jwb.Value<int>("currentColorTemperature")
-                    },
-                    CapabilityChanged = jwb.Value<bool>("checkAvailability")
-                };
-            }
-
-            var jtaf = jResult[34];
-            TouchFocusStatus tafs = null;
-            if (jtaf.HasValues)
-            {
-                var coordinates = new List<double>();
-                foreach (var val in jtaf["currentTouchCoordinates"].Values<double>())
-                {
-                    coordinates.Add(val);
-                }
-                tafs = new TouchFocusStatus
-                {
-                    Focused = jtaf.Value<bool>("currentSet"),
-                    Position = coordinates.ToArray()
-                };
-            }
-
-            string fs = null;
             if (jResult.Count > 35) // GetEvent version 1.1
             {
-                var jfs = jResult[35];
-                if (jfs != null && jfs.HasValues)
-                {
-                    fs = jfs.Value<string>("focusStatus");
-                }
+                elem = jResult[35];
+                res.FocusStatus = elem.HasValues ? elem.Value<string>("focusStatus") : null;
             }
 
-            return new Event()
+            if (jResult.Count > 36) // GetEvent version 1.2
             {
-                AvailableApis = apis,
-                CameraStatus = status,
-                ZoomInfo = zoom,
-                LiveviewAvailable = liveview_status,
-                PostviewSizeInfo = postview,
-                SelfTimerInfo = selftimer,
-                ShootModeInfo = shootmode,
-                FNumber = fn,
-                ISOSpeedRate = iso,
-                ShutterSpeed = ss,
-                EvInfo = ev,
-                ExposureMode = exposure,
-                ProgramShiftActivated = ps,
-                LiveviewOrientation = lv_orientation,
-                TouchAFStatus = tafs,
-                BeepMode = beep,
-                PictureUrls = pic_urls,
-                StillImageSize = sis,
-                WhiteBalance = wb,
-                FocusStatus = fs,
-                SteadyMode = steady,
-                ViewAngle = angle,
-                MovieQuality = mquality,
-                StorageInfo = storage,
-                FlashMode = flash,
-                FocusMode = fm,
-            };
+                elem = jResult[36];
+                res.ZoomSetting = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("zoom"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
+                } : null;
+
+                elem = jResult[37];
+                res.ImageQuality = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("stillQuality"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
+                } : null;
+
+                elem = jResult[38];
+                res.ContShootingMode = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("contShootingMode"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
+                } : null;
+
+                elem = jResult[39];
+                res.ContShootingSpeed = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("contShootingSpeed"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
+                } : null;
+
+                elem = jResult[40];
+                if (elem.HasValues)
+                {
+                    var list = new List<ContShootingResult>();
+                    var ja = elem["contShootingUrl"] as JArray;
+                    foreach (var token in ja.Values<JObject>())
+                    {
+                        list.Add(JsonConvert.DeserializeObject<ContShootingResult>(token.ToString(Formatting.None)));
+                    }
+                    res.ContShootingResult = list;
+                }
+
+                elem = jResult[41];
+                res.FlipMode = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("flip"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
+                } : null;
+
+                elem = jResult[42];
+                res.SceneSelection = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("scene"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
+                } : null;
+
+                elem = jResult[43];
+                res.IntervalTime = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("intervalTimeSec"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
+                } : null;
+
+                elem = jResult[44];
+                res.ColorSetting = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("colorSetting"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
+                } : null;
+
+                elem = jResult[45];
+                res.MovieFormat = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("movieFileFormat"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
+                } : null;
+
+                elem = jResult[52];
+                res.IrRemoteControl = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("infraredRemoteControl"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
+                } : null;
+
+                elem = jResult[53];
+                res.TvColorSystem = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("tvColorSystem"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
+                } : null;
+
+                elem = jResult[54];
+                res.TrackingFocusStatus = elem.HasValues ? elem.Value<string>("trackingFocusStatus") : null;
+
+                elem = jResult[55];
+                res.TrackingFocusMode = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("trackingFocus"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
+                } : null;
+
+                elem = jResult[56];
+                if (elem.HasValues)
+                {
+                    var list = new List<BatteryInfo>();
+                    var ja = elem["batteryInfo"] as JArray;
+                    foreach (var token in ja.Values<JObject>())
+                    {
+                        list.Add(JsonConvert.DeserializeObject<BatteryInfo>(token.ToString(Formatting.None)));
+                    }
+                    res.BatteryInfo = list;
+                }
+
+                elem = jResult[57];
+                res.RecordingTimeSec = elem.HasValues ? elem.Value<int>("recordingTime") : -1;
+
+                elem = jResult[58];
+                res.NumberOfShots = elem.HasValues ? elem.Value<int>("numberOfShots") : -1;
+
+                elem = jResult[59];
+                res.AutoPowerOff = elem.HasValues ? new Capability<int>
+                {
+                    Current = elem.Value<int>("autoPowerOff"),
+                    Candidates = elem["candidate"].Values<int>().ToList()
+                } : null;
+            }
+
+            return res;
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kazyx.RemoteApi.Internal
+namespace Kazyx.RemoteApi
 {
     internal class AsyncPostClient
     {
@@ -16,7 +16,7 @@ namespace Kazyx.RemoteApi.Internal
         /// <param name="endpoint">URL of the endpoint.</param>
         /// <param name="body">Reqeust body.</param>
         /// <returns></returns>
-        internal static Task<string> Post(string endpoint, string body)
+        internal static Task<string> PostAsync(Uri endpoint, string body)
         {
             if (endpoint == null || body == null)
             {
@@ -25,7 +25,7 @@ namespace Kazyx.RemoteApi.Internal
 
             var tcs = new TaskCompletionSource<string>();
 
-            var request = HttpWebRequest.Create(new Uri(endpoint)) as HttpWebRequest;
+            var request = HttpWebRequest.Create(endpoint) as HttpWebRequest;
             request.Method = "POST";
             request.ContentType = "application/json";
             Debug.WriteLine(body);

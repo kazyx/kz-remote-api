@@ -1,8 +1,7 @@
-﻿using Kazyx.RemoteApi.Internal;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
-namespace Kazyx.RemoteApi
+namespace Kazyx.RemoteApi.System
 {
     public class SystemApiClient : ApiClient
     {
@@ -10,7 +9,7 @@ namespace Kazyx.RemoteApi
         /// 
         /// </summary>
         /// <param name="endpoint">Endpoint URL of system service.</param>
-        public SystemApiClient(string endpoint)
+        public SystemApiClient(Uri endpoint)
             : base(endpoint)
         {
         }

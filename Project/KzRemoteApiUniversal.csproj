@@ -24,6 +24,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\KzRemoteApi.XML</DocumentationFile>
+    <GenerateLibraryLayout>false</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,6 +40,7 @@
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\AvContentApiClient.cs" />
     <Compile Include="Api\CameraApiClient.cs" />
     <Compile Include="Api\SystemApiClient.cs" />
     <Compile Include="Internal\ApiClient.cs" />
@@ -46,12 +49,16 @@
     <Compile Include="Internal\CustomParser.cs" />
     <Compile Include="Internal\RequestGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\ApiParams.cs" />
     <Compile Include="Util\ApiVersion.cs" />
+    <Compile Include="Util\AvContentParams.cs" />
+    <Compile Include="Util\AvContentStructures.cs" />
+    <Compile Include="Util\CameraParams.cs" />
+    <Compile Include="Util\CameraStructures.cs" />
     <Compile Include="Util\EvConverter.cs" />
     <Compile Include="Util\RemoteApiException.cs" />
+    <Compile Include="Util\SharedStructures.cs" />
     <Compile Include="Util\StatusCode.cs" />
-    <Compile Include="Util\Structures.cs" />
+    <Compile Include="Util\SystemStructures.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">

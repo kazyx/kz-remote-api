@@ -1,17 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Kazyx.RemoteApi.Internal
+namespace Kazyx.RemoteApi
 {
+    /// <summary>
+    /// Base of service clients.
+    /// </summary>
     public abstract class ApiClient
     {
-        protected readonly string endpoint;
+        private readonly Uri endpoint;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="endpoint">Endpoint URL of this service.</param>
-        protected ApiClient(string endpoint)
+        protected ApiClient(Uri endpoint)
         {
             if (endpoint == null)
             {
@@ -25,9 +29,9 @@ namespace Kazyx.RemoteApi.Internal
         /// </summary>
         /// <param name="version">Version of the API set to retrieve. Empty string means all.</param>
         /// <returns></returns>
-        public async Task<MethodType[]> GetMethodTypesAsync(string version = "")
+        public async Task<List<MethodType>> GetMethodTypesAsync(string version = "")
         {
-            return await Single<MethodType[]>(
+            return await Single<List<MethodType>>(
                 RequestGenerator.Jsonize("getMethodTypes", version),
                 CustomParser.AsMethodTypes);
         }
@@ -36,9 +40,9 @@ namespace Kazyx.RemoteApi.Internal
         /// GetVersions v1.0
         /// </summary>
         /// <returns></returns>
-        public async Task<string[]> GetVersionsAsync()
+        public async Task<List<string>> GetVersionsAsync()
         {
-            return await PrimitiveArrayByMethod<string>("getVersions");
+            return await PrimitiveListByMethod<string>("getVersions");
         }
 
         /// <summary>
@@ -99,9 +103,9 @@ namespace Kazyx.RemoteApi.Internal
         /// <param name="request">Request JSON body</param>
         /// <param name="deserializer">Response JSON deserializer</param>
         /// <returns></returns>
-        protected async Task<T[]> Array<T>(string request, ArrayDeserializer<T> deserializer)
+        protected async Task<List<T>> List<T>(string request, ListDeserializer<T> deserializer)
         {
-            return await Core<T[]>(request, (res) => { return deserializer(res); });
+            return await Core<List<T>>(request, (res) => { return deserializer(res); });
         }
 
         /// <summary>
@@ -111,11 +115,11 @@ namespace Kazyx.RemoteApi.Internal
         /// <param name="method">Name of the API</param>
         /// <param name="version">Version of the API</param>
         /// <returns></returns>
-        protected async Task<T[]> PrimitiveArrayByMethod<T>(string method, ApiVersion version = ApiVersion.V1_0)
+        protected async Task<List<T>> PrimitiveListByMethod<T>(string method, ApiVersion version = ApiVersion.V1_0)
         {
-            return await Array<T>(
+            return await List<T>(
                 RequestGenerator.Jsonize(method, version),
-                BasicParser.AsPrimitiveArray<T>);
+                BasicParser.AsPrimitiveList<T>);
         }
 
         /// <summary>
@@ -162,7 +166,7 @@ namespace Kazyx.RemoteApi.Internal
         {
             try
             {
-                var res = await AsyncPostClient.Post(endpoint, request);
+                var res = await AsyncPostClient.PostAsync(endpoint, request);
                 return function.Invoke(res);
             }
             catch (RemoteApiException e)
@@ -176,12 +180,12 @@ namespace Kazyx.RemoteApi.Internal
         }
 
         /// <summary>
-        /// Deserialize JSON to an array.
+        /// Deserialize JSON into a List.
         /// </summary>
         /// <typeparam name="T">Type of response</typeparam>
         /// <param name="jString">Input JSON string</param>
         /// <returns></returns>
-        protected delegate T[] ArrayDeserializer<T>(string jString);
+        protected delegate List<T> ListDeserializer<T>(string jString);
 
         /// <summary>
         /// Deserialize JSON to a Capability
