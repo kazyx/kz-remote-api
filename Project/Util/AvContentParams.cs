@@ -1,6 +1,11 @@
 ﻿
 namespace Kazyx.RemoteApi.AvContent
 {
+    public class Scheme
+    {
+        public const string Storage = "storage";
+    }
+
     public class StreamStatus
     {
         public const string Idle = "idle";

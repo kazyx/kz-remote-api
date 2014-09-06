@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Kazyx.RemoteApi.AvContent
 {
-    class AvContentApiClient : ApiClient
+    public class AvContentApiClient : ApiClient
     {
         /// <summary>
         /// 
