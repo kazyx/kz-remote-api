@@ -167,7 +167,7 @@ namespace Kazyx.RemoteApi.AvContent
         /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.TextBoolean"/> for defined parameters.
         /// </summary>
         [JsonProperty("isPlayable")]
-        public string IsContent { set; get; }
+        public string IsPlayableOnCamera { set; get; }
 
         /// <summary>
         /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.TextBoolean"/> for defined parameters.
@@ -191,7 +191,7 @@ namespace Kazyx.RemoteApi.AvContent
     public class ImageContent
     {
         [JsonProperty("original")]
-        public List<OriginalImage> OriginalImages { set; get; }
+        public List<OriginaContent> OriginalContents { set; get; }
 
         [JsonProperty("largeUrl")]
         public string LargeImageUrl { set; get; }
@@ -203,7 +203,7 @@ namespace Kazyx.RemoteApi.AvContent
         public string ThumbnailUrl { set; get; }
     }
 
-    public class OriginalImage
+    public class OriginaContent
     {
         [JsonProperty("url")]
         public string Url { set; get; }
