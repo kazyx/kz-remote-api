@@ -232,7 +232,7 @@ namespace Kazyx.RemoteApi.Camera
     public class CameraFunction
     {
         public const string RemoteShooting = "Remote Shooting";
-        public const string ContentTransfer = "Content Transfer";
+        public const string ContentTransfer = "Contents Transfer";
     }
 
     public class Scene
