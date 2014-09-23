@@ -741,7 +741,7 @@ namespace Kazyx.RemoteApi.Camera
 
         public async Task StopContShootingAsync()
         {
-            await NoValueByMethod("stopContShootingAsync");
+            await NoValueByMethod("stopContShooting");
         }
 
         public async Task<MovieFormat> GetMovieFileFormat()
