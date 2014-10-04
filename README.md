@@ -1,12 +1,12 @@
-KzRemoteApi
+kz-remote-api
 =============
 - Sony camera remote API wrapper for .NET
-- Currently supports [Camera Remote API beta v1.6.0](https://developer.sony.com/develop/cameras/).
+- Currently supports [Camera Remote API beta v1.7.0](https://developer.sony.com/develop/cameras/).
 
 ##Build
 1. Clone repository.
  ``` bash
- git clone git@github.com:kazyx/KzRemoteApi.git
+ git clone git@github.com:kazyx/kz-remote-api.git
  ```
 
 2. Open csproj file by Visual Studio.
@@ -16,10 +16,10 @@ KzRemoteApi
 3. Add reference to [Json.NET](https://github.com/JamesNK/Newtonsoft.Json).
 
 ##Call camera remote APIs
-1. Get end point URL of the services. See [KzSoDiscovery](https://github.com/kazyx/KzSoDiscovery).
+1. Get end point URL of the services. See [kz-ssdp-discovery](https://github.com/kazyx/kz-ssdp-discovery).
  ``` cs
- discovery.ScalarDeviceDiscovered += (sender, e) => {
-     var endpoints = e.ScalarDevice.Endpoints;
+ discovery.SonyCameraDeviceDiscovered += (sender, e) => {
+     var endpoints = e.SonyCameraDevice.Endpoints;
  }
  ```
 
