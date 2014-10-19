@@ -14,12 +14,12 @@ namespace Kazyx.RemoteApi.System
         {
         }
 
-        public async Task SetCurrentTimeAsync(DateTimeOffset time)
+        public async Task SetCurrentTimeAsync(DateTimeOffset UtcTime, int OffsetInMinute)
         {
             var req = new TimeOffset
             {
-                DateTime = time.ToString("yyyy-MM-ddThh:mm:ssZ"),
-                TimeZoneOffsetMinute = (int)(time.Offset.TotalMinutes),
+                DateTime = UtcTime.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                TimeZoneOffsetMinute = OffsetInMinute,
                 DstOffsetMinute = 0
             };
             await NoValue(RequestGenerator.Serialize("setCurrentTime", ApiVersion.V1_0, req));
