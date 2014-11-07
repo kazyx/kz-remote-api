@@ -1,14 +1,19 @@
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
+#if WINDOWS_PHONE
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
+#else
+using Windows.Web.Http;
+#endif
 
 namespace Kazyx.RemoteApi
 {
     internal class AsyncPostClient
     {
+#if WINDOWS_PHONE
         /// <summary>
         /// Asynchronously POST a request to the endpoint.
         /// Response will be returned asynchronously.
@@ -87,5 +92,50 @@ namespace Kazyx.RemoteApi
 
             return tcs.Task;
         }
+#else
+        private static readonly HttpClient mClient = new HttpClient();
+
+        /// <summary>
+        /// Asynchronously POST a request to the endpoint.
+        /// Response will be returned asynchronously.
+        /// </summary>
+        /// <param name="endpoint">URL of the endpoint.</param>
+        /// <param name="body">Reqeust body.</param>
+        /// <returns></returns>
+        internal static async Task<string> PostAsync(Uri endpoint, string body)
+        {
+            if (endpoint == null || body == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            var content = new HttpStringContent(body);
+            content.Headers["Content-Type"] = "application/json";
+
+            try
+            {
+                var response = await mClient.PostAsync(endpoint, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    Debug.WriteLine("Http Status Error: " + response.StatusCode);
+                    throw new RemoteApiException((int)response.StatusCode);
+                }
+            }
+            catch (RemoteApiException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("HttpPost Exception: " + e.StackTrace);
+                throw new RemoteApiException(StatusCode.NetworkError);
+            }
+        }
+#endif
     }
 }
