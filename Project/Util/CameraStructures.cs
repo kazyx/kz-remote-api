@@ -58,6 +58,8 @@ namespace Kazyx.RemoteApi.Camera
         public List<StorageInfo> StorageInfo { set; get; }
         public Capability<string> FlashMode { set; get; }
         public Capability<string> FocusMode { set; get; }
+        public string FunctionChangeResult { set; get; }
+        public Capability<string> Function { set; get; }
 
         // GetEvent v1.1 parameters
         public string FocusStatus { set; get; }

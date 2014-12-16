@@ -171,6 +171,13 @@ namespace Kazyx.RemoteApi
                     Candidates = elem["beepModeCandidates"].Values<string>().ToList()
                 } : null;
 
+            elem = jResult[12];
+            res.Function = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("currentCameraFunction"),
+                    Candidates = elem["cameraFunctionCandidates"].Values<string>().ToList()
+                } : null;
+
             elem = jResult[13];
             res.MovieQuality = elem.HasValues ? new Capability<string>
                 {
@@ -188,6 +195,9 @@ namespace Kazyx.RemoteApi
                     },
                     CapabilityChanged = elem.Value<bool>("checkAvailability")
                 } : null;
+
+            elem = jResult[15];
+            res.FunctionChangeResult = elem.HasValues ? elem.Value<string>("cameraFunctionResult") : null;
 
             elem = jResult[16];
             res.SteadyMode = elem.HasValues ? new Capability<string>

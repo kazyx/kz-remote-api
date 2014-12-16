@@ -75,6 +75,7 @@ namespace Kazyx.RemoteApi.Camera
         public const string Single = "AF-S";
         public const string Continuous = "AF-C";
         public const string Manual = "MF";
+        public const string DirectManual = "DMF";
     }
 
     public class AspectRatio
