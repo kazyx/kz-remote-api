@@ -33,7 +33,7 @@ namespace Kazyx.RemoteApi
         {
             return await Single<List<MethodType>>(
                 RequestGenerator.Jsonize("getMethodTypes", version),
-                CustomParser.AsMethodTypes);
+                CustomParser.AsMethodTypes).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Kazyx.RemoteApi
         /// <returns></returns>
         public async Task<List<string>> GetVersionsAsync()
         {
-            return await PrimitiveListByMethod<string>("getVersions");
+            return await PrimitiveListByMethod<string>("getVersions").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Kazyx.RemoteApi
             {
                 BasicParser.CheckError(res);
                 return true;
-            });
+            }).ConfigureAwait(false);
         }
 
 
@@ -68,7 +68,7 @@ namespace Kazyx.RemoteApi
         /// <returns></returns>
         protected async Task NoValueByMethod(string method, ApiVersion version = ApiVersion.V1_0)
         {
-            await NoValue(RequestGenerator.Jsonize(method, version));
+            await NoValue(RequestGenerator.Jsonize(method, version)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Kazyx.RemoteApi
         /// <returns></returns>
         protected async Task<Capability<T>> Capability<T>(string request, CapabilityDeserializer<T> deserializer)
         {
-            return await Core<Capability<T>>(request, (res) => { return deserializer(res); });
+            return await Core<Capability<T>>(request, (res) => { return deserializer(res); }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Kazyx.RemoteApi
         {
             return await Capability<T>(
                 RequestGenerator.Jsonize(method),
-                BasicParser.AsCapability<T>);
+                BasicParser.AsCapability<T>).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace Kazyx.RemoteApi
         /// <returns></returns>
         protected async Task<List<T>> List<T>(string request, ListDeserializer<T> deserializer)
         {
-            return await Core<List<T>>(request, (res) => { return deserializer(res); });
+            return await Core<List<T>>(request, (res) => { return deserializer(res); }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Kazyx.RemoteApi
         {
             return await List<T>(
                 RequestGenerator.Jsonize(method, version),
-                BasicParser.AsPrimitiveList<T>);
+                BasicParser.AsPrimitiveList<T>).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Kazyx.RemoteApi
         /// <returns></returns>
         protected async Task<T> Single<T>(string request, RawDeserializer<T> deserializer)
         {
-            return await Core<T>(request, (res) => { return deserializer(res); });
+            return await Core<T>(request, (res) => { return deserializer(res); }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace Kazyx.RemoteApi
         {
             return await Single<T>(
                 RequestGenerator.Jsonize(method, version),
-                BasicParser.AsPrimitive<T>);
+                BasicParser.AsPrimitive<T>).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -159,14 +159,14 @@ namespace Kazyx.RemoteApi
         {
             return await Single<T>(
                 RequestGenerator.Jsonize(method, version),
-                BasicParser.AsObject<T>);
+                BasicParser.AsObject<T>).ConfigureAwait(false);
         }
 
         private async Task<T> Core<T>(string request, Func<string, T> function)
         {
             try
             {
-                var res = await AsyncPostClient.PostAsync(endpoint, request);
+                var res = await AsyncPostClient.PostAsync(endpoint, request).ConfigureAwait(false);
                 return function.Invoke(res);
             }
             catch (RemoteApiException e)

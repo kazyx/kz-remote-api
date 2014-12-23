@@ -22,7 +22,7 @@ namespace Kazyx.RemoteApi.System
                 TimeZoneOffsetMinute = OffsetInMinute,
                 DstOffsetMinute = 0
             };
-            await NoValue(RequestGenerator.Serialize("setCurrentTime", ApiVersion.V1_0, req));
+            await NoValue(RequestGenerator.Serialize("setCurrentTime", ApiVersion.V1_0, req)).ConfigureAwait(false); ;
         }
     }
 }
