@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kazyx.RemoteApi.Camera
@@ -20,11 +21,12 @@ namespace Kazyx.RemoteApi.Camera
         /// </summary>
         /// <param name="longpolling">Set true for event notification, false for immediate response.</param>
         /// <returns></returns>
-        public async Task<Event> GetEventAsync(bool longpolling, ApiVersion version = ApiVersion.V1_0)
+        public async Task<Event> GetEventAsync(bool longpolling, ApiVersion version = ApiVersion.V1_0
+            , CancellationTokenSource cancel = null)
         {
             return await Single<Event>(
                 RequestGenerator.Jsonize("getEvent", version, longpolling),
-                CustomParser.AsCameraEvent).ConfigureAwait(false);
+                CustomParser.AsCameraEvent, cancel).ConfigureAwait(false);
         }
 
         public async Task<ServerAppInfo> GetApplicationInfoAsync()
@@ -106,14 +108,16 @@ namespace Kazyx.RemoteApi.Camera
             return await PrimitiveByMethod<string>("stopMovieRec").ConfigureAwait(false);
         }
 
-        public async Task<List<string>> ActTakePictureAsync()
+        public async Task<List<string>> ActTakePictureAsync(CancellationTokenSource cancel = null)
         {
-            return await PrimitiveListByMethod<string>("actTakePicture").ConfigureAwait(false);
+            return await PrimitiveListByMethod<string>("actTakePicture"
+                , ApiVersion.V1_0, cancel).ConfigureAwait(false);
         }
 
-        public async Task<List<string>> AwaitTakePictureAsync()
+        public async Task<List<string>> AwaitTakePictureAsync(CancellationTokenSource cancel = null)
         {
-            return await PrimitiveListByMethod<string>("awaitTakePicture").ConfigureAwait(false);
+            return await PrimitiveListByMethod<string>("awaitTakePicture"
+                , ApiVersion.V1_0, cancel).ConfigureAwait(false);
         }
 
         public async Task SetSelfTimerAsync(int timer)

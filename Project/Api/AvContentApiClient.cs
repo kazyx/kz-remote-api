@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kazyx.RemoteApi.AvContent
@@ -32,11 +33,12 @@ namespace Kazyx.RemoteApi.AvContent
             await NoValueByMethod("pauseStreaming").ConfigureAwait(false);
         }
 
-        public async Task<StreamingStatus> RequestToNotifyStreamingStatusAsync(LongPollingFlag flag)
+        public async Task<StreamingStatus> RequestToNotifyStreamingStatusAsync(LongPollingFlag flag
+            , CancellationTokenSource cancel = null)
         {
             return await Single(
                 RequestGenerator.Serialize("requestToNotifyStreamingStatus", ApiVersion.V1_0, flag),
-                BasicParser.AsObject<StreamingStatus>).ConfigureAwait(false);
+                BasicParser.AsObject<StreamingStatus>, cancel).ConfigureAwait(false);
         }
 
         public async Task SeekStreamingPositionAsync(PlaybackPosition position)

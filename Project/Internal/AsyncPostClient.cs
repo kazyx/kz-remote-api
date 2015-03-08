@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 #else
 using Windows.Web.Http;
+using System.Threading;
 #endif
 
 namespace Kazyx.RemoteApi
@@ -102,7 +103,7 @@ namespace Kazyx.RemoteApi
         /// <param name="endpoint">URL of the endpoint.</param>
         /// <param name="body">Reqeust body.</param>
         /// <returns></returns>
-        internal static async Task<string> PostAsync(Uri endpoint, string body)
+        internal static async Task<string> PostAsync(Uri endpoint, string body, CancellationTokenSource cancel = null)
         {
             if (endpoint == null || body == null)
             {
@@ -114,8 +115,19 @@ namespace Kazyx.RemoteApi
 
             try
             {
-                var response = await mClient.PostAsync(endpoint, content);
-
+                var task = mClient.PostAsync(endpoint, content);
+                if (cancel != null)
+                {
+                    cancel.Token.Register(() =>
+                    {
+                        try
+                        {
+                            task.Cancel();
+                        }
+                        catch { Debug.WriteLine("Failed to cancel request: " + body); }
+                    });
+                }
+                var response = await task;
                 if (response.IsSuccessStatusCode)
                 {
                     return await response.Content.ReadAsStringAsync();
@@ -132,8 +144,16 @@ namespace Kazyx.RemoteApi
             }
             catch (Exception e)
             {
-                Debug.WriteLine("HttpPost Exception: " + e.StackTrace);
-                throw new RemoteApiException(StatusCode.NetworkError);
+                if (e is TaskCanceledException || e is OperationCanceledException)
+                {
+                    Debug.WriteLine("Request cancelled: " + e.StackTrace);
+                    throw new RemoteApiException(StatusCode.Cancelled);
+                }
+                else
+                {
+                    Debug.WriteLine("HttpPost Exception: " + e.StackTrace);
+                    throw new RemoteApiException(StatusCode.NetworkError);
+                }
             }
         }
 #endif
