@@ -451,7 +451,10 @@ namespace Kazyx.RemoteApi
                     Current = elem.Value<int>("autoPowerOff"),
                     Candidates = elem["candidate"].Values<int>().ToList()
                 } : null;
+            }
 
+            if (jResult.Count > 60) // GetEvent version 1.3
+            {
                 elem = jResult[60];
                 res.LoopRecTime = elem.HasValues ? new Capability<string>
                 {
