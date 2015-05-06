@@ -7,6 +7,7 @@ namespace Kazyx.RemoteApi.Camera
         public const string Movie = "movie";
         public const string Audio = "audio";
         public const string Interval = "intervalstill";
+        public const string Loop = "looprec"
     }
 
     public class ZoomParam
@@ -49,6 +50,11 @@ namespace Kazyx.RemoteApi.Camera
         public const string ItvWaitRecStart = "IntervalWaitRecStart";
         public const string ItvRecording = "IntervalRecording";
         public const string ItvWaitRecStop = "IntervalWaitRecStop";
+        public const string LoopWaitRecStart = "LoopWaitRecStart";
+        public const string LoopRecording = "LoopRecording";
+        public const string LoopWaitRecStop = "LoopWaitRecStop";
+        public const string LoopSaving = "LoopSaving";
+        public const string WBCapturing = "WhiteBalanceOnePushCapturing";
         public const string ContentsTransfer = "ContentsTransfer";
         public const string StreamingMovie = "Streaming";
         public const string DeletingContents = "Deleting";
@@ -122,6 +128,7 @@ namespace Kazyx.RemoteApi.Camera
         public const string Silent = "Off";
         public const string On = "On";
         public const string Shutter = "Shutter Only";
+        public const string Silent = "Silent";
     }
 
     public class Orientation
@@ -138,6 +145,18 @@ namespace Kazyx.RemoteApi.Camera
         public const string InProgress = "Focusing";
         public const string Focused = "Focused";
         public const string Failed = "Failed";
+    }
+
+    public class WindNoiseReductionMode
+    {
+        public const string On = "on";
+        public const string Off = "off";
+    }
+
+    public class AudioRecordingMode
+    {
+        public const string On = "on";
+        public const string Off = "off";
     }
 
     public class SteadyMode
@@ -170,6 +189,20 @@ namespace Kazyx.RemoteApi.Camera
         public const string XAVC_S_FHD_30P = "50M 30p";
         public const string XAVC_S_FHD_25P = "50M 25p";
         public const string XAVC_S_FHD_24P = "50M 24p";
+        public const string XAVC_S_FHD_120P_100M = "100M 120P";
+        public const string XAVC_S_FHD_100P_100M = "100M 100P";
+        public const string XAVC_S_FHD_120P_60M = "60M 120P";
+        public const string XAVC_S_FHD_100P_60M = "60M 100P";
+        public const string XAVC_S_HD_240P_100M = "100M 240P";
+        public const string XAVC_S_HD_200P_100M = "100M 200P";
+        public const string XAVC_S_HD_240P_60M = "60M 240P";
+        public const string XAVC_S_HD_200P_60M = "60M 200P";
+        public const string XAVC_S_4K_30P_100M = "100M 30p";
+        public const string XAVC_S_4K_25P_100M = "100M 25p";
+        public const string XAVC_S_4K_24P_100M = "100M 24p";
+        public const string XAVC_S_4K_30P_60M = "60M 30p";
+        public const string XAVC_S_4K_25P_60M = "60M 25p";
+        public const string XAVC_S_4K_24P_60M = "60M 24p";
     }
 
     public class FlashMode
@@ -210,6 +243,16 @@ namespace Kazyx.RemoteApi.Camera
         public const string FixedFrames_10_In_1_25Sec = "8fps 1sec";
         public const string FixedFrames_10_In_2Sec = "5fps 2sec";
         public const string FixedFrames_10_In_5Sec = "2fps 5sec";
+        public const string FixedFrames_10_In_1Sec = "10fps 1sec";
+    }
+
+    public class LoopTime
+    {
+        public const string MIN_5 = "5";
+        public const string MIN_20 = "20";
+        public const string MIN_60 = "60";
+        public const string MIN_120 = "120";
+        public const string UNLIMITED = "unlimited";
     }
 
     public class FlipMode
@@ -271,6 +314,7 @@ namespace Kazyx.RemoteApi.Camera
     {
         public const string MP4 = "MP4";
         public const string XAVCS = "XAVC S";
+        public const string XAVCS_4K = "XAVC S 4K";
     }
 
     public class StorageId

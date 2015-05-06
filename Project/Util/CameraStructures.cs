@@ -83,6 +83,11 @@ namespace Kazyx.RemoteApi.Camera
         public int RecordingTimeSec { set; get; }
         public int NumberOfShots { set; get; }
         public Capability<int> AutoPowerOff { set; get; }
+
+        // GetEvent v1.3 parameters
+        public Capability<string> LoopRecTime { set; get; }
+        public Capability<string> AudioRecording { set; get; }
+        public Capability<string> WindNoiseReduction { set; get; }
     }
 
     public class EvCapability
@@ -232,6 +237,24 @@ namespace Kazyx.RemoteApi.Camera
         public string TimeInSeconds { set; get; }
     }
 
+    public class LoopRecTimeSetting
+    {
+        [JsonProperty("loopRecTimeMin")]
+        public string TimeInMinutes { set; get; }
+    }
+
+    public class WindNoiseReductionSetting
+    {
+        [JsonProperty("windNoiseReduction")]
+        public string Mode { set; get; }
+    }
+
+    public class AudioRecordingSetting
+    {
+        [JsonProperty("audioRecording")]
+        public string Mode { set; get; }
+    }
+
     public class SceneSelectionSetting
     {
         [JsonProperty("scene")]
@@ -339,6 +362,24 @@ namespace Kazyx.RemoteApi.Camera
         public override string CurrentValue { set; get; }
     }
 
+    public class LoopRecTimeCapability : ObjectStyleCapability<string>
+    {
+        [JsonProperty("loopRecTimeMin")]
+        public override string CurrentValue { set; get; }
+    }
+
+    public class WindNoiseReductionCapability : ObjectStyleCapability<string>
+    {
+        [JsonProperty("windNoiseReduction")]
+        public override string CurrentValue { set; get; }
+    }
+
+    public class AudioRecordingCapability : ObjectStyleCapability<string>
+    {
+        [JsonProperty("audioRecording")]
+        public override string CurrentValue { set; get; }
+    }
+
     public class SceneSelectionCapability : ObjectStyleCapability<string>
     {
         [JsonProperty("scene")]
@@ -433,5 +474,35 @@ namespace Kazyx.RemoteApi.Camera
 
         [JsonProperty("thumbnailUrl")]
         public string ThumbnailUrl { set; get; }
+    }
+
+    public class CaptureBasedWhiteBalance
+    {
+        [JsonProperty("inRange")]
+        public bool ExposureInRange { set; get; }
+
+        [JsonIgnore]
+        public const int InvalidColorTemperture = -1;
+
+        private int _ColorTemperature = InvalidColorTemperture;
+
+        [JsonProperty("colorTemperature")]
+        public int ColorTemperature
+        {
+            set { _ColorTemperature = value; }
+            get { return _ColorTemperature; }
+        }
+
+        /// <summary>
+        /// A(+)-B(-) axis value.
+        /// </summary>
+        [JsonProperty("lightBalance")]
+        public int LightBalance { set; get; }
+
+        /// <summary>
+        /// G(+)-M(-) axis value.
+        /// </summary>
+        [JsonProperty("colorCompensation")]
+        public int ColorCompensation { set; get; }
     }
 }

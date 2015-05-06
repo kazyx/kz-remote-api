@@ -68,7 +68,7 @@ namespace Kazyx.RemoteApi.Camera
                 BasicParser.AsPrimitive<string>).ConfigureAwait(false);
         }
 
-        public async Task<List<string>> GetSupportedLiveviewSize()
+        public async Task<List<string>> GetSupportedLiveviewSizeAsync()
         {
             return await PrimitiveListByMethod<string>("getSupportedLiveviewSize").ConfigureAwait(false);
         }
@@ -78,12 +78,12 @@ namespace Kazyx.RemoteApi.Camera
             await NoValueByMethod("stopLiveview").ConfigureAwait(false);
         }
 
-        public async Task SetLiveviewFrameInfo(FrameInfoSetting setting)
+        public async Task SetLiveviewFrameInfoAsync(FrameInfoSetting setting)
         {
             await NoValue(RequestGenerator.Serialize("setLiveviewFrameInfo", ApiVersion.V1_0, setting)).ConfigureAwait(false);
         }
 
-        public async Task<FrameInfoSetting> GetLiveviewFrameInfo()
+        public async Task<FrameInfoSetting> GetLiveviewFrameInfoAsync()
         {
             return await ObjectByMethod<FrameInfoSetting>("getLiveviewFrameInfo").ConfigureAwait(false);
         }
@@ -381,6 +381,11 @@ namespace Kazyx.RemoteApi.Camera
                 CustomParser.AsWhiteBalanceCapability).ConfigureAwait(false);
         }
 
+        public async Task<CaptureBasedWhiteBalance> ActWhiteBalanceOnePushCustomAsync()
+        {
+            return await ObjectByMethod<CaptureBasedWhiteBalance>("actWhiteBalanceOnePushCustom").ConfigureAwait(false);
+        }
+
         public async Task SetBeepModeAsync(string mode)
         {
             await NoValue(RequestGenerator.Jsonize("setBeepMode", mode)).ConfigureAwait(false);
@@ -409,6 +414,16 @@ namespace Kazyx.RemoteApi.Camera
         public async Task StopIntervalStillRecAsync()
         {
             await NoValueByMethod("stopIntervalStillRec").ConfigureAwait(false);
+        }
+
+        public async Task StartLoopRecAsync()
+        {
+            await NoValueByMethod("startLoopRec").ConfigureAwait(false);
+        }
+
+        public async Task StopLoopRecAsync()
+        {
+            await NoValueByMethod("stopLoopRec").ConfigureAwait(false);
         }
 
         public async Task SetViewAngleAsync(int angle)
@@ -638,7 +653,7 @@ namespace Kazyx.RemoteApi.Camera
             await NoValue(RequestGenerator.Serialize("setIntervalTime", ApiVersion.V1_0, setting)).ConfigureAwait(false);
         }
 
-        public async Task<Candidate<string>> GetSupportedIntervalTime()
+        public async Task<Candidate<string>> GetSupportedIntervalTimeAsync()
         {
             return await ObjectByMethod<Candidate<string>>("getSupportedIntervalTime").ConfigureAwait(false);
         }
@@ -646,6 +661,66 @@ namespace Kazyx.RemoteApi.Camera
         public async Task<Capability<string>> GetAvailableIntervalTimeAsync()
         {
             return await ObjectByMethod<IntervalTimeCapability>("getAvailableIntervalTime").ConfigureAwait(false);
+        }
+
+        public async Task<LoopRecTimeSetting> GetLoopRecTimeAsync()
+        {
+            return await ObjectByMethod<LoopRecTimeSetting>("getLoopRecTime").ConfigureAwait(false);
+        }
+
+        public async Task SetLoopRecTimeAsync(LoopRecTimeSetting setting)
+        {
+            await NoValue(RequestGenerator.Serialize("setLoopRecTime", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+        }
+
+        public async Task<Candidate<string>> GetSupportedLoopRecTimeAsync()
+        {
+            return await ObjectByMethod<Candidate<string>>("getSupportedLoopRecTime").ConfigureAwait(false);
+        }
+
+        public async Task<Capability<string>> GetAvailableLoopRecTimeAsync()
+        {
+            return await ObjectByMethod<LoopRecTimeCapability>("getAvailableLoopRecTime").ConfigureAwait(false);
+        }
+
+        public async Task<WindNoiseReductionSetting> GetWindNoiseReductionAsync()
+        {
+            return await ObjectByMethod<WindNoiseReductionSetting>("getWindNoiseReduction").ConfigureAwait(false);
+        }
+
+        public async Task SetWindNoiseReductionAsync(WindNoiseReductionSetting setting)
+        {
+            await NoValue(RequestGenerator.Serialize("setWindNoiseReduction", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+        }
+
+        public async Task<Candidate<string>> GetSupportedWindNoiseReductionAsync()
+        {
+            return await ObjectByMethod<Candidate<string>>("getSupportedWindNoiseReduction").ConfigureAwait(false);
+        }
+
+        public async Task<Capability<string>> GetAvailableWindNoiseReductionAsync()
+        {
+            return await ObjectByMethod<WindNoiseReductionCapability>("getAvailableWindNoiseReduction").ConfigureAwait(false);
+        }
+
+        public async Task<AudioRecordingSetting> GetAudioRecordingAsync()
+        {
+            return await ObjectByMethod<AudioRecordingSetting>("getAudioRecording").ConfigureAwait(false);
+        }
+
+        public async Task SetAudioRecordingAsync(AudioRecordingSetting setting)
+        {
+            await NoValue(RequestGenerator.Serialize("setAudioRecording", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+        }
+
+        public async Task<Candidate<string>> GetSupportedAudioRecordingAsync()
+        {
+            return await ObjectByMethod<Candidate<string>>("getSupportedAudioRecording").ConfigureAwait(false);
+        }
+
+        public async Task<Capability<string>> GetAvailableAudioRecordingAsync()
+        {
+            return await ObjectByMethod<AudioRecordingCapability>("getAvailableAudioRecording").ConfigureAwait(false);
         }
 
         public async Task<SceneSelectionSetting> GetSceneSelectionAsync()
@@ -708,7 +783,7 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<TrackingFocusSetting>("getTrackingFocus").ConfigureAwait(false);
         }
 
-        public async Task<Candidate<string>> GetSupportedTrackingFocus()
+        public async Task<Candidate<string>> GetSupportedTrackingFocusAsync()
         {
             return await ObjectByMethod<Candidate<string>>("getSupportedTrackingFocus").ConfigureAwait(false);
         }
@@ -768,7 +843,7 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<MovieFormatCapability>("getAvailableMovieFileFormat").ConfigureAwait(false);
         }
 
-        public async Task<TvColorSystem> GetTvColorSystem()
+        public async Task<TvColorSystem> GetTvColorSystemAsync()
         {
             return await ObjectByMethod<TvColorSystem>("getTvColorSystem").ConfigureAwait(false);
         }
@@ -788,7 +863,7 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<TvColorSystemCapability>("getAvailableTvColorSystem").ConfigureAwait(false);
         }
 
-        public async Task<InfraredRemoteControl> GetInfraredRemoteControl()
+        public async Task<InfraredRemoteControl> GetInfraredRemoteControlAsync()
         {
             return await ObjectByMethod<InfraredRemoteControl>("getInfraredRemoteControl").ConfigureAwait(false);
         }

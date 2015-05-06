@@ -126,7 +126,7 @@ namespace Kazyx.RemoteApi
         internal static Event AsCameraEvent(string jString)
         {
             var json = BasicParser.Initialize(jString);
-            Debug.WriteLine(json.ToString());
+            Debug.WriteLine(json.ToString(Formatting.None));
 
             var jResult = json["result"] as JArray;
 
@@ -450,6 +450,27 @@ namespace Kazyx.RemoteApi
                 {
                     Current = elem.Value<int>("autoPowerOff"),
                     Candidates = elem["candidate"].Values<int>().ToList()
+                } : null;
+
+                elem = jResult[60];
+                res.LoopRecTime = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("loopRecTime"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
+                } : null;
+
+                elem = jResult[61];
+                res.AudioRecording = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("audioRecording"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
+                } : null;
+
+                elem = jResult[62];
+                res.WindNoiseReduction = elem.HasValues ? new Capability<string>
+                {
+                    Current = elem.Value<string>("windNoiseReduction"),
+                    Candidates = elem["candidate"].Values<string>().ToList()
                 } : null;
             }
 
