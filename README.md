@@ -1,7 +1,7 @@
 kz-remote-api
 =============
 - Sony camera remote API wrapper for .NET
-- Currently supports [Camera Remote API beta v1.9.0](https://developer.sony.com/develop/cameras/).
+- Currently supports [Camera Remote API beta v2.0.0](https://developer.sony.com/develop/cameras/).
 
 ##Build
 1. Clone repository.

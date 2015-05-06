@@ -7,7 +7,7 @@ namespace Kazyx.RemoteApi.Camera
         public const string Movie = "movie";
         public const string Audio = "audio";
         public const string Interval = "intervalstill";
-        public const string Loop = "looprec"
+        public const string Loop = "looprec";
     }
 
     public class ZoomParam
@@ -125,7 +125,7 @@ namespace Kazyx.RemoteApi.Camera
 
     public class BeepMode
     {
-        public const string Silent = "Off";
+        public const string Off = "Off";
         public const string On = "On";
         public const string Shutter = "Shutter Only";
         public const string Silent = "Silent";
