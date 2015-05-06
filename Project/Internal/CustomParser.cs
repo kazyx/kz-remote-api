@@ -329,32 +329,16 @@ namespace Kazyx.RemoteApi
             if (jResult.Count > 36) // GetEvent version 1.2
             {
                 elem = jResult[36];
-                res.ZoomSetting = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("zoom"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.ZoomSetting = elem.HasValues ? JsonConvert.DeserializeObject<ZoomModeCapability>(elem.ToString(Formatting.None)) : null;
 
                 elem = jResult[37];
-                res.ImageQuality = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("stillQuality"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.ImageQuality = elem.HasValues ? JsonConvert.DeserializeObject<ImageQualityCapability>(elem.ToString(Formatting.None)) : null;
 
                 elem = jResult[38];
-                res.ContShootingMode = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("contShootingMode"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.ContShootingMode = elem.HasValues ? JsonConvert.DeserializeObject<ContinuousShootingModeCapability>(elem.ToString(Formatting.None)) : null;
 
                 elem = jResult[39];
-                res.ContShootingSpeed = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("contShootingSpeed"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.ContShootingSpeed = elem.HasValues ? JsonConvert.DeserializeObject<ContinuousShootingSpeedCapability>(elem.ToString(Formatting.None)) : null;
 
                 elem = jResult[40];
                 if (elem.HasValues)
@@ -369,63 +353,31 @@ namespace Kazyx.RemoteApi
                 }
 
                 elem = jResult[41];
-                res.FlipMode = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("flip"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.FlipMode = elem.HasValues ? JsonConvert.DeserializeObject<FlipModeCapability>(elem.ToString(Formatting.None)) : null;
 
                 elem = jResult[42];
-                res.SceneSelection = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("scene"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.SceneSelection = elem.HasValues ? JsonConvert.DeserializeObject<SceneSelectionCapability>(elem.ToString(Formatting.None)) : null;
 
                 elem = jResult[43];
-                res.IntervalTime = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("intervalTimeSec"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.IntervalTime = elem.HasValues ? JsonConvert.DeserializeObject<IntervalTimeCapability>(elem.ToString(Formatting.None)) : null;
 
                 elem = jResult[44];
-                res.ColorSetting = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("colorSetting"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.ColorSetting = elem.HasValues ? JsonConvert.DeserializeObject<ColorSettingCapability>(elem.ToString(Formatting.None)) : null;
 
                 elem = jResult[45];
-                res.MovieFormat = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("movieFileFormat"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.MovieFormat = elem.HasValues ? JsonConvert.DeserializeObject<MovieFormatCapability>(elem.ToString(Formatting.None)) : null;
 
                 elem = jResult[52];
-                res.IrRemoteControl = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("infraredRemoteControl"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.IrRemoteControl = elem.HasValues ? JsonConvert.DeserializeObject<InfraredRemoteControlCapability>(elem.ToString(Formatting.None)) : null;
 
                 elem = jResult[53];
-                res.TvColorSystem = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("tvColorSystem"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.TvColorSystem = elem.HasValues ? JsonConvert.DeserializeObject<TvColorSystemCapability>(elem.ToString(Formatting.None)) : null;
 
                 elem = jResult[54];
                 res.TrackingFocusStatus = elem.HasValues ? elem.Value<string>("trackingFocusStatus") : null;
 
                 elem = jResult[55];
-                res.TrackingFocusMode = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("trackingFocus"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.TrackingFocusMode = elem.HasValues ? JsonConvert.DeserializeObject<TrackingFocusModeCapability>(elem.ToString(Formatting.None)) : null;
 
                 elem = jResult[56];
                 if (elem.HasValues)
@@ -446,35 +398,19 @@ namespace Kazyx.RemoteApi
                 res.NumberOfShots = elem.HasValues ? elem.Value<int>("numberOfShots") : -1;
 
                 elem = jResult[59];
-                res.AutoPowerOff = elem.HasValues ? new Capability<int>
-                {
-                    Current = elem.Value<int>("autoPowerOff"),
-                    Candidates = elem["candidate"].Values<int>().ToList()
-                } : null;
+                res.AutoPowerOff = elem.HasValues ? JsonConvert.DeserializeObject<ApoCapability>(elem.ToString(Formatting.None)) : null;
             }
 
             if (jResult.Count > 60) // GetEvent version 1.3
             {
                 elem = jResult[60];
-                res.LoopRecTime = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("loopRecTime"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.LoopRecTime = elem.HasValues ? JsonConvert.DeserializeObject<LoopRecTimeCapability>(elem.ToString(Formatting.None)) : null;
 
                 elem = jResult[61];
-                res.AudioRecording = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("audioRecording"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.AudioRecording = elem.HasValues ? JsonConvert.DeserializeObject<AudioRecordingCapability>(elem.ToString(Formatting.None)) : null;
 
                 elem = jResult[62];
-                res.WindNoiseReduction = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("windNoiseReduction"),
-                    Candidates = elem["candidate"].Values<string>().ToList()
-                } : null;
+                res.WindNoiseReduction = elem.HasValues ? JsonConvert.DeserializeObject<WindNoiseReductionCapability>(elem.ToString(Formatting.None)) : null;
             }
 
             return res;
