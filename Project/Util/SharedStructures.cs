@@ -34,11 +34,11 @@ namespace Kazyx.RemoteApi
         /// <summary>
         /// Current value of the specified parameter.
         /// </summary>
-        public T Current { set; get; }
+        public virtual T Current { set; get; }
 
         /// <summary>
         /// Candidate values of the specified parameter.
         /// </summary>
-        public List<T> Candidates { set; get; }
+        public virtual List<T> Candidates { set; get; }
     }
 }
