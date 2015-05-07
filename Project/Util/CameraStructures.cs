@@ -312,14 +312,14 @@ namespace Kazyx.RemoteApi.Camera
         public List<T> CandidateValues { set; get; }
 
         [JsonIgnore]
-        public new T Current
+        public override T Current
         {
             set { CurrentValue = value; }
             get { return CurrentValue; }
         }
 
         [JsonIgnore]
-        public new List<T> Candidates
+        public override List<T> Candidates
         {
             set { CandidateValues = value; }
             get { return CandidateValues; }
