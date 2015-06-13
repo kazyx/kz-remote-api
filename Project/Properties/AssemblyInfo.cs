@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("KzRemoteApi")]
-[assembly: AssemblyCopyright("Copyright kazyx 2014")]
+[assembly: AssemblyCopyright("Copyright kazyx 2014-2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

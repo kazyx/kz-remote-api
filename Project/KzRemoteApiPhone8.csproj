@@ -88,6 +88,7 @@
   <ItemGroup>
     <Compile Include="Api\AvContentApiClient.cs" />
     <Compile Include="Internal\ApiClient.cs" />
+    <Compile Include="Internal\AsyncPostClientPhone8.cs" />
     <Compile Include="Internal\BasicParser.cs" />
     <Compile Include="Internal\CustomParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -102,7 +103,6 @@
     <Compile Include="Util\CameraStructures.cs" />
     <Compile Include="Util\SharedStructures.cs" />
     <Compile Include="Util\StatusCode.cs" />
-    <Compile Include="Internal\AsyncPostClient.cs" />
     <Compile Include="Util\EvConverter.cs" />
     <Compile Include="Util\SystemStructures.cs" />
   </ItemGroup>
@@ -111,7 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>packages\Newtonsoft.Json.6.0.3\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Newtonsoft.Json.6.0.8\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />

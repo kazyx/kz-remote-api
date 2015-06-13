@@ -46,7 +46,7 @@
     <Compile Include="Api\CameraApiClient.cs" />
     <Compile Include="Api\SystemApiClient.cs" />
     <Compile Include="Internal\ApiClient.cs" />
-    <Compile Include="Internal\AsyncPostClient.cs" />
+    <Compile Include="Internal\AsyncPostClientUniversal.cs" />
     <Compile Include="Internal\BasicParser.cs" />
     <Compile Include="Internal\CustomParser.cs" />
     <Compile Include="Internal\RequestGenerator.cs" />
@@ -64,8 +64,11 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\Project\packages\Newtonsoft.Json.6.0.3\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

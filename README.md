@@ -10,7 +10,7 @@ kz-remote-api
  ```
 
 2. Open csproj file by Visual Studio.
- - /Project/KzRemoteApi.csproj for Windows Phone 8 or 8.1 application.
+ - /Project/KzRemoteApiPhone8.csproj for Windows Phone 8 or 8.1 application.
  - /Project/KzRemoteApiUniversal.csproj for Universal Windows application.
  - /Project/KzRemoteApiDesktop.csproj for Desktop Windows application.
 
