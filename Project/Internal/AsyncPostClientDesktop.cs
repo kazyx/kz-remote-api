@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -43,7 +44,8 @@ namespace Kazyx.RemoteApi
                 var response = await task;
                 if (response.IsSuccessStatusCode)
                 {
-                    return await response.Content.ReadAsStringAsync();
+                    // ReadAsString fails in case of charset=utf-8
+                    return Encoding.UTF8.GetString(await response.Content.ReadAsByteArrayAsync());
                 }
                 else
                 {
