@@ -10,9 +10,10 @@ kz-remote-api
  ```
 
 2. Open csproj file by Visual Studio.
- - /Project/KzRemoteApiPhone8.csproj for Windows Phone 8 or 8.1 application.
- - /Project/KzRemoteApiUniversal.csproj for Universal Windows application.
+ - /Project/KzRemoteApiUwp.csproj for Universa Windows Platform application.
  - /Project/KzRemoteApiDesktop.csproj for Desktop Windows application.
+ - /Project/KzRemoteApiUniversal.csproj for Windows 8.1 Universal application.
+ - /Project/KzRemoteApiPhone8.csproj for Windows Phone 8 or 8.1 application.
 
 3. Add reference to [Json.NET](https://github.com/JamesNK/Newtonsoft.Json).
 
