@@ -294,7 +294,8 @@ namespace Kazyx.RemoteApi.Camera
 
     public class ZoomMode
     {
-        public const string Optical = "Optical Zoom Only";
+        public const string OpticalOnly = "Optical Zoom Only";
+        public const string SmartOnly = "Smart Zoom Only";
         public const string ClearImageDigital = "On:Clear Image Zoom";
     }
 
