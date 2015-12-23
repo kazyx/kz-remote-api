@@ -40,6 +40,6 @@ namespace Kazyx.RemoteApi
         ContentProtected = 41000,
         ContentDoesNotExist = 41001,
         StorageRemoved = 41002,
-        FailedToDelege = 41003,
+        FailedToDelete = 41003,
     }
 }
