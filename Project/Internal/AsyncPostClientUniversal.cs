@@ -27,12 +27,14 @@ namespace Kazyx.RemoteApi
             var content = new HttpStringContent(body);
             content.Headers["Content-Type"] = "application/json";
 
+            CancellationTokenRegistration cancelReg;
+
             try
             {
                 var task = mClient.PostAsync(endpoint, content);
                 if (cancel != null)
                 {
-                    cancel.Token.Register(() =>
+                    cancelReg = cancel.Token.Register(() =>
                     {
                         try
                         {
@@ -67,6 +69,13 @@ namespace Kazyx.RemoteApi
                 {
                     Debug.WriteLine("HttpPost Exception: " + e.StackTrace);
                     throw new RemoteApiException(StatusCode.NetworkError);
+                }
+            }
+            finally
+            {
+                if (cancel != null)
+                {
+                    cancelReg.Dispose();
                 }
             }
         }
