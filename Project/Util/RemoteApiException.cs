@@ -7,26 +7,29 @@ namespace Kazyx.RemoteApi
     /// </summary>
     public class RemoteApiException : Exception
     {
+        [Obsolete("Use StatusCode instead")]
+        public StatusCode code { get { return StatusCode; } }
+
         /// <summary>
         /// Status code of this Remote API error.
         /// </summary>
-        public StatusCode code { get; private set; }
+        public StatusCode StatusCode { get; private set; }
 
         internal RemoteApiException(int code)
         {
             if (Enum.IsDefined(typeof(StatusCode), code))
             {
-                this.code = (StatusCode)code;
+                this.StatusCode = (StatusCode)code;
             }
             else
             {
-                this.code = StatusCode.Undefined;
+                this.StatusCode = StatusCode.Undefined;
             }
         }
 
         internal RemoteApiException(StatusCode code)
         {
-            this.code = code;
+            this.StatusCode = code;
         }
     }
 }

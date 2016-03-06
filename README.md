@@ -35,5 +35,13 @@ kz-remote-api
  var picUrls = await camera.ActTakePictureAsync();
  ```
 
+## Error handling
+
+Async methods throw `RemoteApiException` in the following cases.
+
+- Any network error: `StatusCode.NetworkError`
+- Operation is cancelled via `CancellationTokenSource`: `StatusCode.Cancelled`
+- Error response: `StatusCode.Any` or larger. Or `StatusCode.Undefined` if it is not defined yet.
+
 ##License
 This software is published under the [MIT License](http://opensource.org/licenses/mit-license).
