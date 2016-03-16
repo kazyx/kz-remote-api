@@ -30,22 +30,18 @@ namespace Kazyx.RemoteApi
         /// </summary>
         /// <param name="version">Version of the API set to retrieve. Empty string means all.</param>
         /// <returns></returns>
-        public async Task<List<MethodType>> GetMethodTypesAsync(string version = ""
-            , CancellationTokenSource cancel = null)
+        public Task<List<MethodType>> GetMethodTypesAsync(string version = "", CancellationTokenSource cancel = null)
         {
-            return await Single<List<MethodType>>(
-                RequestGenerator.Jsonize("getMethodTypes", version),
-                CustomParser.AsMethodTypes, cancel).ConfigureAwait(false);
+            return Single(RequestGenerator.Jsonize("getMethodTypes", version), CustomParser.AsMethodTypes, cancel);
         }
 
         /// <summary>
         /// GetVersions v1.0
         /// </summary>
         /// <returns></returns>
-        public async Task<List<string>> GetVersionsAsync(CancellationTokenSource cancel = null)
+        public Task<List<string>> GetVersionsAsync(CancellationTokenSource cancel = null)
         {
-            return await PrimitiveListByMethod<string>("getVersions", ApiVersion.V1_0
-                , cancel).ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getVersions", ApiVersion.V1_0, cancel);
         }
 
         /// <summary>
@@ -55,7 +51,7 @@ namespace Kazyx.RemoteApi
         /// <returns></returns>
         protected async Task NoValue(string request, CancellationTokenSource cancel = null)
         {
-            await Core<bool>(request, (res) =>
+            await Core(request, res =>
             {
                 BasicParser.CheckError(res);
                 return true;
@@ -82,10 +78,10 @@ namespace Kazyx.RemoteApi
         /// <param name="request">Request JSON body</param>
         /// <param name="deserializer">Response JSON deserializer</param>
         /// <returns></returns>
-        protected async Task<Capability<T>> Capability<T>(string request, CapabilityDeserializer<T> deserializer
+        protected Task<Capability<T>> Capability<T>(string request, CapabilityDeserializer<T> deserializer
             , CancellationTokenSource cancel = null)
         {
-            return await Core<Capability<T>>(request, (res) => { return deserializer(res); }, cancel).ConfigureAwait(false);
+            return Core(request, res => deserializer(res), cancel);
         }
 
         /// <summary>
@@ -94,12 +90,10 @@ namespace Kazyx.RemoteApi
         /// <typeparam name="T">Type of the response Capability</typeparam>
         /// <param name="method">Name of the API</param>
         /// <returns></returns>
-        protected async Task<Capability<T>> CapabilityByMethod<T>(string method
+        protected Task<Capability<T>> CapabilityByMethod<T>(string method
             , CancellationTokenSource cancel = null)
         {
-            return await Capability<T>(
-                RequestGenerator.Jsonize(method),
-                BasicParser.AsCapability<T>, cancel).ConfigureAwait(false);
+            return Capability(RequestGenerator.Jsonize(method), BasicParser.AsCapability<T>, cancel);
         }
 
         /// <summary>
@@ -109,10 +103,10 @@ namespace Kazyx.RemoteApi
         /// <param name="request">Request JSON body</param>
         /// <param name="deserializer">Response JSON deserializer</param>
         /// <returns></returns>
-        protected async Task<List<T>> List<T>(string request, ListDeserializer<T> deserializer
+        protected Task<List<T>> List<T>(string request, ListDeserializer<T> deserializer
             , CancellationTokenSource cancel = null)
         {
-            return await Core<List<T>>(request, (res) => { return deserializer(res); }, cancel).ConfigureAwait(false);
+            return Core(request, res => deserializer(res), cancel);
         }
 
         /// <summary>
@@ -122,12 +116,10 @@ namespace Kazyx.RemoteApi
         /// <param name="method">Name of the API</param>
         /// <param name="version">Version of the API</param>
         /// <returns></returns>
-        protected async Task<List<T>> PrimitiveListByMethod<T>(string method, ApiVersion version = ApiVersion.V1_0
+        protected Task<List<T>> PrimitiveListByMethod<T>(string method, ApiVersion version = ApiVersion.V1_0
             , CancellationTokenSource cancel = null)
         {
-            return await List<T>(
-                RequestGenerator.Jsonize(method, version),
-                BasicParser.AsPrimitiveList<T>, cancel).ConfigureAwait(false);
+            return List(RequestGenerator.Jsonize(method, version), BasicParser.AsPrimitiveList<T>, cancel);
         }
 
         /// <summary>
@@ -137,10 +129,10 @@ namespace Kazyx.RemoteApi
         /// <param name="request">Request JSON body</param>
         /// <param name="deserializer">Response JSON deserializer</param>
         /// <returns></returns>
-        protected async Task<T> Single<T>(string request, RawDeserializer<T> deserializer
+        protected Task<T> Single<T>(string request, RawDeserializer<T> deserializer
             , CancellationTokenSource cancel = null)
         {
-            return await Core<T>(request, (res) => { return deserializer(res); }, cancel).ConfigureAwait(false);
+            return Core(request, res => deserializer(res), cancel);
         }
 
         /// <summary>
@@ -150,12 +142,10 @@ namespace Kazyx.RemoteApi
         /// <param name="method">Name of the API</param>
         /// <param name="version">Version of the API</param>
         /// <returns></returns>
-        protected async Task<T> PrimitiveByMethod<T>(string method, ApiVersion version = ApiVersion.V1_0
+        protected Task<T> PrimitiveByMethod<T>(string method, ApiVersion version = ApiVersion.V1_0
             , CancellationTokenSource cancel = null)
         {
-            return await Single<T>(
-                RequestGenerator.Jsonize(method, version),
-                BasicParser.AsPrimitive<T>, cancel).ConfigureAwait(false);
+            return Single(RequestGenerator.Jsonize(method, version), BasicParser.AsPrimitive<T>, cancel);
         }
 
         /// <summary>
@@ -165,16 +155,13 @@ namespace Kazyx.RemoteApi
         /// <param name="method">Name of the API</param>
         /// <param name="version">Version of the API</param>
         /// <returns></returns>
-        protected async Task<T> ObjectByMethod<T>(string method, ApiVersion version = ApiVersion.V1_0
+        protected Task<T> ObjectByMethod<T>(string method, ApiVersion version = ApiVersion.V1_0
             , CancellationTokenSource cancel = null)
         {
-            return await Single<T>(
-                RequestGenerator.Jsonize(method, version),
-                BasicParser.AsObject<T>, cancel).ConfigureAwait(false);
+            return Single(RequestGenerator.Jsonize(method, version), BasicParser.AsObject<T>, cancel);
         }
 
-        private async Task<T> Core<T>(string request, Func<string, T> function
-            , CancellationTokenSource cancel = null)
+        private async Task<T> Core<T>(string request, Func<string, T> function, CancellationTokenSource cancel = null)
         {
             try
             {

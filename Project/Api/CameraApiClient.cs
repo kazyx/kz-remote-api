@@ -21,173 +21,171 @@ namespace Kazyx.RemoteApi.Camera
         /// </summary>
         /// <param name="longpolling">Set true for event notification, false for immediate response.</param>
         /// <returns></returns>
-        public async Task<Event> GetEventAsync(bool longpolling, ApiVersion version = ApiVersion.V1_0
+        public Task<Event> GetEventAsync(bool longpolling, ApiVersion version = ApiVersion.V1_0
             , CancellationTokenSource cancel = null)
         {
-            return await Single<Event>(
+            return Single(
                 RequestGenerator.Jsonize("getEvent", version, longpolling),
-                CustomParser.AsCameraEvent, cancel).ConfigureAwait(false);
+                CustomParser.AsCameraEvent, cancel);
         }
 
-        public async Task<ServerAppInfo> GetApplicationInfoAsync()
+        public Task<ServerAppInfo> GetApplicationInfoAsync()
         {
-            return await Single<ServerAppInfo>(
+            return Single(
                 RequestGenerator.Jsonize("getApplicationInfo"),
-                CustomParser.AsServerAppInfo).ConfigureAwait(false);
+                CustomParser.AsServerAppInfo);
         }
 
-        public async Task<List<string>> GetAvailableApiListAsync()
+        public Task<List<string>> GetAvailableApiListAsync()
         {
-            return await PrimitiveListByMethod<string>("getAvailableApiList").ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getAvailableApiList");
         }
 
         public async Task StartRecModeAsync()
         {
-            await NoValueByMethod("startRecMode").ConfigureAwait(false);
+            await NoValueByMethod("startRecMode");
         }
 
         public async Task StopRecModeAsync()
         {
-            await NoValueByMethod("stopRecMode").ConfigureAwait(false);
+            await NoValueByMethod("stopRecMode");
         }
 
         public async Task ActZoomAsync(string direction, string movement)
         {
-            await NoValue(RequestGenerator.Jsonize("actZoom", direction, movement)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("actZoom", direction, movement));
         }
 
-        public async Task<string> StartLiveviewAsync()
+        public Task<string> StartLiveviewAsync()
         {
-            return await PrimitiveByMethod<string>("startLiveview").ConfigureAwait(false);
+            return PrimitiveByMethod<string>("startLiveview");
         }
 
-        public async Task<string> StartLiveviewWithSizeAsync(string size)
+        public Task<string> StartLiveviewWithSizeAsync(string size)
         {
-            return await Single<string>(
+            return Single(
                 RequestGenerator.Jsonize("startLiveviewWithSize", size),
-                BasicParser.AsPrimitive<string>).ConfigureAwait(false);
+                BasicParser.AsPrimitive<string>);
         }
 
-        public async Task<List<string>> GetSupportedLiveviewSizeAsync()
+        public Task<List<string>> GetSupportedLiveviewSizeAsync()
         {
-            return await PrimitiveListByMethod<string>("getSupportedLiveviewSize").ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getSupportedLiveviewSize");
         }
 
         public async Task StopLiveviewAsync()
         {
-            await NoValueByMethod("stopLiveview").ConfigureAwait(false);
+            await NoValueByMethod("stopLiveview");
         }
 
         public async Task SetLiveviewFrameInfoAsync(FrameInfoSetting setting)
         {
-            await NoValue(RequestGenerator.Serialize("setLiveviewFrameInfo", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setLiveviewFrameInfo", ApiVersion.V1_0, setting));
         }
 
-        public async Task<FrameInfoSetting> GetLiveviewFrameInfoAsync()
+        public Task<FrameInfoSetting> GetLiveviewFrameInfoAsync()
         {
-            return await ObjectByMethod<FrameInfoSetting>("getLiveviewFrameInfo").ConfigureAwait(false);
+            return ObjectByMethod<FrameInfoSetting>("getLiveviewFrameInfo");
         }
 
         public async Task StartAudioRecAsync()
         {
-            await NoValueByMethod("startAudioRec").ConfigureAwait(false);
+            await NoValueByMethod("startAudioRec");
         }
 
         public async Task StopAudioRecAsync()
         {
-            await NoValueByMethod("stopAudioRec").ConfigureAwait(false);
+            await NoValueByMethod("stopAudioRec");
         }
 
         public async Task StartMovieRecAsync()
         {
-            await NoValueByMethod("startMovieRec").ConfigureAwait(false);
+            await NoValueByMethod("startMovieRec");
         }
 
-        public async Task<string> StopMovieRecAsync()
+        public Task<string> StopMovieRecAsync()
         {
-            return await PrimitiveByMethod<string>("stopMovieRec").ConfigureAwait(false);
+            return PrimitiveByMethod<string>("stopMovieRec");
         }
 
-        public async Task<List<string>> ActTakePictureAsync(CancellationTokenSource cancel = null)
+        public Task<List<string>> ActTakePictureAsync(CancellationTokenSource cancel = null)
         {
-            return await PrimitiveListByMethod<string>("actTakePicture"
-                , ApiVersion.V1_0, cancel).ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("actTakePicture", ApiVersion.V1_0, cancel);
         }
 
-        public async Task<List<string>> AwaitTakePictureAsync(CancellationTokenSource cancel = null)
+        public Task<List<string>> AwaitTakePictureAsync(CancellationTokenSource cancel = null)
         {
-            return await PrimitiveListByMethod<string>("awaitTakePicture"
-                , ApiVersion.V1_0, cancel).ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("TakePicture", ApiVersion.V1_0, cancel);
         }
 
         public async Task SetSelfTimerAsync(int timer)
         {
-            await NoValue(RequestGenerator.Jsonize("setSelfTimer", timer)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setSelfTimer", timer));
         }
 
-        public async Task<int> GetSelfTimerAsync()
+        public Task<int> GetSelfTimerAsync()
         {
-            return await PrimitiveByMethod<int>("getSelfTimer").ConfigureAwait(false);
+            return PrimitiveByMethod<int>("getSelfTimer");
         }
 
-        public async Task<List<int>> GetSupportedSelfTimerAsync()
+        public Task<List<int>> GetSupportedSelfTimerAsync()
         {
-            return await PrimitiveListByMethod<int>("getSupportedSelfTimer").ConfigureAwait(false);
+            return PrimitiveListByMethod<int>("getSupportedSelfTimer");
         }
 
-        public async Task<Capability<int>> GetAvailableSelfTimerAsync()
+        public Task<Capability<int>> GetAvailableSelfTimerAsync()
         {
-            return await CapabilityByMethod<int>("getAvailableSelfTimer").ConfigureAwait(false);
+            return CapabilityByMethod<int>("getAvailableSelfTimer");
         }
 
         public async Task SetPostviewImageSizeAsync(string size)
         {
-            await NoValue(RequestGenerator.Jsonize("setPostviewImageSize", size)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setPostviewImageSize", size));
         }
 
-        public async Task<string> GetPostviewImageSizeAsync()
+        public Task<string> GetPostviewImageSizeAsync()
         {
-            return await PrimitiveByMethod<string>("getPostviewImageSize").ConfigureAwait(false);
+            return PrimitiveByMethod<string>("getPostviewImageSize");
         }
 
-        public async Task<List<string>> GetSupportedPostviewImageSizeAsync()
+        public Task<List<string>> GetSupportedPostviewImageSizeAsync()
         {
-            return await PrimitiveListByMethod<string>("getSupportedPostviewImageSize").ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getSupportedPostviewImageSize");
         }
 
-        public async Task<Capability<string>> GetAvailablePostviewImageSizeAsync()
+        public Task<Capability<string>> GetAvailablePostviewImageSizeAsync()
         {
-            return await CapabilityByMethod<string>("getAvailablePostviewImageSize").ConfigureAwait(false);
+            return CapabilityByMethod<string>("getAvailablePostviewImageSize");
         }
 
         public async Task SetShootModeAsync(string mode)
         {
-            await NoValue(RequestGenerator.Jsonize("setShootMode", mode)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setShootMode", mode));
         }
 
-        public async Task<string> GetShootModeAsync()
+        public Task<string> GetShootModeAsync()
         {
-            return await PrimitiveByMethod<string>("getShootMode").ConfigureAwait(false);
+            return PrimitiveByMethod<string>("getShootMode");
         }
 
-        public async Task<List<string>> GetSupportedShootModeAsync()
+        public Task<List<string>> GetSupportedShootModeAsync()
         {
-            return await PrimitiveListByMethod<string>("getSupportedShootMode").ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getSupportedShootMode");
         }
 
-        public async Task<Capability<string>> GetAvailableShootModeAsync()
+        public Task<Capability<string>> GetAvailableShootModeAsync()
         {
-            return await CapabilityByMethod<string>("getAvailableShootMode").ConfigureAwait(false);
+            return CapabilityByMethod<string>("getAvailableShootMode");
         }
 
         public async Task ActHalfPressShutterAsync()
         {
-            await NoValueByMethod("actHalfPressShutter").ConfigureAwait(false);
+            await NoValueByMethod("actHalfPressShutter");
         }
 
         public async Task CancelHalfPressShutterAsync()
         {
-            await NoValueByMethod("cancelHalfPressShutter").ConfigureAwait(false);
+            await NoValueByMethod("cancelHalfPressShutter");
         }
 
         /// <summary>
@@ -196,341 +194,341 @@ namespace Kazyx.RemoteApi.Camera
         /// <param name="x">Percentage of the position to focus in x-axis.</param>
         /// <param name="y">Percentage of the position to focus in y-axis</param>
         /// <returns></returns>
-        public async Task<SetFocusResult> SetAFPositionAsync(double x, double y)
+        public Task<SetFocusResult> SetAFPositionAsync(double x, double y)
         {
-            return await Single<SetFocusResult>(
+            return Single(
                 RequestGenerator.Jsonize("setTouchAFPosition", x, y),
-                CustomParser.AsSetFocusResult).ConfigureAwait(false);
+                CustomParser.AsSetFocusResult);
         }
 
-        public async Task<TouchFocusStatus> GetTouchAFStatusAsync()
+        public Task<TouchFocusStatus> GetTouchAFStatusAsync()
         {
-            return await ObjectByMethod<TouchFocusStatus>("getTouchAFPosition").ConfigureAwait(false);
+            return ObjectByMethod<TouchFocusStatus>("getTouchAFPosition");
         }
 
         public async Task CancelTouchAFAsync()
         {
-            await NoValueByMethod("cancelTouchAFPosition").ConfigureAwait(false);
+            await NoValueByMethod("cancelTouchAFPosition");
         }
 
         public async Task SetExposureModeAsync(string mode)
         {
-            await NoValue(RequestGenerator.Jsonize("setExposureMode", mode)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setExposureMode", mode));
         }
 
-        public async Task<string> GetExposureModeAsync()
+        public Task<string> GetExposureModeAsync()
         {
-            return await PrimitiveByMethod<string>("getExposureMode").ConfigureAwait(false);
+            return PrimitiveByMethod<string>("getExposureMode");
         }
 
-        public async Task<List<string>> GetSupportedExposureModeAsync()
+        public Task<List<string>> GetSupportedExposureModeAsync()
         {
-            return await PrimitiveListByMethod<string>("getSupportedExposureMode").ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getSupportedExposureMode");
         }
 
-        public async Task<Capability<string>> GetAvailableExposureModeAsync()
+        public Task<Capability<string>> GetAvailableExposureModeAsync()
         {
-            return await CapabilityByMethod<string>("getAvailableExposureMode").ConfigureAwait(false);
+            return CapabilityByMethod<string>("getAvailableExposureMode");
         }
 
         public async Task SetFocusModeAsync(string mode)
         {
-            await NoValue(RequestGenerator.Jsonize("setFocusMode", mode)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setFocusMode", mode));
         }
 
-        public async Task<string> GetFocusModeAsync()
+        public Task<string> GetFocusModeAsync()
         {
-            return await PrimitiveByMethod<string>("getFocusMode").ConfigureAwait(false);
+            return PrimitiveByMethod<string>("getFocusMode");
         }
 
-        public async Task<List<string>> GetSupportedFocusModeAsync()
+        public Task<List<string>> GetSupportedFocusModeAsync()
         {
-            return await PrimitiveListByMethod<string>("getSupportedFocusMode").ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getSupportedFocusMode");
         }
 
-        public async Task<Capability<string>> GetAvailableFocusModeAsync()
+        public Task<Capability<string>> GetAvailableFocusModeAsync()
         {
-            return await CapabilityByMethod<string>("getAvailableFocusMode").ConfigureAwait(false);
+            return CapabilityByMethod<string>("getAvailableFocusMode");
         }
 
         public async Task SetEvIndexAsync(int index)
         {
-            await NoValue(RequestGenerator.Jsonize("setExposureCompensation", index)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setExposureCompensation", index));
         }
 
-        public async Task<int> GetEvIndexAsync()
+        public Task<int> GetEvIndexAsync()
         {
-            return await PrimitiveByMethod<int>("getExposureCompensation").ConfigureAwait(false);
+            return PrimitiveByMethod<int>("getExposureCompensation");
         }
 
-        public async Task<List<EvCandidate>> GetSupportedEvAsync()
+        public Task<List<EvCandidate>> GetSupportedEvAsync()
         {
-            return await Single<List<EvCandidate>>(
+            return Single(
                  RequestGenerator.Jsonize("getSupportedExposureCompensation"),
-                 CustomParser.AsEvCandidates).ConfigureAwait(false);
+                 CustomParser.AsEvCandidates);
         }
 
-        public async Task<EvCapability> GetAvailableEvAsync()
+        public Task<EvCapability> GetAvailableEvAsync()
         {
-            return await Single<EvCapability>(
+            return Single(
                 RequestGenerator.Jsonize("getAvailableExposureCompensation"),
-                CustomParser.AsEvCapability).ConfigureAwait(false);
+                CustomParser.AsEvCapability);
         }
 
         public async Task SetFNumberAsync(string f)
         {
-            await NoValue(RequestGenerator.Jsonize("setFNumber", f)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setFNumber", f));
         }
 
-        public async Task<string> GetFNumberAsync()
+        public Task<string> GetFNumberAsync()
         {
-            return await PrimitiveByMethod<string>("getFNumber").ConfigureAwait(false);
+            return PrimitiveByMethod<string>("getFNumber");
         }
 
-        public async Task<List<string>> GetSupportedFNumberAsync()
+        public Task<List<string>> GetSupportedFNumberAsync()
         {
-            return await PrimitiveListByMethod<string>("getSupportedFNumber").ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getSupportedFNumber");
         }
 
-        public async Task<Capability<string>> GetAvailableFNumberAsync()
+        public Task<Capability<string>> GetAvailableFNumberAsync()
         {
-            return await CapabilityByMethod<string>("getAvailableFNumber").ConfigureAwait(false);
+            return CapabilityByMethod<string>("getAvailableFNumber");
         }
 
         public async Task SetShutterSpeedAsync(string ss)
         {
-            await NoValue(RequestGenerator.Jsonize("setShutterSpeed", ss)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setShutterSpeed", ss));
         }
 
-        public async Task<string> GetShutterSpeedAsync()
+        public Task<string> GetShutterSpeedAsync()
         {
-            return await PrimitiveByMethod<string>("getShutterSpeed").ConfigureAwait(false);
+            return PrimitiveByMethod<string>("getShutterSpeed");
         }
 
-        public async Task<List<string>> GetSupportedShutterSpeedAsync()
+        public Task<List<string>> GetSupportedShutterSpeedAsync()
         {
-            return await PrimitiveListByMethod<string>("getSupportedShutterSpeed").ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getSupportedShutterSpeed");
         }
 
-        public async Task<Capability<string>> GetAvailableShutterSpeedAsync()
+        public Task<Capability<string>> GetAvailableShutterSpeedAsync()
         {
-            return await CapabilityByMethod<string>("getAvailableShutterSpeed").ConfigureAwait(false);
+            return CapabilityByMethod<string>("getAvailableShutterSpeed");
         }
 
         public async Task SetISOSpeedAsync(string iso)
         {
-            await NoValue(RequestGenerator.Jsonize("setIsoSpeedRate", iso)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setIsoSpeedRate", iso));
         }
 
-        public async Task<string> GetIsoSpeedAsync()
+        public Task<string> GetIsoSpeedAsync()
         {
-            return await PrimitiveByMethod<string>("getIsoSpeedRate").ConfigureAwait(false);
+            return PrimitiveByMethod<string>("getIsoSpeedRate");
         }
 
-        public async Task<List<string>> GetSupportedIsoSpeedAsync()
+        public Task<List<string>> GetSupportedIsoSpeedAsync()
         {
-            return await PrimitiveListByMethod<string>("getSupportedIsoSpeedRate").ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getSupportedIsoSpeedRate");
         }
 
-        public async Task<Capability<string>> GetAvailableIsoSpeedAsync()
+        public Task<Capability<string>> GetAvailableIsoSpeedAsync()
         {
-            return await CapabilityByMethod<string>("getAvailableIsoSpeedRate").ConfigureAwait(false);
+            return CapabilityByMethod<string>("getAvailableIsoSpeedRate");
         }
 
         public async Task SetStillImageSizeAsync(StillImageSize size)
         {
-            await NoValue(RequestGenerator.Jsonize("setStillSize", size.AspectRatio, size.SizeDefinition)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setStillSize", size.AspectRatio, size.SizeDefinition));
         }
 
-        public async Task<StillImageSize> GetStillSizeAsync()
+        public Task<StillImageSize> GetStillSizeAsync()
         {
-            return await ObjectByMethod<StillImageSize>(RequestGenerator.Jsonize("getStillSize")).ConfigureAwait(false);
+            return ObjectByMethod<StillImageSize>(RequestGenerator.Jsonize("getStillSize"));
         }
 
-        public async Task<StillImageSize[]> GetSupportedStillSizeAsync()
+        public Task<StillImageSize[]> GetSupportedStillSizeAsync()
         {
-            return await ObjectByMethod<StillImageSize[]>("getSupportedStillSize").ConfigureAwait(false);
+            return ObjectByMethod<StillImageSize[]>("getSupportedStillSize");
         }
 
-        public async Task<Capability<StillImageSize>> GetAvailableStillSizeAsync()
+        public Task<Capability<StillImageSize>> GetAvailableStillSizeAsync()
         {
-            return await Capability<StillImageSize>(
+            return Capability(
                 RequestGenerator.Jsonize("getAvailableStillSize"),
-                BasicParser.AsCapabilityObject<StillImageSize>).ConfigureAwait(false);
+                BasicParser.AsCapabilityObject<StillImageSize>);
         }
 
         public async Task SetWhiteBalanceAsync(WhiteBalance wb)
         {
-            await NoValue(RequestGenerator.Jsonize("setWhiteBalance", wb.Mode, wb.ColorTemperature != WhiteBalance.InvalidColorTemperture, wb.ColorTemperature)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setWhiteBalance", wb.Mode, wb.ColorTemperature != WhiteBalance.InvalidColorTemperture, wb.ColorTemperature));
         }
 
-        public async Task<WhiteBalance> GetWhiteBalanceAsync()
+        public Task<WhiteBalance> GetWhiteBalanceAsync()
         {
-            return await ObjectByMethod<WhiteBalance>("getWhiteBalance").ConfigureAwait(false);
+            return ObjectByMethod<WhiteBalance>("getWhiteBalance");
         }
 
-        public async Task<WhiteBalanceCandidate[]> GetSupportedWhiteBalanceAsync()
+        public Task<WhiteBalanceCandidate[]> GetSupportedWhiteBalanceAsync()
         {
-            return await ObjectByMethod<WhiteBalanceCandidate[]>("getSupportedWhiteBalance").ConfigureAwait(false);
+            return ObjectByMethod<WhiteBalanceCandidate[]>("getSupportedWhiteBalance");
         }
 
-        public async Task<WhiteBalanceCapability> GetAvailableWhiteBalanceAsync()
+        public Task<WhiteBalanceCapability> GetAvailableWhiteBalanceAsync()
         {
-            return await Single<WhiteBalanceCapability>(
+            return Single(
                 RequestGenerator.Jsonize("getAvailableWhiteBalance"),
-                CustomParser.AsWhiteBalanceCapability).ConfigureAwait(false);
+                CustomParser.AsWhiteBalanceCapability);
         }
 
-        public async Task<CaptureBasedWhiteBalance> ActWhiteBalanceOnePushCustomAsync()
+        public Task<CaptureBasedWhiteBalance> ActWhiteBalanceOnePushCustomAsync()
         {
-            return await ObjectByMethod<CaptureBasedWhiteBalance>("actWhiteBalanceOnePushCustom").ConfigureAwait(false);
+            return ObjectByMethod<CaptureBasedWhiteBalance>("actWhiteBalanceOnePushCustom");
         }
 
         public async Task SetBeepModeAsync(string mode)
         {
-            await NoValue(RequestGenerator.Jsonize("setBeepMode", mode)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setBeepMode", mode));
         }
 
-        public async Task<string> GetBeepModeAsync()
+        public Task<string> GetBeepModeAsync()
         {
-            return await PrimitiveByMethod<string>("getBeepMode").ConfigureAwait(false);
+            return PrimitiveByMethod<string>("getBeepMode");
         }
 
-        public async Task<List<string>> GetSupportedBeepModeAsync()
+        public Task<List<string>> GetSupportedBeepModeAsync()
         {
-            return await PrimitiveListByMethod<string>("getSupportedBeepMode").ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getSupportedBeepMode");
         }
 
-        public async Task<Capability<string>> GetAvailableBeepModeAsync()
+        public Task<Capability<string>> GetAvailableBeepModeAsync()
         {
-            return await CapabilityByMethod<string>("getAvailableBeepMode").ConfigureAwait(false);
+            return CapabilityByMethod<string>("getAvailableBeepMode");
         }
 
         public async Task StartIntervalStillRecAsync()
         {
-            await NoValueByMethod("startIntervalStillRec").ConfigureAwait(false);
+            await NoValueByMethod("startIntervalStillRec");
         }
 
         public async Task StopIntervalStillRecAsync()
         {
-            await NoValueByMethod("stopIntervalStillRec").ConfigureAwait(false);
+            await NoValueByMethod("stopIntervalStillRec");
         }
 
         public async Task StartLoopRecAsync()
         {
-            await NoValueByMethod("startLoopRec").ConfigureAwait(false);
+            await NoValueByMethod("startLoopRec");
         }
 
         public async Task StopLoopRecAsync()
         {
-            await NoValueByMethod("stopLoopRec").ConfigureAwait(false);
+            await NoValueByMethod("stopLoopRec");
         }
 
         public async Task SetViewAngleAsync(int angle)
         {
-            await NoValue(RequestGenerator.Jsonize("setViewAngle", angle)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setViewAngle", angle));
         }
 
-        public async Task<int> GetViewAngleAsync()
+        public Task<int> GetViewAngleAsync()
         {
-            return await PrimitiveByMethod<int>("getViewAngle").ConfigureAwait(false);
+            return PrimitiveByMethod<int>("getViewAngle");
         }
 
-        public async Task<List<int>> GetSupportedViewAngleAsync()
+        public Task<List<int>> GetSupportedViewAngleAsync()
         {
-            return await PrimitiveListByMethod<int>("getSupportedViewAngle").ConfigureAwait(false);
+            return PrimitiveListByMethod<int>("getSupportedViewAngle");
         }
 
-        public async Task<Capability<int>> GetAvailableViewAngleAsync()
+        public Task<Capability<int>> GetAvailableViewAngleAsync()
         {
-            return await CapabilityByMethod<int>("getAvailableViewAngle").ConfigureAwait(false);
+            return CapabilityByMethod<int>("getAvailableViewAngle");
         }
 
         public async Task SetSteadyModeAsync(string mode)
         {
-            await NoValue(RequestGenerator.Jsonize("setSteadyMode", mode)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setSteadyMode", mode));
         }
 
-        public async Task<string> GetSteadyModeAsync()
+        public Task<string> GetSteadyModeAsync()
         {
-            return await PrimitiveByMethod<string>("getSteadyMode").ConfigureAwait(false);
+            return PrimitiveByMethod<string>("getSteadyMode");
         }
 
-        public async Task<List<string>> GetSupportedSteadyModeAsync()
+        public Task<List<string>> GetSupportedSteadyModeAsync()
         {
-            return await PrimitiveListByMethod<string>("getSupportedSteadyMode").ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getSupportedSteadyMode");
         }
 
-        public async Task<Capability<string>> GetAvailableSteadyModeAsync()
+        public Task<Capability<string>> GetAvailableSteadyModeAsync()
         {
-            return await CapabilityByMethod<string>("getAvailableSteadyMode").ConfigureAwait(false);
+            return CapabilityByMethod<string>("getAvailableSteadyMode");
         }
 
         public async Task SetMovieQualityAsync(string mode)
         {
-            await NoValue(RequestGenerator.Jsonize("setMovieQuality", mode)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setMovieQuality", mode));
         }
 
-        public async Task<string> GetMovieQualityAsync()
+        public Task<string> GetMovieQualityAsync()
         {
-            return await PrimitiveByMethod<string>("getMovieQuality").ConfigureAwait(false);
+            return PrimitiveByMethod<string>("getMovieQuality");
         }
 
-        public async Task<List<string>> GetSupportedMovieQualityAsync()
+        public Task<List<string>> GetSupportedMovieQualityAsync()
         {
-            return await PrimitiveListByMethod<string>("getSupportedMovieQuality").ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getSupportedMovieQuality");
         }
 
-        public async Task<Capability<string>> GetAvailableMovieQualityAsync()
+        public Task<Capability<string>> GetAvailableMovieQualityAsync()
         {
-            return await CapabilityByMethod<string>("getAvailableMovieQuality").ConfigureAwait(false);
+            return CapabilityByMethod<string>("getAvailableMovieQuality");
         }
 
         public async Task SetFlashModeAsync(string mode)
         {
-            await NoValue(RequestGenerator.Jsonize("setFlashMode", mode)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setFlashMode", mode));
         }
 
-        public async Task<string> GetFlashModeAsync()
+        public Task<string> GetFlashModeAsync()
         {
-            return await PrimitiveByMethod<string>("getFlashMode").ConfigureAwait(false);
+            return PrimitiveByMethod<string>("getFlashMode");
         }
 
-        public async Task<List<string>> GetSupportedFlashModeAsync()
+        public Task<List<string>> GetSupportedFlashModeAsync()
         {
-            return await PrimitiveListByMethod<string>("getSupportedFlashMode").ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getSupportedFlashMode");
         }
 
-        public async Task<Capability<string>> GetAvailableFlashModeAsync()
+        public Task<Capability<string>> GetAvailableFlashModeAsync()
         {
-            return await CapabilityByMethod<string>("getAvailableFlashMode").ConfigureAwait(false);
+            return CapabilityByMethod<string>("getAvailableFlashMode");
         }
 
         public async Task SetProgramShiftAsync(int amount)
         {
-            await NoValue(RequestGenerator.Jsonize("setProgramShift", amount)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setProgramShift", amount));
         }
 
-        public async Task<ProgramShiftRange> GetSupportedProgramShiftAsync()
+        public Task<ProgramShiftRange> GetSupportedProgramShiftAsync()
         {
-            return await Single<ProgramShiftRange>(
+            return Single(
                 RequestGenerator.Jsonize("getSupportedProgramShift"),
-                CustomParser.AsProgramShiftRange).ConfigureAwait(false);
+                CustomParser.AsProgramShiftRange);
         }
 
-        public async Task<AutoPowerOff> GetAutoPowerOffAsync()
+        public Task<AutoPowerOff> GetAutoPowerOffAsync()
         {
-            return await ObjectByMethod<AutoPowerOff>("getAutoPowerOff").ConfigureAwait(false);
+            return ObjectByMethod<AutoPowerOff>("getAutoPowerOff");
         }
 
         public async Task SetAutoPowerOffAsync(AutoPowerOff param)
         {
-            await NoValue(RequestGenerator.Serialize("setAutoPowerOff", ApiVersion.V1_0, param)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setAutoPowerOff", ApiVersion.V1_0, param));
         }
 
-        public async Task<Candidate<int>> GetSupportedAutoPowerOffAsync()
+        public Task<Candidate<int>> GetSupportedAutoPowerOffAsync()
         {
-            return await ObjectByMethod<Candidate<int>>("getSupportedAutoPowerOff").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<int>>("getSupportedAutoPowerOff");
         }
 
         public async Task<Capability<int>> GetAvailableAutoPowerOffAsync()
@@ -538,39 +536,39 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<ApoCapability>("getAvailableAutoPowerOff").ConfigureAwait(false);
         }
 
-        public async Task<string> GetCameraFunctionAsync()
+        public Task<string> GetCameraFunctionAsync()
         {
-            return await PrimitiveByMethod<string>("getCameraFunction").ConfigureAwait(false);
+            return PrimitiveByMethod<string>("getCameraFunction");
         }
 
         public async Task SetCameraFunctionAsync(string mode)
         {
-            await NoValue(RequestGenerator.Jsonize("setCameraFunction", mode)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Jsonize("setCameraFunction", mode));
         }
 
-        public async Task<List<string>> GetSupportedCameraFunctionAsync()
+        public Task<List<string>> GetSupportedCameraFunctionAsync()
         {
-            return await PrimitiveListByMethod<string>("getSupportedCameraFunction").ConfigureAwait(false);
+            return PrimitiveListByMethod<string>("getSupportedCameraFunction");
         }
 
-        public async Task<Capability<string>> GetAvailableCameraFunctionAsync()
+        public Task<Capability<string>> GetAvailableCameraFunctionAsync()
         {
-            return await CapabilityByMethod<string>("getAvailableCameraFunction").ConfigureAwait(false);
+            return CapabilityByMethod<string>("getAvailableCameraFunction");
         }
 
-        public async Task<ColorSetting> GetColorSettingAsync()
+        public Task<ColorSetting> GetColorSettingAsync()
         {
-            return await ObjectByMethod<ColorSetting>("getColorSetting").ConfigureAwait(false);
+            return ObjectByMethod<ColorSetting>("getColorSetting");
         }
 
         public async Task SetColorSettingAsync(ColorSetting setting)
         {
-            await NoValue(RequestGenerator.Serialize("setColorSetting", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setColorSetting", ApiVersion.V1_0, setting));
         }
 
-        public async Task<Candidate<string>> GetSupportedColorSettingAsync()
+        public Task<Candidate<string>> GetSupportedColorSettingAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedColorSetting").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedColorSetting");
         }
 
         public async Task<Capability<string>> GetAvailableColorSettingAsync()
@@ -578,19 +576,19 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<ColorSettingCapability>("getAvailableColorSetting").ConfigureAwait(false);
         }
 
-        public async Task<ContinuousShootSetting> GetContShootingModeAsync()
+        public Task<ContinuousShootSetting> GetContShootingModeAsync()
         {
-            return await ObjectByMethod<ContinuousShootSetting>("getContShootingMode").ConfigureAwait(false);
+            return ObjectByMethod<ContinuousShootSetting>("getContShootingMode");
         }
 
         public async Task SetContShootingModeAsync(ContinuousShootSetting setting)
         {
-            await NoValue(RequestGenerator.Serialize("setContShootingMode", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setContShootingMode", ApiVersion.V1_0, setting));
         }
 
-        public async Task<Candidate<string>> GetSupportedContShootingModeAsync()
+        public Task<Candidate<string>> GetSupportedContShootingModeAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedContShootingMode").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedContShootingMode");
         }
 
         public async Task<Capability<string>> GetAvailableContShootingModeAsync()
@@ -598,19 +596,19 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<ContinuousShootingModeCapability>("getAvailableContShootingMode").ConfigureAwait(false);
         }
 
-        public async Task<ContinuousShootSpeedSetting> GetContShootingSpeedAsync()
+        public Task<ContinuousShootSpeedSetting> GetContShootingSpeedAsync()
         {
-            return await ObjectByMethod<ContinuousShootSpeedSetting>("getContShootingSpeed").ConfigureAwait(false);
+            return ObjectByMethod<ContinuousShootSpeedSetting>("getContShootingSpeed");
         }
 
         public async Task SetContShootingSpeedAsync(ContinuousShootSpeedSetting setting)
         {
-            await NoValue(RequestGenerator.Serialize("setContShootingSpeed", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setContShootingSpeed", ApiVersion.V1_0, setting));
         }
 
-        public async Task<Candidate<string>> GetSupportedContShootingSpeedAsync()
+        public Task<Candidate<string>> GetSupportedContShootingSpeedAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedContShootingSpeed").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedContShootingSpeed");
         }
 
         public async Task<Capability<string>> GetAvailableContShootingSpeedAsync()
@@ -618,19 +616,19 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<ContinuousShootingSpeedCapability>("getAvailableContShootingSpeed").ConfigureAwait(false);
         }
 
-        public async Task<FlipSetting> GetFlipSettingAsync()
+        public Task<FlipSetting> GetFlipSettingAsync()
         {
-            return await ObjectByMethod<FlipSetting>("getFlipSetting").ConfigureAwait(false);
+            return ObjectByMethod<FlipSetting>("getFlipSetting");
         }
 
         public async Task SetFlipSettingAsync(FlipSetting setting)
         {
-            await NoValue(RequestGenerator.Serialize("setFlipSetting", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setFlipSetting", ApiVersion.V1_0, setting));
         }
 
-        public async Task<Candidate<string>> GetSupportedFlipSettingAsync()
+        public Task<Candidate<string>> GetSupportedFlipSettingAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedFlipSetting").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedFlipSetting");
         }
 
         public async Task<Capability<string>> GetAvailableFlipSettingAsync()
@@ -638,24 +636,24 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<FlipModeCapability>("getAvailableFlipSetting").ConfigureAwait(false);
         }
 
-        public async Task<StorageInfo> GetStorageInformationAsync()
+        public Task<StorageInfo> GetStorageInformationAsync()
         {
-            return await ObjectByMethod<StorageInfo>("getStorageInformation").ConfigureAwait(false);
+            return ObjectByMethod<StorageInfo>("getStorageInformation");
         }
 
-        public async Task<IntervalTimeSetting> GetIntervalTimeAsync()
+        public Task<IntervalTimeSetting> GetIntervalTimeAsync()
         {
-            return await ObjectByMethod<IntervalTimeSetting>("getIntervalTime").ConfigureAwait(false);
+            return ObjectByMethod<IntervalTimeSetting>("getIntervalTime");
         }
 
         public async Task SetIntervalTimeAsync(IntervalTimeSetting setting)
         {
-            await NoValue(RequestGenerator.Serialize("setIntervalTime", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setIntervalTime", ApiVersion.V1_0, setting));
         }
 
-        public async Task<Candidate<string>> GetSupportedIntervalTimeAsync()
+        public Task<Candidate<string>> GetSupportedIntervalTimeAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedIntervalTime").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedIntervalTime");
         }
 
         public async Task<Capability<string>> GetAvailableIntervalTimeAsync()
@@ -663,19 +661,19 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<IntervalTimeCapability>("getAvailableIntervalTime").ConfigureAwait(false);
         }
 
-        public async Task<LoopRecTimeSetting> GetLoopRecTimeAsync()
+        public Task<LoopRecTimeSetting> GetLoopRecTimeAsync()
         {
-            return await ObjectByMethod<LoopRecTimeSetting>("getLoopRecTime").ConfigureAwait(false);
+            return ObjectByMethod<LoopRecTimeSetting>("getLoopRecTime");
         }
 
         public async Task SetLoopRecTimeAsync(LoopRecTimeSetting setting)
         {
-            await NoValue(RequestGenerator.Serialize("setLoopRecTime", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setLoopRecTime", ApiVersion.V1_0, setting));
         }
 
-        public async Task<Candidate<string>> GetSupportedLoopRecTimeAsync()
+        public Task<Candidate<string>> GetSupportedLoopRecTimeAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedLoopRecTime").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedLoopRecTime");
         }
 
         public async Task<Capability<string>> GetAvailableLoopRecTimeAsync()
@@ -683,19 +681,19 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<LoopRecTimeCapability>("getAvailableLoopRecTime").ConfigureAwait(false);
         }
 
-        public async Task<WindNoiseReductionSetting> GetWindNoiseReductionAsync()
+        public Task<WindNoiseReductionSetting> GetWindNoiseReductionAsync()
         {
-            return await ObjectByMethod<WindNoiseReductionSetting>("getWindNoiseReduction").ConfigureAwait(false);
+            return ObjectByMethod<WindNoiseReductionSetting>("getWindNoiseReduction");
         }
 
         public async Task SetWindNoiseReductionAsync(WindNoiseReductionSetting setting)
         {
-            await NoValue(RequestGenerator.Serialize("setWindNoiseReduction", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setWindNoiseReduction", ApiVersion.V1_0, setting));
         }
 
-        public async Task<Candidate<string>> GetSupportedWindNoiseReductionAsync()
+        public Task<Candidate<string>> GetSupportedWindNoiseReductionAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedWindNoiseReduction").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedWindNoiseReduction");
         }
 
         public async Task<Capability<string>> GetAvailableWindNoiseReductionAsync()
@@ -703,19 +701,19 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<WindNoiseReductionCapability>("getAvailableWindNoiseReduction").ConfigureAwait(false);
         }
 
-        public async Task<AudioRecordingSetting> GetAudioRecordingAsync()
+        public Task<AudioRecordingSetting> GetAudioRecordingAsync()
         {
-            return await ObjectByMethod<AudioRecordingSetting>("getAudioRecording").ConfigureAwait(false);
+            return ObjectByMethod<AudioRecordingSetting>("getAudioRecording");
         }
 
         public async Task SetAudioRecordingAsync(AudioRecordingSetting setting)
         {
-            await NoValue(RequestGenerator.Serialize("setAudioRecording", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setAudioRecording", ApiVersion.V1_0, setting));
         }
 
-        public async Task<Candidate<string>> GetSupportedAudioRecordingAsync()
+        public Task<Candidate<string>> GetSupportedAudioRecordingAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedAudioRecording").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedAudioRecording");
         }
 
         public async Task<Capability<string>> GetAvailableAudioRecordingAsync()
@@ -723,19 +721,19 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<AudioRecordingCapability>("getAvailableAudioRecording").ConfigureAwait(false);
         }
 
-        public async Task<SceneSelectionSetting> GetSceneSelectionAsync()
+        public Task<SceneSelectionSetting> GetSceneSelectionAsync()
         {
-            return await ObjectByMethod<SceneSelectionSetting>("getSceneSelection").ConfigureAwait(false);
+            return ObjectByMethod<SceneSelectionSetting>("getSceneSelection");
         }
 
         public async Task SetSceneSelectionAsync(SceneSelectionSetting setting)
         {
-            await NoValue(RequestGenerator.Serialize("setSceneSelection", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setSceneSelection", ApiVersion.V1_0, setting));
         }
 
-        public async Task<Candidate<string>> GetSupportedSceneSelectionAsync()
+        public Task<Candidate<string>> GetSupportedSceneSelectionAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedSceneSelection").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedSceneSelection");
         }
 
         public async Task<Capability<string>> GetAvailableSceneSelectionAsync()
@@ -743,19 +741,19 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<SceneSelectionCapability>("getAvailableSceneSelection").ConfigureAwait(false);
         }
 
-        public async Task<ImageQualitySetting> GetStillQualityAsync()
+        public Task<ImageQualitySetting> GetStillQualityAsync()
         {
-            return await ObjectByMethod<ImageQualitySetting>("getStillQuality").ConfigureAwait(false);
+            return ObjectByMethod<ImageQualitySetting>("getStillQuality");
         }
 
         public async Task SetStillQualityAsync(ImageQualitySetting setting)
         {
-            await NoValue(RequestGenerator.Serialize("setStillQuality", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setStillQuality", ApiVersion.V1_0, setting));
         }
 
-        public async Task<Candidate<string>> GetSupportedStillQualityAsync()
+        public Task<Candidate<string>> GetSupportedStillQualityAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedStillQuality").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedStillQuality");
         }
 
         public async Task<Capability<string>> GetAvailableStillQualityAsync()
@@ -765,27 +763,27 @@ namespace Kazyx.RemoteApi.Camera
 
         public async Task ActTrackingFocusAsync(FocusPosition position)
         {
-            await NoValue(RequestGenerator.Serialize("actTrackingFocus", ApiVersion.V1_0, position)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("actTrackingFocus", ApiVersion.V1_0, position));
         }
 
         public async Task CancelTrackingFocusAsync()
         {
-            await NoValueByMethod("cancelTrackingFocus").ConfigureAwait(false);
+            await NoValueByMethod("cancelTrackingFocus");
         }
 
         public async Task SetTrackingFocusAsync(TrackingFocusSetting setting)
         {
-            await NoValue(RequestGenerator.Serialize("setTrackingFocus", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setTrackingFocus", ApiVersion.V1_0, setting));
         }
 
-        public async Task<TrackingFocusSetting> GetTrackingFocusAsync()
+        public Task<TrackingFocusSetting> GetTrackingFocusAsync()
         {
-            return await ObjectByMethod<TrackingFocusSetting>("getTrackingFocus").ConfigureAwait(false);
+            return ObjectByMethod<TrackingFocusSetting>("getTrackingFocus");
         }
 
-        public async Task<Candidate<string>> GetSupportedTrackingFocusAsync()
+        public Task<Candidate<string>> GetSupportedTrackingFocusAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedTrackingFocus").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedTrackingFocus");
         }
 
         public async Task<Capability<string>> GetAvailableTrackingFocusAsync()
@@ -793,19 +791,19 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<TrackingFocusModeCapability>("getAvailableTrackingFocus").ConfigureAwait(false);
         }
 
-        public async Task<ZoomSetting> GetZoomSettingAsync()
+        public Task<ZoomSetting> GetZoomSettingAsync()
         {
-            return await ObjectByMethod<ZoomSetting>("getZoomSetting").ConfigureAwait(false);
+            return ObjectByMethod<ZoomSetting>("getZoomSetting");
         }
 
         public async Task SetZoomSettingAsync(ZoomSetting setting)
         {
-            await NoValue(RequestGenerator.Serialize("setZoomSetting", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setZoomSetting", ApiVersion.V1_0, setting));
         }
 
-        public async Task<Candidate<string>> GetSupportedZoomSettingAsync()
+        public Task<Candidate<string>> GetSupportedZoomSettingAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedZoomSetting").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedZoomSetting");
         }
 
         public async Task<Capability<string>> GetAvailableZoomSettingAsync()
@@ -815,27 +813,27 @@ namespace Kazyx.RemoteApi.Camera
 
         public async Task StartContShootingAsync()
         {
-            await NoValueByMethod("startContShooting").ConfigureAwait(false);
+            await NoValueByMethod("startContShooting");
         }
 
         public async Task StopContShootingAsync()
         {
-            await NoValueByMethod("stopContShooting").ConfigureAwait(false);
+            await NoValueByMethod("stopContShooting");
         }
 
-        public async Task<MovieFormat> GetMovieFileFormat()
+        public Task<MovieFormat> GetMovieFileFormat()
         {
-            return await ObjectByMethod<MovieFormat>("getMovieFileFormat").ConfigureAwait(false);
+            return ObjectByMethod<MovieFormat>("getMovieFileFormat");
         }
 
         public async Task SetMovieFileFormatAsync(MovieFormat setting)
         {
-            await NoValue(RequestGenerator.Serialize("setMovieFileFormat", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setMovieFileFormat", ApiVersion.V1_0, setting));
         }
 
-        public async Task<Candidate<string>> GetSupportedMovieFileFormatAsync()
+        public Task<Candidate<string>> GetSupportedMovieFileFormatAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedMovieFileFormat").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedMovieFileFormat");
         }
 
         public async Task<Capability<string>> GetAvailableMovieFileFormatAsync()
@@ -843,19 +841,19 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<MovieFormatCapability>("getAvailableMovieFileFormat").ConfigureAwait(false);
         }
 
-        public async Task<TvColorSystem> GetTvColorSystemAsync()
+        public Task<TvColorSystem> GetTvColorSystemAsync()
         {
-            return await ObjectByMethod<TvColorSystem>("getTvColorSystem").ConfigureAwait(false);
+            return ObjectByMethod<TvColorSystem>("getTvColorSystem");
         }
 
         public async Task SetTvColorSystemAsync(TvColorSystem setting)
         {
-            await NoValue(RequestGenerator.Serialize("setTvColorSystem", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setTvColorSystem", ApiVersion.V1_0, setting));
         }
 
-        public async Task<Candidate<string>> GetSupportedTvColorSystemAsync()
+        public Task<Candidate<string>> GetSupportedTvColorSystemAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedTvColorSystem").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedTvColorSystem");
         }
 
         public async Task<Capability<string>> GetAvailableTvColorSystemAsync()
@@ -863,19 +861,19 @@ namespace Kazyx.RemoteApi.Camera
             return await ObjectByMethod<TvColorSystemCapability>("getAvailableTvColorSystem").ConfigureAwait(false);
         }
 
-        public async Task<InfraredRemoteControl> GetInfraredRemoteControlAsync()
+        public Task<InfraredRemoteControl> GetInfraredRemoteControlAsync()
         {
-            return await ObjectByMethod<InfraredRemoteControl>("getInfraredRemoteControl").ConfigureAwait(false);
+            return ObjectByMethod<InfraredRemoteControl>("getInfraredRemoteControl");
         }
 
         public async Task SetInfraredRemoteControlAsync(InfraredRemoteControl setting)
         {
-            await NoValue(RequestGenerator.Serialize("setInfraredRemoteControl", ApiVersion.V1_0, setting)).ConfigureAwait(false);
+            await NoValue(RequestGenerator.Serialize("setInfraredRemoteControl", ApiVersion.V1_0, setting));
         }
 
-        public async Task<Candidate<string>> GetSupportedInfraredRemoteControlAsync()
+        public Task<Candidate<string>> GetSupportedInfraredRemoteControlAsync()
         {
-            return await ObjectByMethod<Candidate<string>>("getSupportedInfraredRemoteControl").ConfigureAwait(false);
+            return ObjectByMethod<Candidate<string>>("getSupportedInfraredRemoteControl");
         }
 
         public async Task<Capability<string>> GetAvailableInfraredRemoteControlAsync()

@@ -16,16 +16,16 @@ namespace Kazyx.RemoteApi.AvContent
         {
         }
 
-        public async Task<List<UriScheme>> GetSchemeListAsync()
+        public Task<List<UriScheme>> GetSchemeListAsync()
         {
-            return await ObjectByMethod<List<UriScheme>>("getSchemeList").ConfigureAwait(false);
+            return ObjectByMethod<List<UriScheme>>("getSchemeList");
         }
 
-        public async Task<List<DataSource>> GetSourceListAsync(UriScheme scheme)
+        public Task<List<DataSource>> GetSourceListAsync(UriScheme scheme)
         {
-            return await Single(
+            return Single(
                 RequestGenerator.Serialize("getSourceList", ApiVersion.V1_0, scheme),
-                BasicParser.AsObject<List<DataSource>>).ConfigureAwait(false);
+                BasicParser.AsObject<List<DataSource>>);
         }
 
         public async Task PauseStreamingAsync()
@@ -33,12 +33,12 @@ namespace Kazyx.RemoteApi.AvContent
             await NoValueByMethod("pauseStreaming").ConfigureAwait(false);
         }
 
-        public async Task<StreamingStatus> RequestToNotifyStreamingStatusAsync(LongPollingFlag flag
+        public Task<StreamingStatus> RequestToNotifyStreamingStatusAsync(LongPollingFlag flag
             , CancellationTokenSource cancel = null)
         {
-            return await Single(
+            return Single(
                 RequestGenerator.Serialize("requestToNotifyStreamingStatus", ApiVersion.V1_0, flag),
-                BasicParser.AsObject<StreamingStatus>, cancel).ConfigureAwait(false);
+                BasicParser.AsObject<StreamingStatus>, cancel);
         }
 
         public async Task SeekStreamingPositionAsync(PlaybackPosition position)
@@ -46,11 +46,11 @@ namespace Kazyx.RemoteApi.AvContent
             await NoValue(RequestGenerator.Serialize("seekStreamingPosition", ApiVersion.V1_0, position)).ConfigureAwait(false);
         }
 
-        public async Task<PlaybackContentLocation> SetStreamingContentAsync(PlaybackContent content)
+        public Task<PlaybackContentLocation> SetStreamingContentAsync(PlaybackContent content)
         {
-            return await Single(
+            return Single(
                 RequestGenerator.Serialize("setStreamingContent", ApiVersion.V1_0, content),
-                BasicParser.AsObject<PlaybackContentLocation>).ConfigureAwait(false);
+                BasicParser.AsObject<PlaybackContentLocation>);
         }
 
         public async Task StartStreamingAsync()
@@ -68,18 +68,18 @@ namespace Kazyx.RemoteApi.AvContent
             await NoValue(RequestGenerator.Serialize("deleteContent", ApiVersion.V1_1, contents)).ConfigureAwait(false);
         }
 
-        public async Task<ContentCount> GetContentCountAsync(CountingTarget target)
+        public Task<ContentCount> GetContentCountAsync(CountingTarget target)
         {
-            return await Single(
+            return Single(
                 RequestGenerator.Serialize("getContentCount", ApiVersion.V1_2, target),
-                BasicParser.AsObject<ContentCount>).ConfigureAwait(false);
+                BasicParser.AsObject<ContentCount>);
         }
 
-        public async Task<List<Content>> GetContentListAsync(ContentListTarget target)
+        public Task<List<Content>> GetContentListAsync(ContentListTarget target)
         {
-            return await Single(
+            return Single(
                 RequestGenerator.Serialize("getContentList", ApiVersion.V1_3, target),
-                BasicParser.AsObject<List<Content>>).ConfigureAwait(false);
+                BasicParser.AsObject<List<Content>>);
         }
     }
 }

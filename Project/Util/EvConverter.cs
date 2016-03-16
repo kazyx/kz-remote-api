@@ -76,7 +76,7 @@ namespace Kazyx.RemoteApi.Camera
                     return 0;
             }
 
-            return (float)index * by;
+            return index * by;
         }
     }
 

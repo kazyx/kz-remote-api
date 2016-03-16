@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace Kazyx.RemoteApi.AvContent
 {
@@ -25,13 +24,13 @@ namespace Kazyx.RemoteApi.AvContent
     public class StreamingStatus
     {
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.StreamStatus"/> for defined parameters.
+        /// Refer to <seealso cref="StreamStatus"/> for defined parameters.
         /// </summary>
         [JsonProperty("status")]
         public string Status { set; get; }
 
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.StreamStatusChangeFactor"/> for defined parameters.
+        /// Refer to <seealso cref="StreamStatusChangeFactor"/> for defined parameters.
         /// </summary>
         [JsonProperty("factor")]
         public string Factor { set; get; }
@@ -49,7 +48,7 @@ namespace Kazyx.RemoteApi.AvContent
         public string Uri { set; get; }
 
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.RemotePlayMode"/> for defined parameters.
+        /// Refer to <seealso cref="RemotePlayMode"/> for defined parameters.
         /// </summary>
         [JsonProperty("remotePlayType")]
         public string RemotePlayType { set; get; }
@@ -76,20 +75,20 @@ namespace Kazyx.RemoteApi.AvContent
         public string Uri { set; get; }
 
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.ContentKind"/> for defined parameters.
+        /// Refer to <seealso cref="ContentKind"/> for defined parameters.
         /// null means "Not specified"
         /// </summary>
         [JsonProperty("type")]
         public List<string> Types { set; get; }
 
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.ContentsExpansionParameter"/> for defined parameters.
+        /// Refer to <seealso cref="ContentsExpansionParameter"/> for defined parameters.
         /// </summary>
         [JsonProperty("target")]
         public string Target { set; get; }
 
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.ContentGroupingMode"/> for defined parameters.
+        /// Refer to <seealso cref="ContentGroupingMode"/> for defined parameters.
         /// </summary>
         [JsonProperty("view")]
         public string Grouping { set; get; }
@@ -116,19 +115,19 @@ namespace Kazyx.RemoteApi.AvContent
         public int MaxContents { set; get; }
 
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.ContentKind"/> for defined parameters.
+        /// Refer to <seealso cref="ContentKind"/> for defined parameters.
         /// </summary>
         [JsonProperty("type")]
         public List<string> Types { set; get; }
 
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.ContentGroupingMode"/> for defined parameters.
+        /// Refer to <seealso cref="ContentGroupingMode"/> for defined parameters.
         /// </summary>
         [JsonProperty("view")]
         public string Grouping { set; get; }
 
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.SortMode"/> for defined parameters.
+        /// Refer to <seealso cref="SortMode"/> for defined parameters.
         /// </summary>
         [JsonProperty("sort")]
         public string Sorting { set; get; }
@@ -152,7 +151,7 @@ namespace Kazyx.RemoteApi.AvContent
         public string CreatedTime { set; get; }
 
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.ContentKind"/> for defined parameters.
+        /// Refer to <seealso cref="AvContent.ContentKind"/> for defined parameters.
         /// </summary>
         [JsonProperty("contentKind")]
         public string ContentKind { set; get; }
@@ -164,25 +163,25 @@ namespace Kazyx.RemoteApi.AvContent
         public string FileNumber { set; get; }
 
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.TextBoolean"/> for defined parameters.
+        /// Refer to <seealso cref="TextBoolean"/> for defined parameters.
         /// </summary>
         [JsonProperty("isPlayable")]
         public string IsPlayableOnCamera { set; get; }
 
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.TextBoolean"/> for defined parameters.
+        /// Refer to <seealso cref="TextBoolean"/> for defined parameters.
         /// </summary>
         [JsonProperty("isBrowsable")]
         public string IsFolder { set; get; }
 
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.TextBoolean"/> for defined parameters.
+        /// Refer to <seealso cref="TextBoolean"/> for defined parameters.
         /// </summary>
         [JsonProperty("isProtected")]
         public string IsProtected { set; get; }
 
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.RemotePlayMode"/> for defined parameters.
+        /// Refer to <seealso cref="RemotePlayMode"/> for defined parameters.
         /// </summary>
         [JsonProperty("remotePlayType")]
         public List<string> RemotePlayTypes { set; get; }
@@ -212,7 +211,7 @@ namespace Kazyx.RemoteApi.AvContent
         public string FileName { set; get; }
 
         /// <summary>
-        /// Refer to <seealso cref="Kazyx.RemoteApi.AvContent.ImageType"/> for defined parameters.
+        /// Refer to <seealso cref="ImageType"/> for defined parameters.
         /// </summary>
         [JsonProperty("stillObject")]
         public string Type { set; get; }

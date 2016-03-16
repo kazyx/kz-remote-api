@@ -19,17 +19,17 @@ namespace Kazyx.RemoteApi
         {
             if (Enum.IsDefined(typeof(StatusCode), code))
             {
-                this.StatusCode = (StatusCode)code;
+                StatusCode = (StatusCode)code;
             }
             else
             {
-                this.StatusCode = StatusCode.Undefined;
+                StatusCode = StatusCode.Undefined;
             }
         }
 
         internal RemoteApiException(StatusCode code)
         {
-            this.StatusCode = code;
+            StatusCode = code;
         }
     }
 }
