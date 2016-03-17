@@ -117,10 +117,12 @@ namespace Kazyx.RemoteApi.Camera
         public const string Pix18M = "18M";
         public const string Pix17M = "17M";
         public const string Pix13M = "13M";
+        public const string Pix8_3M = "8.3M";
         public const string Pix7_5M = "7.5M";
         public const string Pix5M = "5M";
         public const string Pix4_2M = "4.2M";
         public const string Pix3_7M = "3.7M";
+        public const string Pix2_1M = "2.1M";
     }
 
     public class BeepMode
@@ -298,6 +300,7 @@ namespace Kazyx.RemoteApi.Camera
         public const string SmartOnly = "Smart Zoom Only";
         public const string ClearImageDigital = "On:Clear Image Zoom";
         public const string Digital = "On:Digital Zoom";
+        public const string Off = "Off:Digital Zoom"; // TODO check meaning
     }
 
     public class TrackingFocusMode
