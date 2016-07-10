@@ -1,5 +1,5 @@
+using Kazyx.RemoteApi.Util;
 using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Web.Http;
@@ -40,7 +40,7 @@ namespace Kazyx.RemoteApi
                         {
                             task.Cancel();
                         }
-                        catch { Debug.WriteLine("Failed to cancel request: " + body); }
+                        catch { RemoteApiLogger.Log("Failed to cancel request: " + body); }
                     });
                 }
                 var response = await task;
@@ -50,7 +50,7 @@ namespace Kazyx.RemoteApi
                 }
                 else
                 {
-                    Debug.WriteLine("Http Status Error: " + response.StatusCode);
+                    RemoteApiLogger.Log("Http Status Error: " + response.StatusCode);
                     throw new RemoteApiException((int)response.StatusCode);
                 }
             }
@@ -62,12 +62,12 @@ namespace Kazyx.RemoteApi
             {
                 if (e is TaskCanceledException || e is OperationCanceledException)
                 {
-                    Debug.WriteLine("Request cancelled: " + e.StackTrace);
+                    RemoteApiLogger.Log("Request cancelled: " + e.StackTrace);
                     throw new RemoteApiException(StatusCode.Cancelled);
                 }
                 else
                 {
-                    Debug.WriteLine("HttpPost Exception: " + e.StackTrace);
+                    RemoteApiLogger.Log("HttpPost Exception: " + e.StackTrace);
                     throw new RemoteApiException(StatusCode.NetworkError);
                 }
             }

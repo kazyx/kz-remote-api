@@ -1,8 +1,8 @@
 ﻿using Kazyx.RemoteApi.Camera;
+using Kazyx.RemoteApi.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Kazyx.RemoteApi
@@ -53,15 +53,15 @@ namespace Kazyx.RemoteApi
             var info = BasicParser.AsParallelPrimitives<int>(jString, 4);
 
             return new EvCapability
-               {
-                   Candidate = new EvCandidate
-                   {
-                       IndexStep = EvConverter.GetDefinition(info[3]),
-                       MaxIndex = info[1],
-                       MinIndex = info[2]
-                   },
-                   CurrentIndex = info[0]
-               };
+            {
+                Candidate = new EvCandidate
+                {
+                    IndexStep = EvConverter.GetDefinition(info[3]),
+                    MaxIndex = info[1],
+                    MinIndex = info[2]
+                },
+                CurrentIndex = info[0]
+            };
         }
 
         internal static ServerAppInfo AsServerAppInfo(string jString)
@@ -126,7 +126,7 @@ namespace Kazyx.RemoteApi
         internal static Event AsCameraEvent(string jString)
         {
             var json = BasicParser.Initialize(jString);
-            Debug.WriteLine(json.ToString(Formatting.None));
+            RemoteApiLogger.Log(json.ToString(Formatting.None));
 
             var jResult = json["result"] as JArray;
 
@@ -166,120 +166,120 @@ namespace Kazyx.RemoteApi
 
             elem = jResult[11];
             res.BeepMode = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("currentBeepMode"),
-                    Candidates = elem["beepModeCandidates"].Values<string>().ToList()
-                } : null;
+            {
+                Current = elem.Value<string>("currentBeepMode"),
+                Candidates = elem["beepModeCandidates"].Values<string>().ToList()
+            } : null;
 
             elem = jResult[12];
             res.Function = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("currentCameraFunction"),
-                    Candidates = elem["cameraFunctionCandidates"].Values<string>().ToList()
-                } : null;
+            {
+                Current = elem.Value<string>("currentCameraFunction"),
+                Candidates = elem["cameraFunctionCandidates"].Values<string>().ToList()
+            } : null;
 
             elem = jResult[13];
             res.MovieQuality = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("currentMovieQuality"),
-                    Candidates = elem["movieQualityCandidates"].Values<string>().ToList()
-                } : null;
+            {
+                Current = elem.Value<string>("currentMovieQuality"),
+                Candidates = elem["movieQualityCandidates"].Values<string>().ToList()
+            } : null;
 
             elem = jResult[14];
             res.StillImageSize = elem.HasValues ? new StillImageSizeEvent
+            {
+                Current = new StillImageSize
                 {
-                    Current = new StillImageSize
-                    {
-                        AspectRatio = elem.Value<string>("currentAspect"),
-                        SizeDefinition = elem.Value<string>("currentSize")
-                    },
-                    CapabilityChanged = elem.Value<bool>("checkAvailability")
-                } : null;
+                    AspectRatio = elem.Value<string>("currentAspect"),
+                    SizeDefinition = elem.Value<string>("currentSize")
+                },
+                CapabilityChanged = elem.Value<bool>("checkAvailability")
+            } : null;
 
             elem = jResult[15];
             res.FunctionChangeResult = elem.HasValues ? elem.Value<string>("cameraFunctionResult") : null;
 
             elem = jResult[16];
             res.SteadyMode = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("currentSteadyMode"),
-                    Candidates = elem["steadyModeCandidates"].Values<string>().ToList()
-                } : null;
+            {
+                Current = elem.Value<string>("currentSteadyMode"),
+                Candidates = elem["steadyModeCandidates"].Values<string>().ToList()
+            } : null;
 
             elem = jResult[17];
             res.ViewAngle = elem.HasValues ? new Capability<int>
-                {
-                    Current = elem.Value<int>("currentViewAngle"),
-                    Candidates = elem["viewAngleCandidates"].Values<int>().ToList()
-                } : null;
+            {
+                Current = elem.Value<int>("currentViewAngle"),
+                Candidates = elem["viewAngleCandidates"].Values<int>().ToList()
+            } : null;
 
             elem = jResult[18];
             res.ExposureMode = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("currentExposureMode"),
-                    Candidates = elem["exposureModeCandidates"].Values<string>().ToList()
-                } : null;
+            {
+                Current = elem.Value<string>("currentExposureMode"),
+                Candidates = elem["exposureModeCandidates"].Values<string>().ToList()
+            } : null;
 
             elem = jResult[19];
             res.PostviewSizeInfo = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("currentPostviewImageSize"),
-                    Candidates = elem["postviewImageSizeCandidates"].Values<string>().ToList()
-                } : null;
+            {
+                Current = elem.Value<string>("currentPostviewImageSize"),
+                Candidates = elem["postviewImageSizeCandidates"].Values<string>().ToList()
+            } : null;
 
             elem = jResult[20];
             res.SelfTimerInfo = elem.HasValues ? new Capability<int>
-                {
-                    Current = elem.Value<int>("currentSelfTimer"),
-                    Candidates = elem["selfTimerCandidates"].Values<int>().ToList()
-                } : null;
+            {
+                Current = elem.Value<int>("currentSelfTimer"),
+                Candidates = elem["selfTimerCandidates"].Values<int>().ToList()
+            } : null;
 
             elem = jResult[21];
             res.ShootModeInfo = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("currentShootMode"),
-                    Candidates = elem["shootModeCandidates"].Values<string>().ToList()
-                } : null;
+            {
+                Current = elem.Value<string>("currentShootMode"),
+                Candidates = elem["shootModeCandidates"].Values<string>().ToList()
+            } : null;
 
             elem = jResult[25];
             res.EvInfo = elem.HasValues ? new EvCapability
+            {
+                CurrentIndex = elem.Value<int>("currentExposureCompensation"),
+                Candidate = new EvCandidate
                 {
-                    CurrentIndex = elem.Value<int>("currentExposureCompensation"),
-                    Candidate = new EvCandidate
-                    {
-                        MaxIndex = elem.Value<int>("maxExposureCompensation"),
-                        MinIndex = elem.Value<int>("minExposureCompensation"),
-                        IndexStep = EvConverter.GetDefinition(elem.Value<int>("stepIndexOfExposureCompensation"))
-                    }
-                } : null;
+                    MaxIndex = elem.Value<int>("maxExposureCompensation"),
+                    MinIndex = elem.Value<int>("minExposureCompensation"),
+                    IndexStep = EvConverter.GetDefinition(elem.Value<int>("stepIndexOfExposureCompensation"))
+                }
+            } : null;
 
             elem = jResult[26];
             res.FlashMode = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("currentFlashMode"),
-                    Candidates = elem["flashModeCandidates"].Values<string>().ToList()
-                } : null;
+            {
+                Current = elem.Value<string>("currentFlashMode"),
+                Candidates = elem["flashModeCandidates"].Values<string>().ToList()
+            } : null;
 
             elem = jResult[27];
             res.FNumber = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("currentFNumber"),
-                    Candidates = elem["fNumberCandidates"].Values<string>().ToList()
-                } : null;
+            {
+                Current = elem.Value<string>("currentFNumber"),
+                Candidates = elem["fNumberCandidates"].Values<string>().ToList()
+            } : null;
 
             elem = jResult[28];
             res.FocusMode = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("currentFocusMode"),
-                    Candidates = elem["focusModeCandidates"].Values<string>().ToList()
-                } : null;
+            {
+                Current = elem.Value<string>("currentFocusMode"),
+                Candidates = elem["focusModeCandidates"].Values<string>().ToList()
+            } : null;
 
             elem = jResult[29];
             res.ISOSpeedRate = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("currentIsoSpeedRate"),
-                    Candidates = elem["isoSpeedRateCandidates"].Values<string>().ToList()
-                } : null;
+            {
+                Current = elem.Value<string>("currentIsoSpeedRate"),
+                Candidates = elem["isoSpeedRateCandidates"].Values<string>().ToList()
+            } : null;
 
             elem = jResult[31];
             if (elem.HasValues)
@@ -289,21 +289,21 @@ namespace Kazyx.RemoteApi
 
             elem = jResult[32];
             res.ShutterSpeed = elem.HasValues ? new Capability<string>
-                {
-                    Current = elem.Value<string>("currentShutterSpeed"),
-                    Candidates = elem["shutterSpeedCandidates"].Values<string>().ToList()
-                } : null;
+            {
+                Current = elem.Value<string>("currentShutterSpeed"),
+                Candidates = elem["shutterSpeedCandidates"].Values<string>().ToList()
+            } : null;
 
             elem = jResult[33];
             res.WhiteBalance = elem.HasValues ? new WhiteBalanceEvent
+            {
+                Current = new WhiteBalance
                 {
-                    Current = new WhiteBalance
-                    {
-                        Mode = elem.Value<string>("currentWhiteBalanceMode"),
-                        ColorTemperature = elem.Value<int>("currentColorTemperature")
-                    },
-                    CapabilityChanged = elem.Value<bool>("checkAvailability")
-                } : null;
+                    Mode = elem.Value<string>("currentWhiteBalanceMode"),
+                    ColorTemperature = elem.Value<int>("currentColorTemperature")
+                },
+                CapabilityChanged = elem.Value<bool>("checkAvailability")
+            } : null;
 
             elem = jResult[34];
             if (elem.HasValues)
