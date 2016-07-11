@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kazyx.RemoteApi.Util;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -165,7 +166,9 @@ namespace Kazyx.RemoteApi
         {
             try
             {
+                RemoteApiLogger.VerboseLog(request);
                 var res = await AsyncPostClient.PostAsync(endpoint, request, cancel).ConfigureAwait(false);
+                RemoteApiLogger.VerboseLog(res);
                 return function.Invoke(res);
             }
             catch (RemoteApiException e)
