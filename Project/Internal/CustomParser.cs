@@ -1,5 +1,4 @@
 ﻿using Kazyx.RemoteApi.Camera;
-using Kazyx.RemoteApi.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
@@ -126,7 +125,6 @@ namespace Kazyx.RemoteApi
         internal static Event AsCameraEvent(string jString)
         {
             var json = BasicParser.Initialize(jString);
-            RemoteApiLogger.Log(json.ToString(Formatting.None));
 
             var jResult = json["result"] as JArray;
 
