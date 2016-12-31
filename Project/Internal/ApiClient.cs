@@ -31,6 +31,7 @@ namespace Kazyx.RemoteApi
         /// </summary>
         /// <param name="version">Version of the API set to retrieve. Empty string means all.</param>
         /// <returns></returns>
+        [ApiMeta("getMethodTypes")]
         public Task<List<MethodType>> GetMethodTypesAsync(string version = "", CancellationTokenSource cancel = null)
         {
             return Single(RequestGenerator.Jsonize("getMethodTypes", version), CustomParser.AsMethodTypes, cancel);
@@ -40,6 +41,7 @@ namespace Kazyx.RemoteApi
         /// GetVersions v1.0
         /// </summary>
         /// <returns></returns>
+        [ApiMeta("getVersions")]
         public Task<List<string>> GetVersionsAsync(CancellationTokenSource cancel = null)
         {
             return PrimitiveListByMethod<string>("getVersions", ApiVersion.V1_0, cancel);

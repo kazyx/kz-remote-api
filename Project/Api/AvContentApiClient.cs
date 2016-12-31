@@ -16,11 +16,13 @@ namespace Kazyx.RemoteApi.AvContent
         {
         }
 
+        [ApiMeta("getSchemeList")]
         public Task<List<UriScheme>> GetSchemeListAsync()
         {
             return ObjectByMethod<List<UriScheme>>("getSchemeList");
         }
 
+        [ApiMeta("setSourceList")]
         public Task<List<DataSource>> GetSourceListAsync(UriScheme scheme)
         {
             return Single(
@@ -28,11 +30,13 @@ namespace Kazyx.RemoteApi.AvContent
                 BasicParser.AsObject<List<DataSource>>);
         }
 
+        [ApiMeta("pauseStreaming")]
         public async Task PauseStreamingAsync()
         {
             await NoValueByMethod("pauseStreaming").ConfigureAwait(false);
         }
 
+        [ApiMeta("requestToNotifyStreamingStatus")]
         public Task<StreamingStatus> RequestToNotifyStreamingStatusAsync(LongPollingFlag flag
             , CancellationTokenSource cancel = null)
         {
@@ -41,11 +45,13 @@ namespace Kazyx.RemoteApi.AvContent
                 BasicParser.AsObject<StreamingStatus>, cancel);
         }
 
+        [ApiMeta("seekStreamingPosition")]
         public async Task SeekStreamingPositionAsync(PlaybackPosition position)
         {
             await NoValue(RequestGenerator.Serialize("seekStreamingPosition", ApiVersion.V1_0, position)).ConfigureAwait(false);
         }
 
+        [ApiMeta("setStreamingContent")]
         public Task<PlaybackContentLocation> SetStreamingContentAsync(PlaybackContent content)
         {
             return Single(
@@ -53,21 +59,25 @@ namespace Kazyx.RemoteApi.AvContent
                 BasicParser.AsObject<PlaybackContentLocation>);
         }
 
+        [ApiMeta("startStreaming")]
         public async Task StartStreamingAsync()
         {
             await NoValueByMethod("startStreaming").ConfigureAwait(false);
         }
 
+        [ApiMeta("stopStreaming")]
         public async Task StopStreamingAsync()
         {
             await NoValueByMethod("stopStreaming").ConfigureAwait(false);
         }
 
+        [ApiMeta("deleteContent")]
         public async Task DeleteContentAsync(TargetContents contents)
         {
             await NoValue(RequestGenerator.Serialize("deleteContent", ApiVersion.V1_1, contents)).ConfigureAwait(false);
         }
 
+        [ApiMeta("getContentCount")]
         public Task<ContentCount> GetContentCountAsync(CountingTarget target)
         {
             return Single(
@@ -75,6 +85,7 @@ namespace Kazyx.RemoteApi.AvContent
                 BasicParser.AsObject<ContentCount>);
         }
 
+        [ApiMeta("getContentList")]
         public Task<List<Content>> GetContentListAsync(ContentListTarget target)
         {
             return Single(

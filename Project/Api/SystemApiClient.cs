@@ -14,6 +14,7 @@ namespace Kazyx.RemoteApi.System
         {
         }
 
+        [ApiMeta("setCurrentTime")]
         public async Task SetCurrentTimeAsync(DateTimeOffset UtcTime, int OffsetInMinute)
         {
             var req = new TimeOffset
