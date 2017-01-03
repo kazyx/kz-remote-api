@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Kazyx.RemoteApi
 {
@@ -44,23 +45,10 @@ namespace Kazyx.RemoteApi
         public override bool Equals(object o)
         {
             var other = o as Capability<T>;
-            if (!Current.Equals(other.Current))
-            {
-                return false;
-            }
-            if (Candidates?.Count != other.Candidates?.Count)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < Candidates.Count; i++)
-            {
-                if (!Candidates[i].Equals(other.Candidates[i]))
-                {
-                    return false;
-                }
-            }
-            return true;
+            if (other == null) { return false; }
+            if (!Current.Equals(other.Current)) { return false; }
+            if (Candidates?.Count != other.Candidates?.Count) { return false; }
+            return Candidates.SequenceEqual(other.Candidates);
         }
     }
 }
