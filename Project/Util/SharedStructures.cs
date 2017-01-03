@@ -40,5 +40,27 @@ namespace Kazyx.RemoteApi
         /// Candidate values of the specified parameter.
         /// </summary>
         public virtual List<T> Candidates { set; get; }
+
+        public override bool Equals(object o)
+        {
+            var other = o as Capability<T>;
+            if (!Current.Equals(other.Current))
+            {
+                return false;
+            }
+            if (Candidates?.Count != other.Candidates?.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < Candidates.Count; i++)
+            {
+                if (!Candidates[i].Equals(other.Candidates[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
