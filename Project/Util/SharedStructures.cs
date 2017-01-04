@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Kazyx.RemoteApi
 {
@@ -40,5 +41,14 @@ namespace Kazyx.RemoteApi
         /// Candidate values of the specified parameter.
         /// </summary>
         public virtual List<T> Candidates { set; get; }
+
+        public override bool Equals(object o)
+        {
+            var other = o as Capability<T>;
+            if (other == null) { return false; }
+            if (!Current.Equals(other.Current)) { return false; }
+            if (Candidates?.Count != other.Candidates?.Count) { return false; }
+            return Candidates.SequenceEqual(other.Candidates);
+        }
     }
 }
