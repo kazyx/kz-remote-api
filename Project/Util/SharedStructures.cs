@@ -44,11 +44,35 @@ namespace Kazyx.RemoteApi
 
         public override bool Equals(object o)
         {
+            if (o == null) { return false; }
+            if (!(o is Capability<T>)) { return false; }
             var other = o as Capability<T>;
-            if (other == null) { return false; }
             if (!Current.Equals(other.Current)) { return false; }
             if (Candidates?.Count != other.Candidates?.Count) { return false; }
             return Candidates.SequenceEqual(other.Candidates);
+        }
+
+        public override int GetHashCode()
+        {
+            return Current.GetHashCode() + Candidates.GetHashCode();
+        }
+
+        public static bool operator ==(Capability<T> x, Capability<T> y)
+        {
+            if (ReferenceEquals(x, null))
+            {
+                return ReferenceEquals(y, null);
+            }
+            return x.Equals(y);
+        }
+
+        public static bool operator !=(Capability<T> x, Capability<T> y)
+        {
+            if (ReferenceEquals(x, null))
+            {
+                return !ReferenceEquals(y, null);
+            }
+            return !x.Equals(y);
         }
     }
 }
