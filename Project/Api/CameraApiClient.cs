@@ -115,7 +115,7 @@ namespace Kazyx.RemoteApi.Camera
 
         public Task<List<string>> AwaitTakePictureAsync(CancellationTokenSource cancel = null)
         {
-            return PrimitiveListByMethod<string>("TakePicture", ApiVersion.V1_0, cancel);
+            return PrimitiveListByMethod<string>("awaitTakePicture", ApiVersion.V1_0, cancel);
         }
 
         public async Task SetSelfTimerAsync(int timer)
