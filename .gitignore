@@ -180,3 +180,4 @@ FakesAssemblies/
 .vs/
 
 project.lock.json
+*.nuget.props
