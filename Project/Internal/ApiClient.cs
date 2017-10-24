@@ -19,11 +19,7 @@ namespace Kazyx.RemoteApi
         /// <param name="endpoint">Endpoint URL of this service.</param>
         protected ApiClient(Uri endpoint)
         {
-            if (endpoint == null)
-            {
-                throw new ArgumentNullException();
-            }
-            this.endpoint = endpoint;
+            this.endpoint = endpoint ?? throw new ArgumentNullException();
         }
 
         /// <summary>
