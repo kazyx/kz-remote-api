@@ -55,6 +55,7 @@
     <Compile Include="Util\CameraStructures.cs" />
     <Compile Include="Util\EvConverter.cs" />
     <Compile Include="Util\RemoteApiException.cs" />
+    <Compile Include="Util\RemoteApiLogger.cs" />
     <Compile Include="Util\SharedStructures.cs" />
     <Compile Include="Util\StatusCode.cs" />
     <Compile Include="Util\SystemStructures.cs" />
